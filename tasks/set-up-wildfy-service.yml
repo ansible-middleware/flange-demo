@@ -1,0 +1,46 @@
+- name : "Creates basedir for each instance"
+  file:
+    path: "{{ wildfly.basedir_prefix }}{{ item }}/"
+    state: directory
+    owner: "{{ wildfly.user }}"
+    group: "{{ wildfly.user }}"
+    mode: '0755'
+
+- name : "Creates deployment directories for each instance"
+  file:
+    path: "{{ wildfly.basedir_prefix }}{{ item }}/deployments"
+    state: directory
+    owner: "{{ wildfly.user }}"
+    group: "{{ wildfly.user }}"
+    mode: '0755'
+
+- name: "Deploy Wildfy configuration"
+  copy:
+    src: "{{ wildfly.home }}/standalone/configuration/{{ wildfly.base_config }}"
+    dest: "{{ wildfly.home }}/standalone/configuration/{{ wildfly.config_name_prefix }}{{ item }}.xml"
+    group: "{{ wildfly.user }}"
+    owner: "{{ wildfly.user }}"
+
+- name: "Deploy Systemd configuration for Wildfly service"
+  template:
+    src: templates/wfly.service.j2
+    dest: "/usr/lib/systemd/system/wfly-{{ item }}.service"
+    group: root
+    owner: root
+
+- name: "Deploy Wfly service instance configuration"
+  template:
+    src: templates/wfly.conf.j2
+    dest: "/etc/{{ wildfly.config_name_prefix}}{{ item }}.conf"
+    group: root
+    owner: root
+
+- name: "Perform daemon-reload to ensure the changes are picked up"
+  systemd:
+    daemon_reload: yes
+
+- name: "Start Wildfly Server"
+  service:
+    name: "{{ wildfly.config_name_prefix }}{{ item }}"
+    state: started
+    enabled: yes

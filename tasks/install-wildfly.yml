@@ -1,0 +1,18 @@
+- name: "Ensures workdir '{{ workdir }}' is created"
+  file:
+    path: "{{ workdir }}"
+    state: directory
+
+- name: "Ensure Wildfly user {{ wildfly.user }} exists"
+  user:
+    name: "{{ wildfly.user }}"
+    comment: "User to run Wildfly"
+
+- name: "Download and unzip Wildfly zipfile from {{ wfly_download_url }}"
+  unarchive:
+    src: "{{ wfly_download_url }}"
+    dest: "{{ workdir }}"
+    owner: "{{ wildfly.user }}"
+    group: "{{ wildfly.user }}"
+    remote_src: yes
+    creates: "{{ wildfly.home }}"

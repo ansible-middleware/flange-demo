@@ -1,0 +1,20 @@
+[Unit]
+Description=JBoss EAP (standalone mode)
+After=syslog.target network.target
+Before=httpd.service
+
+[Service]
+Environment=LAUNCH_JBOSS_IN_BACKGROUND=1
+Environment="WILDFLY_SERVER_CONFIG=wfly-1.xml"
+Environment="WILDFLY_OPTS=-Djboss.server.config.dir=/opt/wildfly//wildfly-19.0.0.Final//standalone/configuration/ -Djboss.server.base.dir=/var/run/wfly-1 -Djboss.tx.node.id=wfly-1"
+Environment="WILDFLY_BIND=localhost"
+Environment="WILDFLY_HOME=/opt/wildfly//wildfly-19.0.0.Final/"
+Environment="JBOSS_PIDFILE=/var/run/wfly-1/wfly-1.pid"
+User=wildfly
+Group=wildfly
+PIDFile=/var/run/wfly-1.pid
+ExecStart=/opt/wildfly//wildfly-19.0.0.Final//bin/standalone.sh -c $WILDFLY_SERVER_CONFIG -b $WILDFLY_BIND $WILDFLY_OPTS 
+
+[Install]
+WantedBy=multi-user.target
+
