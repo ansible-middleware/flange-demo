@@ -1,0 +1,121 @@
+---
+- hosts: localhost
+  gather_facts: false
+  vars:
+    app_url: http://people.redhat.com/~rpelisse/simple-webapp.war
+    app: /tmp/simple-webapp.war
+    wfly_version: 19.0.0.Final
+    workdir: /opt/wildfly/
+    wfly_zipfile: "wildfly-{{ wfly_version }}.zip"
+    wfly_download_url: https://download.jboss.org/wildfly/{{ wfly_version }}/{{ wfly_zipfile }}
+    java:
+      home: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.242.b08-0.fc31.x86_64/
+    wildfly:
+      home: "{{ workdir }}/wildfly-{{ wfly_version }}/"
+      user: wildfly
+      bind_addr: localhost
+      base_config: standalone.xml
+      config_name_prefix: wfly-
+      min_mem: 64m
+      max_mem: 512m
+      metaspace_size: 96m
+      metaspace_maxsize: 256m
+    pgsql_module_dir: "{{ wildfly.home }}//modules/org/postgresql/main"
+    jdbc_driver_filename: postgresql-9.2-1002-jdbc4.jar
+    jdbc_driver_url: https://repo.maven.apache.org/maven2/org/postgresql/postgresql/9.2-1002-jdbc4/{{ jdbc_driver_filename }}
+    jdbc_driver_path: "{{ pgsql_module_dir }}/{{ jdbc_driver_filename }}"
+    ansible_distribution: Fedora
+
+  collections:
+    - redhat.jcliff
+  roles:
+    - jcliff
+  pre_tasks:
+    # mostly needed if running on a docker container
+    - name: "Ensures required packages are installed"
+      yum:
+        name:
+          - zip
+          - unzip
+          - procps-ng
+          - initscripts
+          - "{{ jvm_package | default('java-1.8.0-openjdk-devel') }}"
+        state: present
+
+    - name: "Ensures workdir '{{ workdir }}' is created"
+      file:
+        path: "{{ workdir }}"
+        state: directory
+
+    - name: "Ensure Wildfly user {{ wildfly.user }} exists"
+      user:
+        name: "{{ wildfly.user }}"
+        comment: "User to run Wildfly"
+
+    - name: "Download and unzip Wildfly zipfile from {{ wfly_download_url }}"
+      unarchive:
+        src: "{{ wfly_download_url }}"
+        dest: "{{ workdir }}"
+        owner: "{{ wildfly.user }}"
+        group: "{{ wildfly.user }}"
+        remote_src: yes
+        creates: "{{ wildfly.home }}"
+
+    - name: "Deploy Wildfy configuration"
+      copy:
+        src: "{{ wildfly.home }}/standalone/configuration/standalone.xml"
+        dest: "{{ wildfly.home }}/standalone/configuration/wfly-{{ item }}.xml"
+        group: "{{ wildfly.user }}"
+        owner: "{{ wildfly.user }}"
+      loop:
+        - 1
+        - 2
+        - 3
+
+    - name: "Deploy Systemd configuration for Wildfly service"
+      template:
+        src: templates/eap7-standalone.service.j2
+        dest: "/usr/lib/systemd/system/wfly-{{ item }}.service"
+        group: root
+        owner: root
+      loop:
+       - 1
+       - 2
+       - 3
+
+    - name: "Perform daemon-reload to ensure the changes are picked up"
+      systemd:
+        daemon_reload: yes
+
+    - name: "Start Wildfly Server"
+      service:
+        name: wfly
+        state: started
+        enabled: yes
+
+  tasks:
+    - name: "Download a demo app to deploy"
+      get_url:
+        url: "{{ app_url }}"
+        dest: "{{ app }}"
+
+    - jcliff:
+        wfly_home: "{{ wildfly.home }}"
+        subsystems:
+          - system_props:
+              - name: jcliff.enabled
+                value: 'enabled.plus'
+          - deployments:
+              - artifact_id: simple-webapp-v1.war
+                name: simple-webapp
+                path: /tmp/simple-webapp.war
+          - datasources:
+              - name: ExampleDS2
+                use_java_context: 'true'
+                jndi_name: java:jboss/datasources/ExampleDS2
+                connection_url: "jdbc:h2:mem:test2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE"
+                driver_name: h2
+
+    - name: "Restart Wildfly"
+      command: "{{ jboss_home }}/bin/jboss-cli.sh --connect --command=':reload'"
+      register: cli_result
