@@ -1,0 +1,21 @@
+- name: "Download a demo app to deploy"
+  get_url:
+    url: "{{ app_url }}"
+    dest: "{{ app }}"
+
+- jcliff:
+    wfly_home: "{{ wildfly.home }}"
+    subsystems:
+      - system_props:
+          - name: jcliff.enabled
+            value: 'enabled.plus'
+      - deployments:
+          - artifact_id: sample.war
+            name: sample
+            path: "{{ app }}"
+#          - datasources:
+#              - name: ExampleDS2
+#                use_java_context: 'true'
+#                jndi_name: java:jboss/datasources/ExampleDS2
+#                connection_url: "jdbc:h2:mem:test2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE"
+#                driver_name: h2

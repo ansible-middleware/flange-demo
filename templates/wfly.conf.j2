@@ -1,6 +1,6 @@
 WILDFLY_SERVER_CONFIG={{ wildfly.config_name_prefix }}{{ item }}.xml
 
-WILDFLY_OPTS=-Djboss.server.config.dir={{ wildfly.home }}/standalone/configuration/ -Djboss.server.base.dir={{ wildfly.basedir_prefix }}{{ item }} -Djboss.tx.node.id={{ wildfly.config_name_prefix }}{{ item }} -Djboss.socket.binding.port-offset={{ 100 * (item -1) }} -Djboss.node.name={{ wildfly.config_name_prefix }}{{ item }} -Djboss.bind.address.private={{ wildfly.bind_addr }}
+WILDFLY_OPTS=-Djboss.server.config.dir={{ wildfly.home }}/standalone/configuration/ -Djboss.server.base.dir={{ wildfly.basedir_prefix }}{{ item }} -Djboss.tx.node.id={{ wildfly.config_name_prefix }}{{ item }} -Djboss.socket.binding.port-offset={{ 100 * (item -1) }} -Djboss.node.name={{ wildfly.config_name_prefix }}{{ item }}
 
 WILDFLY_BIND={{ wildfly.bind_addr }}
 WILDFLY_HOME={{ wildfly.home }}
