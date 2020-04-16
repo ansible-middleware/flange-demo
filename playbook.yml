@@ -43,6 +43,9 @@
           - "{{ jvm_package | default('java-1.8.0-openjdk-devel') }}"
         state: present
 
+    - name: "Install Postresql"
+      include_tasks: tasks/postgres.yml
+
     - name: "Install Widfly"
       include_tasks: tasks/install-wildfly.yml
 
