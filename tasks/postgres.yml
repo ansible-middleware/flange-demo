@@ -21,7 +21,7 @@
     group: postgres
     mode: 0600
 
-- name: Ensure the PostgreSQL service is running
+- name: "Ensure the PostgreSQL service is running"
   service:
     name: postgresql
     state: started
