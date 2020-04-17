@@ -1,4 +1,9 @@
-- set_fact: package_name=postgresql-server
+- set_fact:
+    package_name: postgresql-server
+    db_name: "{{ wildfly.config_name_prefix }}db"
+    db_user: "{{ wildfly.user }}"
+    db_password:
+
 - name: Install PostgreSQL
   import_tasks: tasks/rpminfo.yml
 
@@ -14,3 +19,21 @@
     state: started
     enabled: yes
   when: datadir_init is success
+
+- name: "Create a Wildfly database with name"
+  become: true
+  become_user: postgres
+  postgresql_db:
+    name: "{{ db_name }}"
+    encoding: UTF-8
+    template: 'template0'
+
+- name: "Create user for database"
+  become: true
+  become_user: postgres
+  postgresql_user:
+    db: "{{ db_name }}"
+    name: "{{ db_user }}"
+    password: "{{ db_user }}"
+    priv: ALL
+    state: present
