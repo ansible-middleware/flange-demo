@@ -14,6 +14,11 @@
           - artifact_id: sample.war
             name: sample
             path: "{{ app }}"
+      - drivers:
+          - driver_name: postgresql
+            driver_module_name: org.postgresql
+            driver_class_name: org.postgresql.Driver
+            driver_xa_datasource_class_name: org.postgresql.xa.PGXADataSourcer
 #          - datasources:
 #              - name: ExampleDS2
 #                use_java_context: 'true'

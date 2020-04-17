@@ -1,0 +1,22 @@
+- name: "Set up module dir for Postgres JDBC Driver"
+  file:
+    path: "{{ jdbc_driver_module_dir }}"
+    state: directory
+    recurse: yes
+    group: "{{ wildfly.user }}"
+    owner: "{{ wildfly.user }}"
+
+- name: "Ensures Wildfly Postgres Driver is present"
+  uri:
+    url: "{{ jdbc_driver_jar_url }}"
+    dest: "{{ jdbc_driver_jar_installation_path }}"
+    group: "{{ wildfly.user }}"
+    owner: "{{ wildfly.user }}"
+    creates: "{{ jdbc_driver_jar_installation_path }}"
+
+- name: "Deploy module.xml for Postgres JDBC Driver"
+  template:
+    src: templates/pgsql_jdbc_driver_module.xml.j2
+    dest: "{{ jdbc_driver_module_dir }}/module.xml"
+    group: "{{ wildfly.user }}"
+    owner: "{{ wildfly.user }}"

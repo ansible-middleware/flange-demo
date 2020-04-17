@@ -21,10 +21,12 @@
       max_mem: 512m
       metaspace_size: 96m
       metaspace_maxsize: 256m
-    pgsql_module_dir: "{{ wildfly.home }}//modules/org/postgresql/main"
-    jdbc_driver_filename: postgresql-9.2-1002-jdbc4.jar
-    jdbc_driver_url: https://repo.maven.apache.org/maven2/org/postgresql/postgresql/9.2-1002-jdbc4/{{ jdbc_driver_filename }}
-    jdbc_driver_path: "{{ pgsql_module_dir }}/{{ jdbc_driver_filename }}"
+    # can't use a structure for the jdbc_driver because of the interpolation between variables.
+    jdbc_driver_module_dir: "{{ wildfly.home }}//modules/org/postgresql/main"
+    jdbc_driver_version: 9.2-1002-jdbc4
+    jdbc_driver_jar_filename: "postgresql-{{ jdbc_driver_version }}.jar"
+    jdbc_driver_jar_url: "https://repo.maven.apache.org/maven2/org/postgresql/postgresql/{{ jdbc_driver_version }}/{{ jdbc_driver_jar_filename }}"
+    jdbc_driver_jar_installation_path: "{{ jdbc_driver_module_dir }}/{{ jdbc_driver_jar_filename }}"
     ansible_distribution: Fedora
 
   collections:
@@ -48,6 +50,9 @@
 
     - name: "Install Widfly"
       include_tasks: tasks/install-wildfly.yml
+
+    - name: "Install Postresql driver"
+      include_tasks: tasks/pgsql_jdbc_driver.yml
 
     - name: "Set up for all Wildfly instances"
       include_tasks: tasks/set-up-wildfy-service.yml
