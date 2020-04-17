@@ -1,16 +1,47 @@
-- set_fact: package_name=postgresql-server
-- name: Install PostgreSQL
+- set_fact:
+    package_name: postgresql-server
+    db_name: "{{ wildfly.config_name_prefix }}db"
+    db_user: "{{ wildfly.user }}"
+    db_password:
+
+- name: "Install PostgreSQL"
   import_tasks: tasks/rpminfo.yml
 
-- name: Init PostgesQL Db
+- name: "Init PostgesQL Db"
   command:
     cmd: /usr/bin/postgresql-setup initdb
     creates: /var/lib/pgsql/data
   register: datadir_init
 
-- name: Ensure the PostgreSQL service is running
+- name: "Ensure PostgreSQL accept connection with password"
+  template:
+    src: templates/pg_hba.conf
+    dest: /var/lib/pgsql/data/pg_hba.conf
+    owner: postgres
+    group: postgres
+    mode: 0600
+
+- name: "Ensure the PostgreSQL service is running"
   service:
     name: postgresql
     state: started
     enabled: yes
   when: datadir_init is success
+
+- name: "Create a Wildfly database with name"
+  become: true
+  become_user: postgres
+  postgresql_db:
+    name: "{{ db_name }}"
+    encoding: UTF-8
+    template: 'template0'
+
+- name: "Create user for database"
+  become: true
+  become_user: postgres
+  postgresql_user:
+    db: "{{ db_name }}"
+    name: "{{ db_user }}"
+    password: "{{ db_user }}"
+    priv: ALL
+    state: present
