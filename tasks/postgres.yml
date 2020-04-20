@@ -4,14 +4,22 @@
     db_user: "{{ wildfly.user }}"
     db_password:
 
-- name: Install PostgreSQL
+- name: "Install PostgreSQL"
   import_tasks: tasks/rpminfo.yml
 
-- name: Init PostgesQL Db
+- name: "Init PostgesQL Db"
   command:
     cmd: /usr/bin/postgresql-setup initdb
     creates: /var/lib/pgsql/data
   register: datadir_init
+
+- name: "Ensure PostgreSQL accept connection with password"
+  template:
+    src: templates/pg_hba.conf
+    dest: /var/lib/pgsql/data/pg_hba.conf
+    owner: postgres
+    group: postgres
+    mode: 0600
 
 - name: Ensure the PostgreSQL service is running
   service:
