@@ -2,8 +2,10 @@
   get_url:
     url: "{{ app_url }}"
     dest: "{{ app }}"
+    creates: "{{ app }}"
 
-- jcliff:
+- name: "Fine tune Wildfly configuration"
+  jcliff:
     wfly_home: "{{ wildfly.home }}"
     management_port: "{{ 9990 + ((item - 1) * 100) }}"
     subsystems:
