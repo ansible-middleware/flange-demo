@@ -2,7 +2,6 @@
   get_url:
     url: "{{ app_url }}"
     dest: "{{ app }}"
-    creates: "{{ app }}"
 
 - name: "Fine tune Wildfly configuration"
   jcliff:
