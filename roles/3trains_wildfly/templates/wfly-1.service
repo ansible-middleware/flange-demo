@@ -7,7 +7,7 @@ Before=httpd.service
 Environment=LAUNCH_JBOSS_IN_BACKGROUND=1
 Environment="WILDFLY_SERVER_CONFIG=wfly-1.xml"
 Environment="WILDFLY_OPTS=-Djboss.server.config.dir=/opt/wildfly//wildfly-19.0.0.Final//standalone/configuration/ -Djboss.server.base.dir=/var/run/wfly-1 -Djboss.tx.node.id=wfly-1"
-Environment="WILDFLY_BIND=localhost"
+Environment="WILDFLY_BIND={{ wildfly.bind_addr }} "
 Environment="WILDFLY_HOME=/opt/wildfly//wildfly-19.0.0.Final/"
 Environment="JBOSS_PIDFILE=/var/run/wfly-1/wfly-1.pid"
 User=wildfly

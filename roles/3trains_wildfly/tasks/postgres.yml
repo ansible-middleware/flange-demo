@@ -1,21 +1,30 @@
 - set_fact:
-    package_name: postgresql-server
+    package_names:
+      - postgresql-server
+      - postgresql-devel
     db_name: "{{ wildfly.config_name_prefix }}db"
     db_user: "{{ wildfly.user }}"
-    db_password:
+    db_password: "{{ wildfly.user }}"
 
 - name: "Install PostgreSQL"
-  import_tasks: tasks/rpminfo.yml
+  include_tasks: rpminfo.yml
+  loop: "{{ package_names }}"
+  loop_control:
+    loop_var: package_name
+
+- name: "Install PostgreSQL Module Depenedncies"
+  pip:
+    name: psycopg2
 
 - name: "Init PostgesQL Db"
   command:
     cmd: /usr/bin/postgresql-setup initdb
-    creates: /var/lib/pgsql/data
+    creates: /var/lib/pgsql/data/log
   register: datadir_init
 
 - name: "Ensure PostgreSQL accept connection with password"
   template:
-    src: templates/pg_hba.conf
+    src: pg_hba.conf
     dest: /var/lib/pgsql/data/pg_hba.conf
     owner: postgres
     group: postgres
@@ -30,7 +39,6 @@
 
 - name: "Create a Wildfly database with name"
   become: true
-  become_user: postgres
   postgresql_db:
     name: "{{ db_name }}"
     encoding: UTF-8
@@ -38,7 +46,6 @@
 
 - name: "Create user for database"
   become: true
-  become_user: postgres
   postgresql_user:
     db: "{{ db_name }}"
     name: "{{ db_user }}"

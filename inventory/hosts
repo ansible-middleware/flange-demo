@@ -1,0 +1,14 @@
+# Placeholder Group
+[threetrains]
+
+# Wildfly Group
+[wildfly]
+
+
+# Keycloak Group
+[keycloak]
+
+
+[threetrains:children]
+wildfly
+keycloak

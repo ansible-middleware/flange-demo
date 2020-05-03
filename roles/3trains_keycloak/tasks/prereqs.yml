@@ -1,0 +1,15 @@
+---
+
+- name: upgrade all packages
+  become: true
+  yum:
+    name: '*'
+    state: latest
+
+- name: Install packages
+  become: true
+  package:
+    name: "{{ item }}"
+  loop:
+    - java-1.8.0-openjdk
+    - unzip

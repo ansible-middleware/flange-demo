@@ -1,0 +1,73 @@
+---
+keycloak_version: 9.0.2
+keycloak_archive: keycloak-{{ keycloak_version }}.zip
+keycloak_download_url: https://downloads.jboss.org/keycloak/{{
+  keycloak_version }}/{{ keycloak_archive }}
+keycloak_local_download_dest: '{{ "~/keycloak_download" | expanduser }}'
+
+### Install location and service settings
+keycloak_dest: /opt/keycloak
+keycloak_jboss_home: "{{ keycloak_dest }}/keycloak-{{ keycloak_version }}"
+keycloak_config_dir: "{{ keycloak_jboss_home }}/standalone/configuration"
+keycloak_service_user: keycloak
+keycloak_service_group: keycloak
+
+### Keycloak configuration settings
+keycloak_bind_address: 0.0.0.0
+keycloak_host: localhost
+keycloak_http_port: 8080
+keycloak_https_port: 8443
+keycloak_management_http_port: 9990
+keycloak_management_https_port: 9993
+
+keycloak_admin_user: admin
+keycloak_admin_password: "redhat1!"
+
+keycloak_java_opts: "-Xms1024m -Xmx20480m -XX:MaxPermSize=768m"
+
+keycloak_force_install: false
+
+keycloak_realm: 3trains
+
+keycloak_3trains_client_name: 3trains
+keycloak_3trains_admin_role: 3trainsadmin
+keycloak_3trains_user_role: 3trainsuser
+
+# Demo App
+demo_app_host: "{{ trains_app_host | default('localhost') }}"
+demo_app_endpoint: "{{ train_app_endpoint | default('/kitchensink') }}"
+demo_app_redirect_uris:
+  - "https://{{ demo_app_host }}:8443{{ demo_app_endpoint }}/*"
+  - "https://{{ demo_app_host }}:8543{{ demo_app_endpoint }}/*"
+  - "https://{{ demo_app_host }}:8643{{ demo_app_endpoint }}/*"
+
+keycloak_clients:
+  - name: "{{ keycloak_3trains_client_name }}"
+    roles:
+      - "{{ keycloak_3trains_user_role }}"
+      - "{{ keycloak_3trains_admin_role }}"
+    realm: "{{ keycloak_realm }}"
+    redirect_uris: "{{ demo_app_redirect_uris }}"
+
+keycloak_auth_realm: master
+keycloak_auth_client: admin-cli
+
+keycloak_url: "http://{{ keycloak_host }}:{{ keycloak_http_port }}"
+keycloak_management_url: "http://{{ keycloak_host }}:{{ keycloak_management_http_port }}"
+
+keycloak_users:
+  - username: 3trainsadmin
+    password: password
+    client_roles:
+      - client: "{{ keycloak_3trains_client_name }}"
+        role: "{{ keycloak_3trains_admin_role }}"
+        realm: "{{ keycloak_realm }}"
+      - client: "{{ keycloak_3trains_client_name }}"
+        role: "{{ keycloak_3trains_user_role }}"
+        realm: "{{ keycloak_realm }}"
+  - username: 3trainsuser
+    password: password
+    client_roles:
+      - client: "{{ keycloak_3trains_client_name }}"
+        role: "{{ keycloak_3trains_user_role }}"
+        realm: "{{ keycloak_realm }}"

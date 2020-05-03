@@ -1,14 +1,13 @@
 Three trains in the night...
 ====
 
-This Ansible playbooks demonstrate how to set up a 3 nodes [Wildfly](https://wildfly.org/) cluster, on a single machine, using Ansible and the [JCliff Ansible collection](https://github.com/wildfly-extras/ansible_collections_jcliff). On top of a fully functionnal cluster, each server will be have the appropriate JDBC driver installed for PostrgeSQL and each instance will be configured to connect to the local PostgreSQL database (also set up by the playbook).
+This repository contains a set of Ansible based roles and playbooks to demonstrate the integration between a [Wildfly](https://wildfly.org/) cluster with an application deployed and secured using [Keycloak](https://www.keycloak.org/) and built using [JCliff Ansible collection](https://github.com/wildfly-extras/ansible_collections_jcliff). Note that currently it is a work in progress, the playbooks is not fully functional (yet)!
 
-This set-up is higly dependend on Systemd as this software is used to manage all services (Wildfly and Postgresql).
+## Set up
 
- Note that currently it is a work in progress, the playbooks is not fully functionnal (yet)!
+The following sections describe the steps necessary to prepare your machine for execution
 
-Set up
-====
+### JCliff Integration
 
 First of all, you'll need to install the [JCliff Ansible collection](https://github.com/wildfly-extras/ansible_collections_jcliff). Clone the project and run the following command line:
 
@@ -19,53 +18,26 @@ This will produce a zipfile named redhat-jcliff-1.0.0.tgz. Install this new modu
 
     $ ansible-galaxy collection install path/to/redhat-jcliff-1.0.0.tgz.
 
-That's all! You can now run the playbook to set up the demo :
+### Ansible Inventory
 
-    $ ansible-playbook playbook.yml
+Ansible groups are used to define the Keycloak and Wildfly instances. Configure these groups in the [hosts](inventory/hosts) file similar to the following:
 
-What the end results of this demo?
-====
+```
+[threetrains]
 
-After a successful run of the provided playbook.yml, here what you should have on the targeted systems :
+[wildfly]
+192.168.22.4
 
-+-----------------------------------------------------------------------------------------------------+
-|                                                                                       Host          |
-|                                                                                                     |
-|                                  Wildfly Application                                                |
-|                                                                                                     |
-|                                        Servers                          +---------------------------+------+
-|                                                                         |Notes:                            |
-|                              +------------------+                       |All services are ran by systemd   |
-|                              |                  |                       |Wildfly is only installed once    |
-|             HTTP             |                  |                       |                                  |
-|      +-----------------------+      wlfy-1      +---------+             +---------------------------+------+
-|      |                       |                  |         |                                         |
-|      |                       |                  |         |                                         |
-|      |                       +--------+---------+         |                                         |
-|      |                                |                   |                                         |
-|      |                                |                   |                                         |
-|      |                 JGroups Clustering                 |                                         |
-|      |                                |                   |                                         |
-|      |                      +---------+---------+         |       +------------------------+        |
-|      |                      |                   |         |       |                        |        |
-|      |      HTTP            |                   |         |       |                        |        |
-|      +----------------------+       wfly-2      +-----------------+   PostgreSQL Db        |        |
-|      |                      |                   |         | SQL   |                        |        |
-|      |                      |                   |         |       |                        |        |
-|      |                      +---------+---------+         |       +------------------------+        |
-|      |                                |                   |                                         |
-|      |                                |                   |                                         |
-|      |                                |                   |                                         |
-|      |                      +---------+----------+        |                                         |
-|      |                      |                    |        |                                         |
-|      |                      |                    |        |                                         |
-|      +----------------------+       wfly-3       +--------+                                         |
-|                             |                    |                                                  |
-|                             |                    |                                                  |
-|                             +--------------------+                                                  |
-|                                                                                                     |
-|                                                                                                     |
-|                                                                                                     |
-+-----------------------------------------------------------------------------------------------------+
+[keycloak]
+192.168.22.5
 
-(diagram produced thanks to [http://asciiflow.com/](http://asciiflow.com/) )
+[threetrains:children]
+wildfly
+keycloak
+```
+
+## Execution
+
+That's all! You can now run the playbook to set up the demo:
+
+    $ ansible-playbook -i inventory/ playbooks/demo.yml
