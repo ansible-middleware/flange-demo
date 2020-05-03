@@ -1,0 +1,21 @@
+---
+
+- name: "Install Prerequisites"
+  include_tasks: prereqs.yml
+
+- name: "Install Postresql"
+  include_tasks: postgres.yml
+
+- name: "Install Widfly"
+  include_tasks: install-wildfly.yml
+
+- name: "Install Postresql driver"
+  include_tasks: pgsql_jdbc_driver.yml
+
+- name: "Set up for all Wildfly instances"
+  include_tasks: set-up-wildfy-service.yml
+  loop: "{{ range(1, 4)|list }}"
+
+- name: "Deploy app in cluster"
+  include_tasks: fine-tuned-wildfly.yml
+  loop: "{{ range(1, 4)|list }}"

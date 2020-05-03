@@ -1,0 +1,14 @@
+---
+- name: Playbook for Wildfly Hosts
+  hosts: wildfly
+  collections:
+    - redhat.jcliff
+  tasks:
+    - name: JCliff
+      include_role:
+        name: jcliff
+    - name: Wildfly Role
+      include_role:
+        name: 3trains_wildfly
+      vars:
+        keycloak_3trains_url: "{{ 'http://' + (groups['keycloak'][0] if groups['keycloak']| length > 0 else 'localhost')  + ':8080' }}"

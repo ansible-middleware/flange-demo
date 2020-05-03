@@ -1,0 +1,15 @@
+---
+
+- name: "Ensures required packages are installed"
+  yum:
+    name:
+      - zip
+      - unzip
+      - gcc
+      - redhat-rpm-config
+      - procps-ng
+      - python3-pip
+      - python3-devel
+      - initscripts
+      - "{{ jvm_package | default('java-1.8.0-openjdk-devel') }}"
+    state: present

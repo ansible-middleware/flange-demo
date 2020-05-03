@@ -1,0 +1,213 @@
+---
+# tasks file for keycloak
+
+- name: Prerequisites
+  include_tasks: prereqs.yml
+  tags:
+    - prereqs
+
+- name: check for an existing deployment
+  become: yes
+  stat:
+    path: "{{ keycloak_jboss_home }}"
+  register: existing_deploy
+
+- block:
+  - name: stop the old keycloak service
+    become: yes
+    ignore_errors: yes
+    systemd:
+      name: keycloak
+      state: stopped
+  - name: remove the old Keycloak deployment
+    become: yes
+    file:
+      path: "{{ keycloak_jboss_home }}"
+      state: absent
+  when: existing_deploy.stat.exists and keycloak_force_install|bool
+
+- name: check for an existing deployment after possible forced removal
+  become: yes
+  stat:
+    path: "{{ keycloak_jboss_home }}"
+  register: existing_deploy
+
+- name: create Keycloak service user/group
+  become: yes
+  user:
+    name: "{{ keycloak_service_user }}"
+    home: /
+    shell: /sbin/nologin
+    system: yes
+    create_home: no
+
+- name: create Keycloak install location
+  become: yes
+  file:
+    dest: "{{ keycloak_dest }}"
+    state: directory
+    owner: "{{ keycloak_service_user }}"
+    group: "{{ keycloak_service_group }}"
+
+- block:
+  - name: download Keycloak archive to target
+    get_url:
+      url: "{{ keycloak_download_url }}"
+      dest: "{{ keycloak_dest }}"
+      owner: "{{ keycloak_service_user }}"
+      group: "{{ keycloak_service_group }}"
+  - name: extract Keycloak archive on target
+    unarchive:
+      remote_src: yes
+      src: "{{ keycloak_dest }}/{{ keycloak_archive }}"
+      dest: "{{ keycloak_dest }}"
+      creates: "{{ keycloak_jboss_home }}"
+      owner: "{{ keycloak_service_user }}"
+      group: "{{ keycloak_service_group }}"
+    notify:
+      - restart keycloak
+  become: yes
+
+- name: create Keycloak admin user
+  command:
+  args:
+    argv:
+      - "{{ keycloak_jboss_home }}/bin/add-user-keycloak.sh"
+      - -rmaster
+      - -u{{ keycloak_admin_user }}
+      - -p{{ keycloak_admin_password }}
+    creates: "{{ keycloak_config_dir }}/keycloak-add-user.json"
+  become: yes
+
+
+- name: install firewalld
+  become: yes
+  package:
+    name: firewalld
+
+- name: enable and start the firewalld service
+  become: yes
+  systemd:
+    name: firewalld
+    enabled: yes
+    state: started
+
+- name: configure firewall for Keycloak ports
+  become: yes
+  firewalld:
+    port: "{{ item }}"
+    permanent: true
+    state: enabled
+    immediate: yes
+  loop:
+    - "{{ keycloak_http_port }}/tcp"
+    - "{{ keycloak_https_port }}/tcp"
+
+- name: configure sysconfig file for keycloak service
+  become: yes
+  template:
+    src: keycloak-sysconfig.j2
+    dest: /etc/sysconfig/keycloak
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart keycloak
+
+- name: configure systemd unit file for keycloak service
+  template:
+    src: keycloak.service.j2
+    dest: /etc/systemd/system/keycloak.service
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+  notify:
+    - reload systemd
+    - restart keycloak
+
+- meta: flush_handlers
+
+- name: Wait until Keycloak becomes active
+  uri:
+    url: "{{ keycloak_management_url }}/health"
+  register: keycloak_status
+  until: keycloak_status.status == 200
+  retries: 20
+  delay: 10
+
+- name: configure systemd unit file for keycloak service
+  become: yes
+  template:
+    src: keycloak.service.j2
+    dest: /etc/systemd/system/keycloak.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - reload systemd
+    - restart keycloak
+
+- name: Generate keycloak auth token
+  uri:
+    url: "{{ keycloak_url }}/auth/realms/master/protocol/openid-connect/token"
+    method: POST
+    body: "client_id={{ keycloak_auth_client }}&username={{ keycloak_admin_user }}&password={{ keycloak_admin_password }}&grant_type=password"
+    validate_certs: no
+  register: keycloak_auth_response
+  until: keycloak_auth_response.status == 200
+  retries: 5
+  delay: 2
+
+- name: "Determine if realm exists"
+  uri:
+    url: "{{ keycloak_url }}/auth/admin/realms/{{ keycloak_realm }}"
+    method: GET
+    status_code:
+     - 200
+     - 404
+    headers:
+      Accept: "application/json"
+      Authorization: "Bearer {{ keycloak_auth_response.json.access_token }}"
+  register: keycloak_realm_exists
+
+- name: "Create realm"
+  uri:
+    url: "{{ keycloak_url }}/auth/admin/realms"
+    method: POST
+    body: "{{ lookup('template','realm.json.j2') }}"
+    validate_certs: no
+    body_format: json
+    headers:
+      Authorization: "Bearer {{ keycloak_auth_response.json.access_token }}"
+    status_code: 201
+  when: keycloak_realm_exists.status == 404
+
+- name: Create 3trains Client
+  keycloak_client:
+    auth_client_id: "{{ keycloak_auth_client }}"
+    auth_keycloak_url: "{{ keycloak_url }}/auth"
+    auth_realm: "{{ keycloak_auth_realm }}"
+    auth_username: "{{ keycloak_admin_user }}"
+    auth_password: "{{ keycloak_admin_password }}"
+    client_id: "{{ item.name }}"
+    realm: "{{ item.realm }}"
+    default_roles: "{{ item.roles | default(omit) }}"
+    root_url: "{{ item.root_url | default('') }}"
+    redirect_uris: "{{ item.redirect_uris | default([]) }}"
+    state: present
+  register: create_client_result
+  loop: "{{ keycloak_clients }}"
+
+- name: Manage Users
+  include_tasks: manage_user.yml
+  loop: "{{ keycloak_users }}"
+  loop_control:
+    loop_var: user
+
+- name: Manage User Roles
+  include_tasks: manage_user_roles.yml
+  loop: "{{ keycloak_users }}"
+  loop_control:
+    loop_var: user
+  when: "'client_roles' in user"

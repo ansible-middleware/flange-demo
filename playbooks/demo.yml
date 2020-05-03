@@ -1,0 +1,6 @@
+---
+# Keycloak Playbook
+- import_playbook: keycloak.yml
+
+# Wildfly Playbook
+- import_playbook: wildfly.yml

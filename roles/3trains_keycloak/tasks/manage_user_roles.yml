@@ -1,0 +1,15 @@
+---
+
+- name: "Get User"
+  uri:
+    url: "{{ keycloak_url }}/auth/admin/realms/{{ keycloak_realm }}/users?username={{ user.username }}"
+    validate_certs: no
+    headers:
+      Authorization: "Bearer {{ keycloak_auth_response.json.access_token }}"
+  register: keycloak_user
+
+- name: Manage Client Role Mapping
+  include_tasks: manage_user_client_roles.yml
+  loop: "{{ user.client_roles }}"
+  loop_control:
+    loop_var: client_role

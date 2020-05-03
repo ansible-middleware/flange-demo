@@ -1,0 +1,104 @@
+- name: Check if Keycloak extensions installed
+  command: >
+    {{ wildfly.home }}/bin/jboss-cli.sh --output-json -c --controller="localhost:{{ 9990 + ((item - 1) * 100) }}" --command="/extension=org.keycloak.keycloak-adapter-subsystem:read-resource"
+  args:
+    chdir: "{{ wildfly.home }}"
+  ignore_errors: true
+  register: keycloak_installed
+
+- name: Install Keycloak Adapter and Reload
+  block:
+    - name: Install Keycloak Adapter
+      command: >
+        {{ wildfly.home }}/bin/jboss-cli.sh -c --controller="localhost:{{ 9990 + ((item - 1) * 100) }}" --file={{ wildfly.home }}/bin/adapter-elytron-install.cli
+      args:
+        chdir: "{{ wildfly.home }}"
+    - name: Reload After Keycloak Adapter Install
+      command: >
+        {{ wildfly.home }}/bin/jboss-cli.sh -c --controller="localhost:{{ 9990 + ((item - 1) * 100) }}" --command=":reload"
+      args:
+        chdir: "{{ wildfly.home }}"
+  when: (keycloak_installed.stdout | from_json)['outcome'] != "success"
+
+- name: "Download a demo app to deploy"
+  get_url:
+    url: "{{ app_url }}"
+    dest: "{{ app }}"
+
+- name: "Fine tune Wildfly configuration"
+  jcliff:
+    wfly_home: "{{ wildfly.home }}"
+    management_port: "{{ 9990 + ((item - 1) * 100) }}"
+    subsystems:
+      - system_props:
+          - name: jcliff.enabled
+            value: 'enabled.plus'
+      - deployments:
+          - artifact_id: "{{ app | basename }}"
+            name: "{{ app | basename | splitext | first }}"
+            path: "{{ app }}"
+      - drivers:
+          - driver_name: postgresql
+            driver_module_name: org.postgresql
+            driver_class_name: org.postgresql.Driver
+            driver_xa_datasource_class_name: org.postgresql.xa.PGXADataSource
+      - datasources:
+          - name: "{{ wildfly.config_name_prefix }}db"
+            use_java_context: 'true'
+            jndi_name: "java:jboss/datasources/{{ wildfly.config_name_prefix }}db"
+            connection_url: "jdbc:postgresql://localhost:5432/{{ wildfly.config_name_prefix }}db"
+            driver_name: postgresql
+            user_name: "{{ wildfly.user }}"
+            password: "{{ wildfly.user }}"
+
+- name: Generate keycloak auth token
+  uri:
+    url: "{{ keycloak_url }}/auth/realms/master/protocol/openid-connect/token"
+    method: POST
+    body: "client_id={{ keycloak_auth_client }}&username={{ keycloak_admin_user }}&password={{ keycloak_admin_password }}&grant_type=password"
+    validate_certs: no
+  register: keycloak_auth_response
+  until: keycloak_auth_response.status == 200
+  retries: 5
+  delay: 2
+  run_once: true
+
+- name: "Get Clients"
+  uri:
+    url: "{{ keycloak_url }}/auth/admin/realms/{{ keycloak_realm }}/clients"
+    method: GET
+    status_code:
+     - 200
+    headers:
+      Accept: "application/json"
+      Authorization: "Bearer {{ keycloak_auth_response.json.access_token }}"
+  register: keycloak_client_response
+
+- name: "Get Client Secret"
+  uri:
+    url: "{{ keycloak_url }}/auth/admin/realms/{{ keycloak_realm }}/clients/{{ (keycloak_client_response.json | selectattr('clientId', 'equalto', keycloak_client) | list | first).id }}/client-secret"
+    method: GET
+    status_code:
+     - 200
+    headers:
+      Accept: "application/json"
+      Authorization: "Bearer {{ keycloak_auth_response.json.access_token }}"
+  register: keycloak_client_secret_response
+
+- name: Determine if secure deployment exists
+  command: >
+    {{ wildfly.home }}/bin/jboss-cli.sh --output-json -c controller="localhost:{{ 9990 + ((item - 1) * 100) }}" --command="/subsystem=keycloak:read-resource(recursive=true)"
+  register: jboss_cli_response
+
+- name: Configure Keycloak
+  block:
+    - name: Configure Secure Deployment
+      command: >
+        {{ wildfly.home }}/bin/jboss-cli.sh --output-json -c controller="localhost:{{ 9990 + ((item - 1) * 100) }}" --command="/subsystem=keycloak/secure-deployment={{ app | basename }}/:add(realm={{ keycloak_realm }},resource={{ keycloak_client }},auth-server-url={{ keycloak_url }}/auth/,verify-token-audience=true,use-resource-role-mappings=true,ssl-required=EXTERNAL)"
+    - name: Configure Secret
+      command: >
+        {{ wildfly.home }}/bin/jboss-cli.sh --output-json -c controller="localhost:{{ 9990 + ((item - 1) * 100) }}" --command="/subsystem=keycloak/secure-deployment={{ app | basename }}/credential=secret:add(value={{ keycloak_client_secret_response.json.value }})"
+    - name: Reload Server
+      command: >
+        {{ wildfly.home }}/bin/jboss-cli.sh --output-json -c controller="localhost:{{ 9990 + ((item - 1) * 100) }}" --command=":reload"
+  when: "(jboss_cli_response.stdout | from_json)['result']['secure-deployment'] == None"
