@@ -27,6 +27,7 @@ jdbc_driver_jar_filename: "postgresql-{{ jdbc_driver_version }}.jar"
 jdbc_driver_jar_url: "https://repo.maven.apache.org/maven2/org/postgresql/postgresql/{{ jdbc_driver_version }}/{{ jdbc_driver_jar_filename }}"
 jdbc_driver_jar_installation_path: "{{ jdbc_driver_module_dir }}/{{ jdbc_driver_jar_filename }}"
 ansible_distribution: Fedora
+jcliff_rules_dir: /usr/share/jcliff/rules
 keycloak_auth_client: admin-cli
 keycloak_admin_user: admin
 keycloak_admin_password: "redhat1!"
