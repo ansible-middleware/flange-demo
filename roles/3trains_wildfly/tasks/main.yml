@@ -16,6 +16,10 @@
   include_tasks: set-up-wildfy-service.yml
   loop: "{{ range(1, 4)|list }}"
 
+- name: "Install Keycloak Extension"
+  include_tasks: keycloak-extension-install.yml
+  loop: "{{ range(1, 4)|list }}"
+
 - name: "Deploy app in cluster"
   include_tasks: fine-tuned-wildfly.yml
   loop: "{{ range(1, 4)|list }}"

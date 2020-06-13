@@ -1,6 +1,15 @@
 ---
-app_url: "https://drive.google.com/uc?export=download&id=12a4MhIZdjAVZhukVGX5xLAHg8rD0lEwh"
-app: /tmp/kitchensink.war
+sample_app_version: "0.0.1"
+apps:
+  - name: kitchensink
+    extension: war
+    version: "0.0.1"
+    url: "https://drive.google.com/uc?export=download&id=1PfTn2zk-UVbLoPDT-xf9Z4AdkNaEfTh3"
+  - name: kitchensink
+    extension: war
+    version: "0.0.2"
+    url: "https://drive.google.com/uc?export=download&id=1nrKPe6N7aDwilz6YIzImw1PznaYHuEDj"
+app_dir: /tmp
 wfly_version: 19.0.0.Final
 workdir: /opt/wildfly/
 wfly_zipfile: "wildfly-{{ wfly_version }}.zip"

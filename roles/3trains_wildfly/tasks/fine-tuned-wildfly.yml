@@ -1,50 +1,17 @@
-- name: Check if Keycloak extensions installed
-  command: >
-    {{ wildfly.home }}/bin/jboss-cli.sh --output-json -c --controller="localhost:{{ 9990 + ((item - 1) * 100) }}" --command="/extension=org.keycloak.keycloak-adapter-subsystem:read-resource"
-  args:
-    chdir: "{{ wildfly.home }}"
-  ignore_errors: true
-  register: keycloak_installed
+---
 
-- name: Install Keycloak Adapter and Reload
-  block:
-    - name: Install Keycloak Adapter
-      command: >
-        {{ wildfly.home }}/bin/jboss-cli.sh -c --controller="localhost:{{ 9990 + ((item - 1) * 100) }}" --file={{ wildfly.home }}/bin/adapter-elytron-install.cli
-      args:
-        chdir: "{{ wildfly.home }}"
-    - name: Reload After Keycloak Adapter Install
-      command: >
-        {{ wildfly.home }}/bin/jboss-cli.sh -c --controller="localhost:{{ 9990 + ((item - 1) * 100) }}" --command=":reload"
-      args:
-        chdir: "{{ wildfly.home }}"
-  when: (keycloak_installed.stdout | from_json)['outcome'] != "success"
+- name: Set application detail
+  set_fact:
+    app_detail: "{{ apps | selectattr('version','equalto', sample_app_version) | list | first }}"
+
+- name: Set Application Destination Directory
+  set_fact:
+    app_dest: "{{ app_dir + '/' + app_detail.name + '-' + app_detail.version + '.' + app_detail.extension }}"
 
 - name: "Download a demo app to deploy"
   get_url:
-    url: "{{ app_url }}"
-    dest: "{{ app }}"
-
-- name: "Copy Rules Directory"
-  copy:
-    src: "files/rules/"
-    dest: "{{ jcliff_rules_dir }}"
-
-- name: "Lookup Rules file"
-  slurp:
-    src: "{{ jcliff_rules_dir }}/rules"
-  register: rules_file
-
-- name: "Get last line of rules file"
-  set_fact:
-    rules_file_last_line: "{{ (rules_file['content'] | b64decode).splitlines()[-1] }}"
-
-- name: Append keycloak rule to jcliff rules file
-  lineinfile:
-    path: "{{ jcliff_rules_dir }}/rules"
-    regex: "^configurable*keycloak"
-    line: "{{ 'configurable.'+(((rules_file_last_line.split('=')[0].split('.')[1] | int)+1)|string) + '=keycloak' }}"
-  when: rules_file_last_line.split('=')[1] != 'keycloak'
+    url: "{{ app_detail.url }}"
+    dest: "{{ app_dest }}"
 
 - name: Get keycloak auth token
   uri:
@@ -89,9 +56,9 @@
           - name: jcliff.enabled
             value: 'enabled.plus'
       - deployments:
-          - artifact_id: "{{ app | basename }}"
-            name: "{{ app | basename | splitext | first }}"
-            path: "{{ app }}"
+          - name: "{{ app_dest | basename }}"
+            path: "{{ app_dest }}"
+            replace_name_regex: "{{  (app_dest | basename).split('-')[0] }}-.*"
       - drivers:
           - driver_name: postgresql
             driver_module_name: org.postgresql
@@ -107,7 +74,7 @@
             password: "{{ wildfly.user }}"
       - keycloak:
           - secure_deployment:
-              - deployment_name: "{{ app | basename }}"
+              - deployment_name: "{{ app_detail.name + '.' + app_detail.extension }}"
                 realm: "{{ keycloak_realm }}"
                 auth_server_url: "{{ keycloak_url }}/auth/"
                 ssl_required: EXTERNAL
