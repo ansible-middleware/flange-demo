@@ -1,0 +1,16 @@
+---
+- name: Playbook to update Applications on a Wildfly instance
+  hosts: wildfly
+  collections:
+    - redhat.jcliff
+  tasks:
+    - name: JCliff
+      include_role:
+        name: jcliff
+    - name: Wildfly Role
+      include_role:
+        name: 3trains_wildfly
+        tasks_from: fine-tuned-wildfly.yml
+      vars:
+        keycloak_3trains_url: "{{ 'http://' + (groups['keycloak'][0] if groups['keycloak']| length > 0 else 'localhost')  + ':8080' }}"
+      loop: "{{ range(1, 4)|list }}"

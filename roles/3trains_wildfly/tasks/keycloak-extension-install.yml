@@ -1,0 +1,23 @@
+---
+
+- name: Check if Keycloak extensions installed
+  command: >
+    {{ wildfly.home }}/bin/jboss-cli.sh --output-json -c --controller="localhost:{{ 9990 + ((item - 1) * 100) }}" --command="/extension=org.keycloak.keycloak-adapter-subsystem:read-resource"
+  args:
+    chdir: "{{ wildfly.home }}"
+  ignore_errors: true
+  register: keycloak_installed
+
+- name: Install Keycloak Adapter and Reload
+  block:
+    - name: Install Keycloak Adapter
+      command: >
+        {{ wildfly.home }}/bin/jboss-cli.sh -c --controller="localhost:{{ 9990 + ((item - 1) * 100) }}" --file={{ wildfly.home }}/bin/adapter-elytron-install.cli
+      args:
+        chdir: "{{ wildfly.home }}"
+    - name: Reload After Keycloak Adapter Install
+      command: >
+        {{ wildfly.home }}/bin/jboss-cli.sh -c --controller="localhost:{{ 9990 + ((item - 1) * 100) }}" --command=":reload"
+      args:
+        chdir: "{{ wildfly.home }}"
+  when: (keycloak_installed.stdout | from_json)['outcome'] != "success"
