@@ -1,0 +1,67 @@
+- name: Create SSL Certificate
+  become: true
+  block:
+    - name: Create temporay directory for certs creation
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - "{{ certs_dir }}"
+        - "{{ generate_cert_dir }}"
+
+    - name: Create Root Private Key
+      openssl_privatekey:
+        path: "{{ certs_generate_root_privatekey }}"
+        size: "{{ certs_privatekey_size }}"
+    - name: Create Root CSR
+      openssl_csr:
+        path: "{{ certs_generate_root_csr }}"
+        privatekey_path: "{{ certs_generate_root_privatekey }}"
+        common_name: "{{ nexus_hostname }}"
+        locality_name: "{{ certs_locality_name }}"
+        organization_name: "{{ certs_organization_name }}"
+        organizational_unit_name: "{{ certs_organizational_unit_name }}"
+        state_or_province_name: "{{ certs_state_name }}"
+        country_name: "{{ certs_country_name }}"
+        basic_constraints:
+          - "CA:TRUE"
+    - name: Create Root Certificate
+      openssl_certificate:
+        path: "{{ certs_generate_root_cert }}"
+        privatekey_path: "{{ certs_generate_root_privatekey }}"
+        csr_path: "{{ certs_generate_root_csr }}"
+        selfsigned_not_after: "+{{ ssl_certificate_expiry_days }}d"
+        provider: selfsigned
+    - name: Create Private Key
+      openssl_privatekey:
+        path: "{{ certs_privatekey_file }}"
+        size: "{{ certs_privatekey_size }}"
+    - name: Create CSR
+      openssl_csr:
+        path: "{{ certs_csr_file }}"
+        privatekey_path: "{{ certs_privatekey_file }}"
+        common_name: "{{ nexus_hostname }}"
+        locality_name: "{{ certs_locality_name }}"
+        organization_name: "{{ certs_organization_name }}"
+        organizational_unit_name: "{{ certs_organizational_unit_name }}"
+        state_or_province_name: "{{ certs_state_name }}"
+        country_name: "{{ certs_country_name }}"
+        use_common_name_for_san: true
+    - name: Create  Certificate
+      openssl_certificate:
+        path: "{{ certs_cert_file }}"
+        ownca_privatekey_path: "{{ certs_generate_root_privatekey }}"
+        ownca_path: "{{ certs_generate_root_cert }}"
+        csr_path: "{{ certs_csr_file }}"
+        provider: ownca
+        ownca_not_after: "+{{ ssl_certificate_expiry_days }}d"
+
+    - name: "Import SSL certificates into JDK"
+      java_cert:
+        cert_path: "{{ certs_cert_file }}"
+        cert_alias: "{{ ansible_nodename }}"
+        keystore_path: "/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.252.b09-0.fc31.x86_64/jre/lib/security/cacerts"
+        executable: "/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.252.b09-0.fc31.x86_64/bin/keytool"
+        keystore_pass: changeit
+        keystore_create: no
+        state: present

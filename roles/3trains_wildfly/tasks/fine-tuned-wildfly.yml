@@ -47,6 +47,20 @@
       Authorization: "Bearer {{ keycloak_auth_response.json.access_token }}"
   register: keycloak_client_secret_response
 
+- name: "Check if HTTPS has been enabled"
+  command: >
+    {{ wildfly.home }}/bin/jboss-cli.sh --output-json -c --controller="localhost:{{ 9990 + ((item - 1) * 100) }}" --command="security enable-ssl-http-server"
+  args:
+    chdir: "{{ wildfly.home }}"
+  ignore_errors: true
+  register: https_enabled
+  changed_when: https_enabled.stdout != "SSL is already enabled for default-server"
+
+- name: "Enable HTTPS"
+  command: >
+    {{ wildfly.home }}/bin/jboss-cli.sh -c --controller="localhost:{{ 9990 + ((item - 1) * 100) }}" --command="security enable-ssl-http-server --key-store-path=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.252.b09-0.fc31.x86_64/jre/lib/security/cacerts --key-store-password=changeit"
+  when: https_enabled.stdout != "SSL is already enabled for default-server"
+
 - name: "Fine tune Wildfly configuration"
   jcliff:
     wfly_home: "{{ wildfly.home }}"

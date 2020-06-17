@@ -7,6 +7,7 @@
     chdir: "{{ wildfly.home }}"
   ignore_errors: true
   register: keycloak_installed
+  changed_when: (keycloak_installed.stdout | from_json)['outcome'] != "success"
 
 - name: Install Keycloak Adapter and Reload
   block:

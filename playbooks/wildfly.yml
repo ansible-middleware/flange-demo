@@ -4,6 +4,9 @@
   collections:
     - redhat.jcliff
   tasks:
+    - name: Wildfly Certs
+      include_role:
+        name: 3trains_certs
     - name: JCliff
       include_role:
         name: jcliff
