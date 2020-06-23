@@ -1,5 +1,5 @@
 - set_fact:
-    package_names:
+    packages_list:
       - postgresql-server
       - postgresql-devel
     db_name: "{{ wildfly.config_name_prefix }}db"
@@ -7,10 +7,7 @@
     db_password: "{{ wildfly.user }}"
 
 - name: "Install PostgreSQL"
-  include_tasks: rpminfo.yml
-  loop: "{{ package_names }}"
-  loop_control:
-    loop_var: package_name
+  include_tasks: install-missing-packages.yml
 
 - name: "Install PostgreSQL Module Depenedncies"
   pip:
