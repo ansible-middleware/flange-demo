@@ -1,16 +1,17 @@
-certs_dir: /etc/certs
+certs_dir: "{{ custom_certs_dir | default('/etc/certs') }}"
 generate_cert_dir: /tmp/registrycerts
 certs_privatekey_name: domain.key
 certs_csr_name: domain.csr
 certs_name: domain.crt
-dns_domain: localdomain.com
+dns_domain: "{{ cert_dns_domain_name | default('localdomain.com') }}"
 
 certs_privatekey_size: 8192
-certs_organization_name: Red Hat
-certs_organizational_unit_name: FSI
-certs_locality_name: New York
-certs_country_name: US
-certs_state_name: New York
+
+certs_organization_name: "{{ custom_certs_organization_name | default('Red Hat') }}"
+certs_organizational_unit_name: "{{ custom_certs_organizational_unit_name | default('acme') }}"
+certs_locality_name: "{{  custom_certs_locality_name  | default('New York') }}"
+certs_country_name: "{{ custom_certs_country_name | default('US') }}"
+certs_state_name: "{{ custom_certs_state_name | default('New York') }}"
 
 certs_generate_root_cert: "{{ certs_dir }}/root-{{ certs_name }}"
 certs_generate_root_privatekey: "{{ generate_cert_dir }}/root-{{ certs_privatekey_name }}"
@@ -21,4 +22,4 @@ certs_privatekey_file: "{{ certs_dir }}/{{ certs_privatekey_name }}"
 force_generate_cert: false
 ssl_certificate_expiry_days: "365"
 
-nexus_hostname: registry.nexus.{{ dns_domain }}
+server_hostname: "{{ server_hostanme | default(ansible_nodename) }}.{{ dns_domain }}"

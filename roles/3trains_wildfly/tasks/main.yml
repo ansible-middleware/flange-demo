@@ -12,6 +12,16 @@
 - name: "Install Postresql driver"
   include_tasks: pgsql_jdbc_driver.yml
 
+- name: "Import SSL certificates into JDK"
+  java_cert:
+    cert_path: /etc/certs
+    cert_alias: "{{ ansible_nodename }}"
+    keystore_path: "{{ java.home }}/jre/lib/security/cacerts"
+    executable: "{{ java.home }}/bin/keytool"
+    keystore_pass: "{{ java.keystore.password }}"
+    keystore_create: no
+    state: present
+
 - name: "Set up for all Wildfly instances"
   include_tasks: set-up-wildfy-service.yml
   loop: "{{ range(1, 4)|list }}"

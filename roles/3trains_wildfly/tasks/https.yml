@@ -1,0 +1,18 @@
+- block:
+  - name: "Check if HTTPS has been enabled"
+    command: >
+      {{ wildfly.home }}/bin/jboss-cli.sh --output-json -c --controller=localhost:{{ 9990 + ((item - 1) * 100) }} --command="security enable-ssl-http-server"
+    args:
+      chdir: "{{ wildfly.home }}"
+    ignore_errors: true
+    register: https_enabled
+    changed_when: https_enabled.stdout != "SSL is already enabled for default-server"
+
+  - set_fact:
+     enable_ssl_command: "security enable-ssl-http-server --key-store-path={{ java.home }}/jre/lib/security/cacerts --key-store-password={{ java.keystore.password }}"
+
+  - name: "Enable HTTPS"
+    command: >
+      {{ wildfly.home }}/bin/jboss-cli.sh -c --controller=localhost:{{ 9990 + ((item - 1) * 100) }} --command="{{ enable_ssl_command }}"
+    when: https_enabled.stdout != "SSL is already enabled for default-server"
+  when: wildfly.enable.https

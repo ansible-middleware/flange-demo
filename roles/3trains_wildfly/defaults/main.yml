@@ -18,6 +18,8 @@ keycloak_adapter_version: 9.0.3
 keyclodk_download_url: https://downloads.jboss.org/keycloak/{{ keycloak_adapter_version }}/adapters/keycloak-oidc/keycloak-wildfly-adapter-dist-{{ keycloak_adapter_version }}.tar.gz
 java:
   home: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.242.b08-0.fc31.x86_64/
+  keystore:
+    password: changeit
 wildfly:
   home: "{{ workdir }}/wildfly-{{ wfly_version }}/"
   user: wildfly
@@ -29,6 +31,10 @@ wildfly:
   max_mem: 512m
   metaspace_size: 96m
   metaspace_maxsize: 256m
+  enable:
+    https: true
+    keycloak: true
+    subsys_config: true
 # can't use a structure for the jdbc_driver because of the interpolation between variables.
 jdbc_driver_module_dir: "{{ wildfly.home }}//modules/org/postgresql/main"
 jdbc_driver_version: 9.2-1002-jdbc4
@@ -43,3 +49,4 @@ keycloak_admin_password: "redhat1!"
 keycloak_realm: 3trains
 keycloak_url: "{{ keycloak_3trains_url | default('http://localhost:8080') }}"
 keycloak_client: 3trains
+
