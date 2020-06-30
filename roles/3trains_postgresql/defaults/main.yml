@@ -1,0 +1,9 @@
+---
+packages_list:
+  - python-psycopg2
+  - postgresql-server
+  - postgresql-devel
+db:
+  name: "{{ postgres.db_name | default('default_db') }}"
+  user: "{{ postgres.user.name | default('db_user') }}"
+  password: "{{ postgres.user.password | default('db_password') }}"

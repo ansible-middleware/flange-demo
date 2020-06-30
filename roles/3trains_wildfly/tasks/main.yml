@@ -3,9 +3,6 @@
 - name: "Install Prerequisites"
   include_tasks: prereqs.yml
 
-- name: "Install Postresql"
-  include_tasks: postgres.yml
-
 - name: "Install Widfly"
   include_tasks: install-wildfly.yml
 

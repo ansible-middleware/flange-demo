@@ -29,6 +29,11 @@ wildfly:
   max_mem: 512m
   metaspace_size: 96m
   metaspace_maxsize: 256m
+postgres:
+  db_name: wildfly
+  user:
+    name: wildfly
+    password: wildfly
 # can't use a structure for the jdbc_driver because of the interpolation between variables.
 jdbc_driver_module_dir: "{{ wildfly.home }}//modules/org/postgresql/main"
 jdbc_driver_version: 9.2-1002-jdbc4

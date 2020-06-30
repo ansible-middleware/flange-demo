@@ -1,22 +1,14 @@
+- name: "Install PostgreSQL and relate packages"
+  include_role:
+    name: 3trains_fastpackages
+
 - set_fact:
-    packages_list:
-      - postgresql-server
-      - postgresql-devel
-    db_name: "{{ wildfly.config_name_prefix }}db"
-    db_user: "{{ wildfly.user }}"
-    db_password: "{{ wildfly.user }}"
-
-- name: "Install PostgreSQL"
-  include_tasks: install-missing-packages.yml
-
-- name: "Install PostgreSQL Module Depenedncies"
-  pip:
-    name: psycopg2
+    pgdata: "{{ lookup('env','PGDATA') | default('/var/lib/pgsql/data') }}"
 
 - name: "Init PostgesQL Db"
   command:
     cmd: /usr/bin/postgresql-setup initdb
-    creates: /var/lib/pgsql/data/log
+    creates: /var/lib/pgsql/initdb.log
   register: datadir_init
 
 - name: "Ensure PostgreSQL accept connection with password"
@@ -34,18 +26,18 @@
     enabled: yes
   when: datadir_init is success
 
-- name: "Create a Wildfly database with name"
+- name: "Create database {{ db.name }}"
   become: true
   postgresql_db:
-    name: "{{ db_name }}"
+    name: "{{ db.name }}"
     encoding: UTF-8
     template: 'template0'
 
 - name: "Create user for database"
   become: true
   postgresql_user:
-    db: "{{ db_name }}"
-    name: "{{ db_user }}"
-    password: "{{ db_user }}"
+    db: "{{ db.name }}"
+    name: "{{ db.user }}"
+    password: "{{ db.user }}"
     priv: ALL
     state: present

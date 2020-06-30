@@ -67,11 +67,11 @@
       - datasources:
           - name: "{{ wildfly.config_name_prefix }}db"
             use_java_context: 'true'
-            jndi_name: "java:jboss/datasources/{{ wildfly.config_name_prefix }}db"
-            connection_url: "jdbc:postgresql://localhost:5432/{{ wildfly.config_name_prefix }}db"
+            jndi_name: "java:jboss/datasources/{{ postgres.db_name }}"
+            connection_url: "jdbc:postgresql://localhost:5432/{{ postgres.db_name }}"
             driver_name: postgresql
-            user_name: "{{ wildfly.user }}"
-            password: "{{ wildfly.user }}"
+            user_name: "{{ postgres.user.name }}"
+            password: "{{ postgres.user.password }}"
       - keycloak:
           - secure_deployment:
               - deployment_name: "{{ app_detail.name + '.' + app_detail.extension }}"
