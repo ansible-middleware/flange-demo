@@ -14,7 +14,8 @@
 
 
 - name: "Ensures required packages are installed"
-  include_tasks: install-missing-packages.yml
+  include_role:
+    name: 3trains_fastpackages
 
 - name: "Copy Rules Directory"
   copy:
