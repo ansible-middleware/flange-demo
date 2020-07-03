@@ -1,4 +1,6 @@
 ---
+- set_fact:
+    wildfly_instance_port: "{{ 9990 + ((item - wildfly.port_range_offset) * 100) }}"
 
 - name: Set application detail
   set_fact:
@@ -50,7 +52,7 @@
 - name: "Fine tune Wildfly configuration"
   jcliff:
     wfly_home: "{{ wildfly.home }}"
-    management_port: "{{ 9990 + ((item - 1) * 100) }}"
+    management_port: "{{ wildfly_instance_port }}"
     subsystems:
       - system_props:
           - name: jcliff.enabled

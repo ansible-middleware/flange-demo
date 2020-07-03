@@ -1,8 +1,10 @@
 ---
+- set_fact:
+    wildfly_instance_port: "{{ 9990 + ((item - wildfly.port_range_offset) * 100) }}"
 
 - name: Check if Keycloak extensions installed
   command: >
-    {{ wildfly.home }}/bin/jboss-cli.sh --output-json -c --controller="localhost:{{ 9990 + ((item - 1) * 100) }}" --command="/extension=org.keycloak.keycloak-adapter-subsystem:read-resource"
+    {{ wildfly.home }}/bin/jboss-cli.sh --output-json -c --controller="localhost:{{ wildfly_instance_port }}" --command="/extension=org.keycloak.keycloak-adapter-subsystem:read-resource"
   args:
     chdir: "{{ wildfly.home }}"
   ignore_errors: true
@@ -12,12 +14,12 @@
   block:
     - name: Install Keycloak Adapter
       command: >
-        {{ wildfly.home }}/bin/jboss-cli.sh -c --controller="localhost:{{ 9990 + ((item - 1) * 100) }}" --file={{ wildfly.home }}/bin/adapter-elytron-install.cli
+        {{ wildfly.home }}/bin/jboss-cli.sh -c --controller="localhost:{{ wildfly_instance_port }}" --file={{ wildfly.home }}/bin/adapter-elytron-install.cli
       args:
         chdir: "{{ wildfly.home }}"
     - name: Reload After Keycloak Adapter Install
       command: >
-        {{ wildfly.home }}/bin/jboss-cli.sh -c --controller="localhost:{{ 9990 + ((item - 1) * 100) }}" --command=":reload"
+        {{ wildfly.home }}/bin/jboss-cli.sh -c --controller="localhost:{{ wildfly_instance_port }}" --command=":reload"
       args:
         chdir: "{{ wildfly.home }}"
   when: (keycloak_installed.stdout | from_json)['outcome'] != "success"
