@@ -1,7 +1,4 @@
 ---
-# Set up env
-- import_playbook: prereqs.yml
-
 # Keycloak Playbook
 - import_playbook: keycloak.yml
 
