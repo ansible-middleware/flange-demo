@@ -21,6 +21,7 @@ java:
 wildfly:
   home: "{{ workdir }}/wildfly-{{ wfly_version }}/"
   user: wildfly
+  group: wildfly
   bind_addr: "{{ wildfly_bind_addr | default('localhost') }}"
   port_range_offset: 0
   base_config: standalone-ha.xml
