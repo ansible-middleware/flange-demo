@@ -15,6 +15,18 @@
   include_role:
     name: 3trains_fastpackages
 
+- name: install firewalld
+  become: yes
+  package:
+    name: firewalld
+
+- name: enable and start the firewalld service
+  become: yes
+  systemd:
+    name: firewalld
+    enabled: yes
+    state: started
+
 - name: "Copy Rules Directory"
   copy:
     src: "files/rules/"
