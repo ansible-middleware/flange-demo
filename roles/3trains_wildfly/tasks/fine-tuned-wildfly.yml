@@ -1,6 +1,19 @@
 ---
 - set_fact:
-    wildfly_instance_port: "{{ 9990 + ((item - wildfly.port_range_offset) * 100) }}"
+    wildfly_instance_management_port: "{{ 9990 + ((item - wildfly.port_range_offset) * 100) }}"
+    wildfly_instance_http_port: "{{ 8080 + ((item - wildfly.port_range_offset) * 100) }}"
+    wildfly_instance_https_port: "{{ 8443 + ((item - wildfly.port_range_offset) * 100) }}"
+
+- name: configure firewall for Wildfly ports
+  become: yes
+  firewalld:
+    port: "{{ item }}"
+    permanent: true
+    state: enabled
+    immediate: yes
+  loop:
+    - "{{ wildfly_instance_http_port }}/tcp"
+    - "{{ wildfly_instance_https_port }}/tcp"
 
 - name: Set application detail
   set_fact:
@@ -52,7 +65,7 @@
 - name: "Fine tune Wildfly configuration"
   jcliff:
     wfly_home: "{{ wildfly.home }}"
-    management_port: "{{ wildfly_instance_port }}"
+    management_port: "{{ wildfly_instance_management_port }}"
     subsystems:
       - system_props:
           - name: jcliff.enabled
