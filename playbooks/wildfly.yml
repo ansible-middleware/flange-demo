@@ -2,7 +2,7 @@
 - name: Playbook for Wildfly Hosts
   hosts: wildfly
   collections:
-    - redhat.jcliff
+    - wildfly.jcliff
   tasks:
     - name: JCliff
       include_role:

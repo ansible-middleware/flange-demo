@@ -2,7 +2,7 @@
 - name: Playbook to update Applications on a Wildfly instance
   hosts: wildfly
   collections:
-    - redhat.jcliff
+    - wildfly.jcliff
   tasks:
     - name: JCliff
       include_role:
