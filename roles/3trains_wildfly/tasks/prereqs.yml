@@ -4,8 +4,8 @@
     packages_list:
     - zip
     - unzip
-    - gcc
-    - redhat-rpm-config
+    # - gcc
+    # - redhat-rpm-config
     - procps-ng
     - initscripts
     - "{{ jvm_package | default('java-1.8.0-openjdk-devel') }}"

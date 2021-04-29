@@ -65,15 +65,16 @@
 - name: "Fine tune Wildfly configuration"
   jcliff:
     wfly_home: "{{ wildfly.home }}"
+    timeout: 7000
     management_port: "{{ wildfly_instance_management_port }}"
     subsystems:
-      - system_props:
+      - system_properties:
           - name: jcliff.enabled
             value: 'enabled.plus'
       - deployments:
           - name: "{{ app_dest | basename }}"
             path: "{{ app_dest }}"
-            replace_name_regex: "{{  (app_dest | basename).split('-')[0] }}-.*"
+            replace_runtime_name_regex: "{{  (app_dest | basename).split('-')[0] }}-.*"
       - drivers:
           - driver_name: postgresql
             driver_module_name: org.postgresql
