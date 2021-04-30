@@ -22,3 +22,4 @@
     src: "{{ keyclodk_download_url }}"
     dest: "{{ wildfly.home }}"
     remote_src: yes
+    creates: "{{ wildfly.home }}/modules/system/add-ons/keycloak"

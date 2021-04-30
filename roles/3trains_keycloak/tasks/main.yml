@@ -50,12 +50,23 @@
     group: "{{ keycloak_service_group }}"
 
 - block:
+  - set_fact:
+      archive: "{{ keycloak_dest }}/{{ keycloak_archive }}"
+  - stat:
+      path: "{{ archive }}"
+    register: archive_path
+
   - name: download Keycloak archive to target
     get_url:
       url: "{{ keycloak_download_url }}"
       dest: "{{ keycloak_dest }}"
       owner: "{{ keycloak_service_user }}"
       group: "{{ keycloak_service_group }}"
+    when:
+      - archive_path is defined
+      - archive_path.stat is defined
+      - not archive_path.stat.exists
+
   - name: extract Keycloak archive on target
     unarchive:
       remote_src: yes
@@ -107,7 +118,7 @@
   become: yes
   template:
     src: keycloak-service.sh.j2
-    dest: "{{ keycloak_dest }}/keycloak-service.sh" 
+    dest: "{{ keycloak_dest }}/keycloak-service.sh"
     owner: root
     group: root
     mode: 0755

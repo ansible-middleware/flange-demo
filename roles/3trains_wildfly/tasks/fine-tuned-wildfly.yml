@@ -23,10 +23,18 @@
   set_fact:
     app_dest: "{{ app_dir + '/' + app_detail.name + '-' + app_detail.version + '.' + app_detail.extension }}"
 
+- stat:
+    path: "{{ app_dest }}"
+  register: app_dest_path
+
 - name: "Download a demo app to deploy"
   get_url:
     url: "{{ app_detail.url }}"
     dest: "{{ app_dest }}"
+  when:
+    - app_dest_path is defined
+    - app_dest_path.stat is defined
+    - not app_dest_path.stat.exists
 
 - name: Get keycloak auth token
   uri:
