@@ -13,7 +13,7 @@ checkEnvVar() {
 }
 # SystemD will do for the unit, decomment 
 #  for testing outside systemd
-#source /etc/sysconfig/keycloak
+#. /etc/sysconfig/keycloak
 
 readonly KEYCLOAK_HOME={{ keycloak_jboss_home }}
 readonly KEYCLOAK_BIND_ADDRESS=${KEYCLOAK_BIND_ADDRESS}
