@@ -103,6 +103,18 @@
     - "{{ keycloak_http_port }}/tcp"
     - "{{ keycloak_https_port }}/tcp"
 
+- name: configure keycloak scervice script wrapper
+  become: yes
+  template:
+    src: keycloak-service.sh.j2
+    dest: "{{ keycloak_dest }}/keycloak-service.sh" 
+    owner: root
+    group: root
+    mode: 0755
+  notify:
+    - restart keycloak
+
+
 - name: configure sysconfig file for keycloak service
   become: yes
   template:
