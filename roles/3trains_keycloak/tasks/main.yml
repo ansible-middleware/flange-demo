@@ -36,8 +36,7 @@
   become: yes
   user:
     name: "{{ keycloak_service_user }}"
-    home: /
-    shell: /sbin/nologin
+    home: /opt/keycloak
     system: yes
     create_home: no
 
