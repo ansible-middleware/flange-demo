@@ -11,8 +11,9 @@ keycloak_jboss_home: "{{ keycloak_dest }}/keycloak-{{ keycloak_version }}"
 keycloak_config_dir: "{{ keycloak_jboss_home }}/standalone/configuration"
 keycloak_service_user: keycloak
 keycloak_service_group: keycloak
-keycloak_service_pidfile: /var/run/keycloak.pid
-keycloak_service_logfile: /var/log/keycloak.log
+keycloak_service_pidfile: "{{ keycloak_dest }}/keycloak.pid"
+keycloak_service_logfile: "{{ keycloak_dest }}/keycloak.log"
+
 
 ### Keycloak configuration settings
 keycloak_bind_address: 0.0.0.0
