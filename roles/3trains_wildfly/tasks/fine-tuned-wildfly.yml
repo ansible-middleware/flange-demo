@@ -7,13 +7,15 @@
 - name: configure firewall for Wildfly ports
   become: yes
   firewalld:
-    port: "{{ item }}"
+    port: "{{ port }}"
     permanent: true
     state: enabled
     immediate: yes
   loop:
     - "{{ wildfly_instance_http_port }}/tcp"
     - "{{ wildfly_instance_https_port }}/tcp"
+  loop_control:
+    loop_var: port
 
 - name: Set application detail
   set_fact:
