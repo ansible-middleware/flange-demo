@@ -1,5 +1,5 @@
 ---
-sample_app_version: "0.0.1"
+sample_app_version: "{{ sample_app_version_to_deploy | default('0.0.1') }}"
 apps:
   - name: kitchensink
     extension: war
