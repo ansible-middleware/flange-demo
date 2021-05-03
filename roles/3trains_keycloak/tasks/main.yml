@@ -166,9 +166,6 @@
       - keycloak_service_status is defined
       - keycloak_service_status.stdout is defined
 
-- debug:
-    msg: "{{ keycloak_service_status.stdout }}"
-
 - name: Wait until Keycloak becomes active
   uri:
     url: "{{ keycloak_management_url }}/health"
