@@ -13,7 +13,7 @@ checkEnvVar() {
 }
 # SystemD will do for the unit, decomment 
 #  for testing outside systemd
-#. /etc/sysconfig/keycloak
+. /etc/sysconfig/keycloak
 
 readonly KEYCLOAK_HOME={{ keycloak_jboss_home }}
 readonly KEYCLOAK_BIND_ADDRESS=${KEYCLOAK_BIND_ADDRESS}
@@ -30,22 +30,13 @@ if [ ! -d "${KEYCLOAK_HOME}" ]; then
   exit 1
 fi
 
-checkEnvVar "${KEYCLOAK_BIND_ADDRESS}" 'KEYCLOAK_BIND_ADDRESS not provided' 2
-checkEnvVar "${KEYCLOAK_HTTP_PORT}"    'KEYCLOAK_HTTP_PORT not provided' 4
-checkEnvVar "${KEYCLOAK_HTTPS_PORT}"   'KEYCLOAK_HTTPS_PORT not provided' 5
-checkEnvVar "${KEYCLOAK_MANAGEMENT_HTTP_PORT}" 'KEYCLOAK_MANAGEMENT_HTTP_PORT not provided' 6
-checkEnvVar "${KEYCLOAK_MANAGEMENT_HTTPS_PORT}" 'KEYCLOAK_MANAGEMENT_HTTPS_PORT not provided' 7
-checkEnvVar "${KEYCLOAK_PIDFILE}" 'KEYCLOAK_PIDFILE not provided' 8
-checkEnvVar "${KEYCLOAK_LOGFILE}" 'KEYCLOAK_LOGFILE not provided' 9
+checkEnvVar "${KEYCLOAK_PIDFILE}" 'KEYCLOAK_PIDFILE not provided' 2
 
 getKeycloakPID() {
   
   local pid
   if [ -e "${KEYCLOAK_PIDFILE}" ]; then
     cat "${KEYCLOAK_PIDFILE}"
-  else
-    echo "No pidfile (${KEYCLOAK_PIDFILE})."
-    exit 10
   fi
 }
 
@@ -54,7 +45,7 @@ statusKeycloak() {
   if [ "$(isKeyCloakRunning)" -eq 1 ]; then
     echo "Keycloak is running (PID:$(getKeycloakPID ))"
   else
-	  echo "Keycloak is NOT running."
+    echo "Keycloak is NOT running."
   fi
 }
 
@@ -73,6 +64,13 @@ isKeyCloakRunning() {
 }
 
 startKeycloak() {
+  checkEnvVar "${KEYCLOAK_BIND_ADDRESS}" 'KEYCLOAK_BIND_ADDRESS not provided' 2
+  checkEnvVar "${KEYCLOAK_HTTP_PORT}"    'KEYCLOAK_HTTP_PORT not provided' 4
+  checkEnvVar "${KEYCLOAK_HTTPS_PORT}"   'KEYCLOAK_HTTPS_PORT not provided' 5
+  checkEnvVar "${KEYCLOAK_MANAGEMENT_HTTP_PORT}" 'KEYCLOAK_MANAGEMENT_HTTP_PORT not provided' 6
+  checkEnvVar "${KEYCLOAK_MANAGEMENT_HTTPS_PORT}" 'KEYCLOAK_MANAGEMENT_HTTPS_PORT not provided' 7
+  checkEnvVar "${KEYCLOAK_LOGFILE}" 'KEYCLOAK_LOGFILE not provided' 8
+
   if [ "$(isKeyCloakRunning)" -eq 1 ]; then
     statusKeycloak
   else
@@ -92,10 +90,11 @@ stopKeycloak() {
     set +e
     kill ${pid} 2> /dev/null
     kill -0 "${pid}" 2> /dev/null
-    if [ "${?}" -eq 0 ]; then
-      sleep 5
-      kill -9 "${pid}" > /dev/null
-    fi
+#    if [ "${?}" -eq 0 ]; then
+#      sleep 5
+#      kill -9 "${pid}" > /dev/null
+#    fi
+    set -e
     deletePidFile
   fi
 }
