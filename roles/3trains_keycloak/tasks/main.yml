@@ -146,10 +146,28 @@
     mode: 0644
   become: yes
   notify:
-    - reload systemd
     - restart keycloak
 
+- name: start keycloak
+  systemd:
+    name: keycloak
+    enabled: yes
+    state: started
+  become: yes
+
 - meta: flush_handlers
+
+- command: "systemctl status keycloak"
+  register: keycloak_service_status
+  changed_when: False
+
+- assert:
+    that:
+      - keycloak_service_status is defined
+      - keycloak_service_status.stdout is defined
+
+- debug:
+    msg: "{{ keycloak_service_status.stdout }}"
 
 - name: Wait until Keycloak becomes active
   uri:
