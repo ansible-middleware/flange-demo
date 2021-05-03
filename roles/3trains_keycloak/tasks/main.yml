@@ -89,11 +89,12 @@
     creates: "{{ keycloak_config_dir }}/keycloak-add-user.json"
   become: yes
 
-
-- name: install firewalld
-  become: yes
-  package:
-    name: firewalld
+- name: "Ensures required package firewalld are installed"
+  include_role:
+    name: 3trains_fastpackages
+  vars:
+    packages_list:
+      - firewalld
 
 - name: enable and start the firewalld service
   become: yes
