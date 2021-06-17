@@ -12,11 +12,11 @@ The following sections describe the steps necessary to prepare your machine for 
 First of all, you'll need to install the [JCliff Ansible collection](https://github.com/wildfly-extras/ansible_collections_jcliff). Clone the project and run the following command line:
 
     $ cd ansible_collections_jcliff/
-    $ ansible-collection build .
+    $ ansible-galaxy collection build .
 
-This will produce a zipfile named redhat-jcliff-1.0.0.tgz. Install this new module for Ansible on the system running the automation tool:
+This will produce a zipfile named redhat-jcliff-0.0.5.tgz. Install this new module for Ansible on the system running the automation tool:
 
-    $ ansible-galaxy collection install path/to/redhat-jcliff-1.0.0.tgz.
+    $ ansible-galaxy collection install path/to/redhat-jcliff-0.0.5.tgz.
 
 ### Ansible Inventory
 
