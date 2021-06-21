@@ -1,4 +1,5 @@
 ---
+- import_playbook: preconds.yml
 # Keycloak Playbook
 - import_playbook: keycloak.yml
 
