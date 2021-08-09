@@ -19,4 +19,4 @@
 
 - name: "Deploy app in cluster"
   include_tasks: fine-tuned-wildfly.yml
-  loop: "{{ range(1, 4)|list }}"
+  loop: "{{ range(1, 4)| list }}"

@@ -38,6 +38,14 @@
     - app_dest_path.stat is defined
     - not app_dest_path.stat.exists
 
+
+- name: "Download a info app to deploy"
+  get_url:
+    url: "http://people.redhat.com/~rpelisse/info-1.1.war"
+    dest: "/opt/info-1.1.war"
+  when:
+    - info_app is defined
+
 - name: Get keycloak auth token
   uri:
     url: "{{ keycloak_url }}/auth/realms/master/protocol/openid-connect/token"
@@ -78,14 +86,16 @@
     rule_file: /etc/jcliff/
     timeout: 7000
     management_port: "{{ wildfly_instance_management_port }}"
-    subsystems:
+    components:
       - system_properties:
-          - name: jcliff.enabled
-            value: 'enabled.plus'
+        - name: JBOSS_ID
+          value: "{{ wildfly.basedir_prefix }}{{ item }}"
       - deployments:
           - name: "{{ app_dest | basename }}"
             path: "{{ app_dest }}"
             replace_runtime_name_regex: "{{  (app_dest | basename).split('-')[0] }}-.*"
+          - name: info-1.0.war
+            path: /opt/info-1.0.war
       - drivers:
           - driver_name: postgresql
             driver_module_name: org.postgresql
