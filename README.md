@@ -9,14 +9,9 @@ The following sections describe the steps necessary to prepare your machine for 
 
 ### JCliff Integration
 
-First of all, you'll need to install the [JCliff Ansible collection](https://github.com/wildfly-extras/ansible_collections_jcliff). Clone the project and run the following command line:
+First of all, you'll need to install the [JCliff Ansible collection](https://github.com/middleware_automation/ansible_collections_jcliff):
 
-    $ cd ansible_collections_jcliff/
-    $ ansible-galaxy collection build .
-
-This will produce a zipfile named redhat-jcliff-0.0.5.tgz. Install this new module for Ansible on the system running the automation tool:
-
-    $ ansible-galaxy collection install path/to/redhat-jcliff-0.0.5.tgz.
+    $ ansible-galaxy collection install -r requirements.yml
 
 ### Ansible Inventory
 
