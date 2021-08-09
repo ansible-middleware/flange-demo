@@ -1,0 +1,9 @@
+---
+- name: "Set up for all Wildfly instances"
+  include_tasks: set-up-wildfy-service.yml
+
+- name: "Install Keycloak Extension"
+  include_tasks: keycloak-extension-install.yml
+
+- name: "Deploy app in cluster"
+  include_tasks: fine-tuned-wildfly.yml
