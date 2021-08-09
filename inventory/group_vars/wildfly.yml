@@ -2,3 +2,4 @@
 ansible_become: true
 jcliff_yum_backend: dnf
 wildfly_bind_addr: 0.0.0.0
+nb_instance_by_node: 2
