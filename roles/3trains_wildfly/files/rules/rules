@@ -1,0 +1,50 @@
+#    Copyright 2013 Red Hat, Inc. and/or its affiliates.
+#
+#    This file is part of jcliff.
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+configurable.1=system-properties
+configurable.2=path
+configurable.3=ee
+configurable.4=jmx
+configurable.5=naming
+configurable.6=threads
+configurable.7=logging
+configurable.8=jdbc-driver
+configurable.9=security
+configurable.10=datasource
+configurable.11=xadatasource
+configurable.12=standard-sockets
+configurable.13=security-realms
+configurable.14=web
+configurable.15=webservices
+configurable.16=jgroups
+configurable.17=infinispan
+configurable.18=scanner
+configurable.19=extension
+configurable.20=subsystem
+configurable.21=remoting
+configurable.22=osgi
+configurable.23=messaging
+configurable.24=mail
+configurable.25=ejb3
+configurable.26=resource-adapter
+configurable.27=transactions
+configurable.28=undertow
+configurable.29=teiid
+configurable.30=rbac
+configurable.31=interface
+configurable.32=keycloak
+configurable.33=modcluster

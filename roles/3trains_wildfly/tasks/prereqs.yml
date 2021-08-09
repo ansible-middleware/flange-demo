@@ -10,7 +10,6 @@
     - initscripts
     - "{{ jvm_package | default('java-1.8.0-openjdk-devel') }}"
 
-
 - name: "Ensures required packages are installed"
   include_role:
     name: 3trains_fastpackages
@@ -27,23 +26,25 @@
     enabled: yes
     state: started
 
-- name: "Copy Rules Directory"
+- name: "Create repo for custom rulesdir"
+  file:
+    path: /etc/jcliff
+    state: directory
+
+- name: "Deploy custom jcliff custom ruleset"
   copy:
-    src: "files/rules/"
+    dest: /etc/jcliff/
+    src: files/custom/remote_sockets.jcliff.yml
+
+- name: Add missing rules to jcliff ruleset
+  copy:
+    src: "{{ item }}"
     dest: "{{ jcliff_rules_dir }}"
+  loop:
+    - files/rules/modcluster
+    - files/rules/standard-sockets
 
-- name: "Lookup Rules file"
-  slurp:
-    src: "{{ jcliff_rules_dir }}/rules"
-  register: rules_file
-
-- name: "Get last line of rules file"
-  set_fact:
-    rules_file_last_line: "{{ (rules_file['content'] | b64decode).splitlines()[-1] }}"
-
-- name: Append keycloak rule to jcliff rules file
-  lineinfile:
-    path: "{{ jcliff_rules_dir }}/rules"
-    regex: "^configurable*keycloak"
-    line: "{{ 'configurable.'+(((rules_file_last_line.split('=')[0].split('.')[1] | int)+1)|string) + '=keycloak' }}"
-  when: rules_file_last_line.split('=')[1] != 'keycloak'
+- name: Update jcliff ruleset to add modcluster and keycloak
+  copy:
+    src: files/rules/rules
+    dest: "{{ jcliff_rules_dir }}/rules"

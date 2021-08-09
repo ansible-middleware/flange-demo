@@ -1,0 +1,8 @@
+{ "standard-sockets" => {
+  "remote-destination-outbound-socket-binding" => {
+    "proxy1" => {
+      "host" => "127.0.0.1", "port" =>  6666,
+      }
+    }
+  }
+}

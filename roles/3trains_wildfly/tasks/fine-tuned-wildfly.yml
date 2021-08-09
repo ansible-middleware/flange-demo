@@ -75,6 +75,7 @@
 - name: "Fine tune Wildfly configuration"
   jcliff:
     wfly_home: "{{ wildfly.home }}"
+    rule_file: /etc/jcliff/
     timeout: 7000
     management_port: "{{ wildfly_instance_management_port }}"
     subsystems:
@@ -108,3 +109,8 @@
                 credential: "{{ keycloak_client_secret_response.json.value }}"
                 verify_token_audience: true
                 use_resource_role_mappings: true
+      - modcluster:
+          proxy:
+            - name: default
+              proxies:
+                - proxy1
