@@ -124,3 +124,5 @@
             - name: default
               proxies:
                 - proxy1
+- debug:
+    msg: "nb_instance_by_node: {{ nb_instances }}"
