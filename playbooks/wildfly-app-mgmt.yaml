@@ -6,9 +6,6 @@
   roles:
     - jcliff
   tasks:
-    # - name: JCliff
-    #   include_role:
-    #     name: jcliff
     - name: Wildfly Role
       include_role:
         name: 3trains_wildfly
