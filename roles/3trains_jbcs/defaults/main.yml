@@ -1,0 +1,11 @@
+---
+httpd:
+  rpm:
+    name: jbcs-httpd24
+    nossl: true
+  home: /opt/jbcs-httpd24-2.4/
+  user:
+    name: apache
+  group:
+    name: apache
+    id: 48
