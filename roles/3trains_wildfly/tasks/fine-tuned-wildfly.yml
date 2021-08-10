@@ -52,7 +52,7 @@
 - name: "Fine tune Wildfly configuration"
   jcliff:
     wfly_home: "{{ wildfly.home }}"
-    rule_file: /etc/jcliff/
+    rule_file: roles/3trains_wildfly/files/custom/
     timeout: 7000
     management_port: "{{ wildfly_instance_management_port }}"
     components:
