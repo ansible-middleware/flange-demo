@@ -42,6 +42,7 @@
     dest: "{{ jcliff_rules_dir }}"
   loop:
     - files/rules/modcluster
+    - files/rules/keycloak
     - files/rules/standard-sockets
 
 - name: Update jcliff ruleset to add modcluster and keycloak
