@@ -46,6 +46,7 @@
 - name: Unarchive JBoss Core Services
   unarchive:
     src: "{{ zip_file_repo }}/jbcs.zip"
+    remote_src: yes
     dest: /opt
   when:
     - not httpd_home.stat.exists
