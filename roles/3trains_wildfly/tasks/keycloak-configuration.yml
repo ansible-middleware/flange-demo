@@ -1,0 +1,34 @@
+---
+- name: Get keycloak auth token
+  uri:
+    url: "{{ keycloak_url }}/auth/realms/master/protocol/openid-connect/token"
+    method: POST
+    body: "client_id={{ keycloak_auth_client }}&username={{ keycloak_admin_user }}&password={{ keycloak_admin_password }}&grant_type=password"
+    validate_certs: no
+  register: keycloak_auth_response
+  until: keycloak_auth_response.status == 200
+  retries: 5
+  delay: 2
+  run_once: true
+
+- name: "Get Clients"
+  uri:
+    url: "{{ keycloak_url }}/auth/admin/realms/{{ keycloak_realm }}/clients"
+    method: GET
+    status_code:
+     - 200
+    headers:
+      Accept: "application/json"
+      Authorization: "Bearer {{ keycloak_auth_response.json.access_token }}"
+  register: keycloak_client_response
+
+- name: "Get Client Secret"
+  uri:
+    url: "{{ keycloak_url }}/auth/admin/realms/{{ keycloak_realm }}/clients/{{ (keycloak_client_response.json | selectattr('clientId', 'equalto', keycloak_client) | list | first).id }}/client-secret"
+    method: GET
+    status_code:
+     - 200
+    headers:
+      Accept: "application/json"
+      Authorization: "Bearer {{ keycloak_auth_response.json.access_token }}"
+  register: keycloak_client_secret_response
