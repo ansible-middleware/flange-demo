@@ -1,0 +1,5 @@
+---
+- name: "Restart JBCS"
+  service:
+    name: jbcs-httpd24-httpd.service
+    state: restarted

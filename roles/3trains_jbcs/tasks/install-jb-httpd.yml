@@ -57,6 +57,13 @@
     chdir: "{{ httpd.home }}/httpd/"
     creates: /usr/lib/systemd/system/jbcs-httpd24-httpd.service
 
+- name: "Ensures JBCS configuration is correct"
+  template:
+    src: templates/httpd.conf.j2
+    dest: /opt/jbcs-httpd24-2.4/httpd/conf/httpd.conf
+  notify:
+    - "Restart JBCS"
+
 - set_fact:
     ssl_conf: "{{ httpd.home }}/httpd/conf.d/ssl.conf"
 

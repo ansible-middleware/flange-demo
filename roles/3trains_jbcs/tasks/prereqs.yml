@@ -5,4 +5,11 @@
   vars:
     packages_list:
       - mailcap
+      - unzip
+      - firewalld
 
+- name: "Ensure that firewalld service is running"
+  systemd:
+    name: firewalld
+    enabled: yes
+    state: started
