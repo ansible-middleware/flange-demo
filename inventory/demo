@@ -1,0 +1,20 @@
+# Placeholder Group
+[threetrains]
+
+# JBCS Group
+[jbcs]
+jbcs-0
+
+# Wildfly Group
+[wildfly]
+wfly-1
+wfly-2
+wfly-3
+# Keycloak Group
+[keycloak]
+keycloak-0
+
+[threetrains:children]
+wildfly
+keycloak
+jbcs
