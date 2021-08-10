@@ -1,6 +1,6 @@
 ---
 - name: Playbook for Wildfly Hosts
-  hosts: wildfly
+  hosts: jbcs
   collections:
     - middleware_automation.redhat_csp_download
   roles:
