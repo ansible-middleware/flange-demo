@@ -1,7 +1,7 @@
 { "standard-sockets" => {
   "remote-destination-outbound-socket-binding" => {
     "proxy1" => {
-      "host" => "{{ (groups['jbcs'][0] if groups['jbcs'] | length > 0 else 'localhost') }}", "port" =>  6666,
+      "host" => "jbcs-0", "port" =>  6666,
       }
     }
   }
