@@ -1,6 +1,6 @@
 ---
 - set_fact:
-    port_shift: "{{ (item - wildfly.port_range_offset) * 100) }}"
+    port_shift: "{{ (item - wildfly.port_range_offset) * 100 }}"
 - set_fact:
     wildfly_instance_management_port: "{{ 9990 + port_shift }}"
     wildfly_instance_http_port: "{{ 8080 + port_shift }}"
