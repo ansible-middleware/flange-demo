@@ -1,0 +1,8 @@
+---
+- name: Playbook for Wildfly Hosts
+  hosts: wildfly
+  tasks:
+    - name: Wildfly Role
+      include_role:
+        name: 3trains_wildfly
+        tasks_from: restart_wfly_instance.yml
