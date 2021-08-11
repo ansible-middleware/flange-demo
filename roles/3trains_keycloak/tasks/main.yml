@@ -13,17 +13,17 @@
   register: existing_deploy
 
 - block:
-  - name: stop the old keycloak service
-    become: yes
-    ignore_errors: yes
-    systemd:
-      name: keycloak
-      state: stopped
-  - name: remove the old Keycloak deployment
-    become: yes
-    file:
-      path: "{{ keycloak_jboss_home }}"
-      state: absent
+    - name: stop the old keycloak service
+      become: yes
+      ignore_errors: yes
+      systemd:
+        name: keycloak
+        state: stopped
+    - name: remove the old Keycloak deployment
+      become: yes
+      file:
+        path: "{{ keycloak_jboss_home }}"
+        state: absent
   when: existing_deploy.stat.exists and keycloak_force_install|bool
 
 - name: check for an existing deployment after possible forced removal
@@ -49,33 +49,33 @@
     group: "{{ keycloak_service_group }}"
 
 - block:
-  - set_fact:
-      archive: "{{ keycloak_dest }}/{{ keycloak_archive }}"
-  - stat:
-      path: "{{ archive }}"
-    register: archive_path
+    - set_fact:
+        archive: "{{ keycloak_dest }}/{{ keycloak_archive }}"
+    - stat:
+        path: "{{ archive }}"
+      register: archive_path
 
-  - name: download Keycloak archive to target
-    get_url:
-      url: "{{ keycloak_download_url }}"
-      dest: "{{ keycloak_dest }}"
-      owner: "{{ keycloak_service_user }}"
-      group: "{{ keycloak_service_group }}"
-    when:
-      - archive_path is defined
-      - archive_path.stat is defined
-      - not archive_path.stat.exists
+    - name: download Keycloak archive to target
+      get_url:
+        url: "{{ keycloak_download_url }}"
+        dest: "{{ keycloak_dest }}"
+        owner: "{{ keycloak_service_user }}"
+        group: "{{ keycloak_service_group }}"
+      when:
+        - archive_path is defined
+        - archive_path.stat is defined
+        - not archive_path.stat.exists
 
-  - name: extract Keycloak archive on target
-    unarchive:
-      remote_src: yes
-      src: "{{ keycloak_dest }}/{{ keycloak_archive }}"
-      dest: "{{ keycloak_dest }}"
-      creates: "{{ keycloak_jboss_home }}"
-      owner: "{{ keycloak_service_user }}"
-      group: "{{ keycloak_service_group }}"
-    notify:
-      - restart keycloak
+    - name: extract Keycloak archive on target
+      unarchive:
+        remote_src: yes
+        src: "{{ keycloak_dest }}/{{ keycloak_archive }}"
+        dest: "{{ keycloak_dest }}"
+        creates: "{{ keycloak_jboss_home }}"
+        owner: "{{ keycloak_service_user }}"
+        group: "{{ keycloak_service_group }}"
+      notify:
+        - restart keycloak
   become: yes
 
 - name: create Keycloak admin user
@@ -124,7 +124,6 @@
     mode: 0755
   notify:
     - restart keycloak
-
 
 - name: configure sysconfig file for keycloak service
   become: yes
@@ -202,8 +201,8 @@
     url: "{{ keycloak_url }}/auth/admin/realms/{{ keycloak_realm }}"
     method: GET
     status_code:
-     - 200
-     - 404
+      - 200
+      - 404
     headers:
       Accept: "application/json"
       Authorization: "Bearer {{ keycloak_auth_response.json.access_token }}"
@@ -222,7 +221,7 @@
   when: keycloak_realm_exists.status == 404
 
 - name: Create 3trains Client
-  keycloak_client:
+  community.general.keycloak_client:
     auth_client_id: "{{ keycloak_auth_client }}"
     auth_keycloak_url: "{{ keycloak_url }}/auth"
     auth_realm: "{{ keycloak_auth_realm }}"
