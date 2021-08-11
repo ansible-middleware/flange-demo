@@ -1,0 +1,45 @@
+---
+- name: "Fine tune Wildfly configuration"
+  jcliff:
+    wfly_home: "{{ wildfly.home }}"
+    rule_file: roles/3trains_wildfly/files/custom/
+    timeout: 7000
+    management_port: "{{ wildfly_instance_management_port }}"
+    components:
+      - system_properties:
+        - name: JBOSS_ID
+          value: "{{ wildfly.basedir_prefix }}{{ item }}"
+      - deployments:
+          - name: "{{ app_dest | basename }}"
+            path: "{{ app_dest }}"
+            replace_runtime_name_regex: "{{  (app_dest | basename).split('-')[0] }}-.*"
+          - name: info-1.0.war
+            path: /opt/info-1.0.war
+      - drivers:
+          - driver_name: postgresql
+            driver_module_name: org.postgresql
+            driver_class_name: org.postgresql.Driver
+            driver_xa_datasource_class_name: org.postgresql.xa.PGXADataSource
+      - datasources:
+          - name: "{{ wildfly.config_name_prefix }}db"
+            use_java_context: 'true'
+            jndi_name: "java:jboss/datasources/{{ postgres.db_name }}"
+            connection_url: "jdbc:postgresql://localhost:5432/{{ postgres.db_name }}"
+            driver_name: postgresql
+            user_name: "{{ postgres.user.name }}"
+            password: "{{ postgres.user.password }}"
+      - keycloak:
+          - secure_deployment:
+              - deployment_name: "{{ app_detail.name + '.' + app_detail.extension }}"
+                realm: "{{ keycloak_realm }}"
+                auth_server_url: "{{ keycloak_url }}/auth/"
+                ssl_required: EXTERNAL
+                resource: "{{ keycloak_client }}"
+                credential: "{{ keycloak_client_secret_response.json.value }}"
+                verify_token_audience: true
+                use_resource_role_mappings: true
+      - modcluster:
+          proxy:
+            - name: default
+              proxies:
+                - proxy1
