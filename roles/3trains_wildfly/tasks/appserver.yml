@@ -5,6 +5,8 @@
 
 - name: "Install Keycloak Extension on instance wfly-{{ item }}"
   include_tasks: keycloak-extension-install.yml
+  when:
+    - not disable_keycloak is defined
 
 - name: "Deploy app on instance wfly-{{ item }}"
   include_tasks: fine-tuned-wildfly.yml
