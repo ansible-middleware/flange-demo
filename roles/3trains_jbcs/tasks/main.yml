@@ -2,6 +2,11 @@
 - include_tasks: prereqs.yml
 - include_tasks: install-jb-httpd.yml
 
+- name: "Ensures mod_cluster configuration is deployed"
+  template:
+    src: templates/mod_cluster.conf.j2
+    dest: /opt/jbcs-httpd24-2.4/httpd/conf.d/mod_cluster.conf
+
 - name: configure firewall for JBCS ports
   become: yes
   firewalld:
