@@ -1,5 +1,4 @@
 ---
-
 - name: "Check if User Already Exists"
   uri:
     url: "{{ keycloak_url }}/auth/admin/realms/{{ keycloak_realm }}/users?username={{ user.username }}"
@@ -7,7 +6,6 @@
     headers:
       Authorization: "Bearer {{ keycloak_auth_response.json.access_token }}"
   register: keycloak_user_serach_result
-
 
 - name: "Create User"
   uri:
