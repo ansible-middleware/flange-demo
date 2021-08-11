@@ -4,6 +4,10 @@
      wildfly_instance_http_port: "{{ 8080 + ((item - wildfly.port_range_offset) * 100) }}"
      wildfly_instance_https_port: "{{ 8443 + ((item - wildfly.port_range_offset) * 100) }}"
      wildfly_instance_ajp_port: "{{ 8009 + ((item - wildfly.port_range_offset) * 100) }}"
+     wildfly_instance_jgroups_tcp_port: "{{ 7600 + ((item - wildfly.port_range_offset) * 100) }}"
+     wildfly_instance_jgroups_tcp_fd_port: "{{ 57600 + ((item - wildfly.port_range_offset) * 100) }}"
+     wildfly_instance_jgroups_udp_port: "{{ 55200 + ((item - wildfly.port_range_offset) * 100) }}"
+     wildfly_instance_jgroups_udp_fd_port: "{{ 54200 + ((item - wildfly.port_range_offset) * 100) }}"
 
 - name: configure firewall for Wildfly ports
   become: yes
@@ -16,6 +20,10 @@
     - "{{ wildfly_instance_http_port }}/tcp"
     - "{{ wildfly_instance_https_port }}/tcp"
     - "{{ wildfly_instance_ajp_port }}/tcp"
+    - "{{ wildfly_instance_jgroups_tcp_port }}/tcp"
+    - "{{ wildfly_instance_jgroups_tcp_fd_port }}/tcp"
+    - "{{ wildfly_instance_jgroups_udp_port }}/udp"
+    - "{{ wildfly_instance_jgroups_udp_fd_port }}/udp"
   loop_control:
     loop_var: port
 
