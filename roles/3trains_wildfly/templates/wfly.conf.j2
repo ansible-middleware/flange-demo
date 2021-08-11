@@ -1,7 +1,7 @@
 WILDFLY_SERVER_CONFIG={{ wildfly.config_name_prefix }}{{ item }}.xml
 
-WILDFLY_OPTS=-Djboss.server.config.dir={{ wildfly.home }}/standalone/configuration/ -Djboss.server.base.dir={{ wildfly.basedir_prefix }}{{ item }} -Djboss.tx.node.id={{ wildfly.config_name_prefix }}{{ item }} -Djboss.socket.binding.port-offset={{ 100 * (item - wildfly.port_range_offset) }} -Djboss.node.name={{ wildfly.config_name_prefix }}{{ item }} {% if wildfly.private_addr is defined %} -Djboss.bind.address.private={{ wildfly.private_addr }}{% endif %}
-
+WILDFLY_OPTS=-Djboss.server.config.dir={{ wildfly.home }}/standalone/configuration/ -Djboss.server.base.dir={{ wildfly.basedir_prefix }}{{ item }} -Djboss.tx.node.id={{ wildfly.config_name_prefix }}{{ item }} -Djboss.socket.binding.port-offset={{ 100 * (item - wildfly.port_range_offset) }} -Djboss.node.name={{ wildfly.config_name_prefix }}{{ item }} {% if wildfly.private_addr is defined %} -Djboss.bind.address.private={{
+wildfly.private_addr }}{% endif %}
 WILDFLY_BIND={{ wildfly.bind_addr }}
 WILDFLY_HOME={{ wildfly.home }}
 JBOSS_PIDFILE={{ wildfly.basedir_prefix }}{{ item }}/{{ wildfly.config_name_prefix }}{{ item }}.pid
