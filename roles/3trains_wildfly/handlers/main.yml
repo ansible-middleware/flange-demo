@@ -1,5 +1,5 @@
 ---
-- name: "Restart JBCS"
+- name: 'Restart Wildfly instances'
   service:
     name: "wildfly.config_name_prefix-{{ item }}"
     state: restarted
