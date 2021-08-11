@@ -3,6 +3,7 @@
     wildfly_instance_management_port: "{{ 9990 + ((item - wildfly.port_range_offset) * 100) }}"
     wildfly_instance_http_port: "{{ 8080 + ((item - wildfly.port_range_offset) * 100) }}"
     wildfly_instance_https_port: "{{ 8443 + ((item - wildfly.port_range_offset) * 100) }}"
+    wildfly_instance_ajp_port: "{{ 8009 + ((item - wildfly.port_range_offset) * 100)) }}"
 
 - name: configure firewall for Wildfly ports
   become: yes
@@ -14,6 +15,7 @@
   loop:
     - "{{ wildfly_instance_http_port }}/tcp"
     - "{{ wildfly_instance_https_port }}/tcp"
+    - "{{ wildfly_instance_ajp_port }}/tcp"
   loop_control:
     loop_var: port
 
