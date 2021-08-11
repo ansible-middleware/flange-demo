@@ -113,3 +113,5 @@
   loop:
     - 80
     - 6666
+  when:
+    - check_jbcs_port is defined
