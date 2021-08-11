@@ -22,7 +22,7 @@ wildfly:
   home: "{{ workdir }}/wildfly-{{ wfly_version }}/"
   user: wildfly
   group: wildfly
-  bind_addr: "{{ ('0.0.0.0' if groups['wildfly'] | length > 0 else 'localhost') }}"
+  bind_addr: "{{ override_wildfly_bind_addr | default('0.0.0.0') }}"
   port_range_offset: 0
   base_config: standalone-ha.xml
   config_name_prefix: wfly-
