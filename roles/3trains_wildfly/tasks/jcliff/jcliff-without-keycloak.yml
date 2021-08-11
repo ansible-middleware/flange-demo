@@ -33,3 +33,5 @@
             - name: default
               proxies:
                 - proxy1
+  notify:
+    - 'Restart Wildfly instances'
