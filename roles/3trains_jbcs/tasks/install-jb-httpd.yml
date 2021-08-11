@@ -38,6 +38,8 @@
     dest: "{{ zip_file_repo }}/jbcs.zip"
     username: "{{ rhn_username }}"
     password: "{{ rhn_password }}"
+  when:
+    - not jbcs_installed is defined
 
 - stat:
     path: "{{ httpd.home }}/httpd"
