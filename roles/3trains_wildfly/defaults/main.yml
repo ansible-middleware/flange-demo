@@ -23,7 +23,7 @@ wildfly:
   user: wildfly
   group: wildfly
   bind_addr: "{{ override_wildfly_bind_addr | default('0.0.0.0') }}"
-  private_addr: "{{ override_wildfly_bind_addr | default('0.0.0.0') }}"
+  private_addr: "{{ override_wildfly_bind_addr | default(ansible_all_ipv4_addresses) }}"
   port_range_offset: 0
   base_config: standalone-ha.xml
   config_name_prefix: wfly-
