@@ -24,6 +24,7 @@
     owner: "{{ httpd.user.name }}"
     group: "{{ httpd.group.name }}"
     recurse: true
+  changed_when: false
 
 - set_fact:
     zip_file_repo: /opt/apps
