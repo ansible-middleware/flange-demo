@@ -6,12 +6,32 @@
       - wildfly.user is defined
       - wildfly.group is defined
       - wildfly.config is defined
-      - wildfly.config.name is defined
       - wildfly.config.base is defined
-      - wildfly.basedir_prefix is defined
+    quiet: true
 
 - set_fact:
-    instance_name: "{{ wildfly.config.name }}-{{ instance_id }}"
+    basedir: "{{ wildfly.basedir_prefix | default(wildfly.home + '/standalone') }}"
+  when:
+    - not instance_id is defined
+
+- block:
+    - assert:
+        that:
+          - wildfly.basedir_prefix is defined
+        quiet: true
+        fail_msg: "If instance_id is set, wildfly.basedir_prefix must also be defined."
+
+    - set_fact:
+        basedir: "{{ wildfly.basedir_prefix }}{{ instance_id }}"
+
+    - assert:
+        that:
+          - wildfly.config.name is defined
+        fail_msg: "If instance_id is set, wildfly.config.name must be defined too."
+        quiet: true
+
+    - set_fact:
+        instance_name: "{{ wildfly.config.name }}-{{ instance_id }}"
   when:
     - instance_id is defined
 
@@ -20,26 +40,21 @@
   when:
     - instance_name is not defined
 
-- name : "Creates basedir for instance: {{ instance_name }}"
+- name : "Creates basedir {{ basedir }} for instance: {{ instance_name }}"
   file:
-    path: "{{ wildfly.basedir_prefix }}{{ instance_id }}/"
+    path: "{{ basedir }}"
     state: directory
     owner: "{{ wildfly.user }}"
     group: "{{ wildfly.group }}"
     mode: '0755'
-  when:
-    - wildfly.basedir_prefix is defined
 
 - name : "Creates deployment directories for instance: {{ instance_name }}"
   file:
-    path: "{{ wildfly.basedir_prefix }}{{ wildfly.instance_id }}/deployments"
+    path: "{{ basedir }}/deployments"
     state: directory
     owner: "{{ wildfly.user }}"
     group: "{{ wildfly.group }}"
     mode: '0755'
-  when:
-    - wildfly.basedir_prefix is defined
-    - wildfly.instance_id is defined
 
 - name: "Deploy Wildfy configuration"
   copy:
