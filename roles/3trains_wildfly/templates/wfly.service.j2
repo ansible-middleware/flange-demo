@@ -5,10 +5,10 @@ Before=httpd.service
 
 [Service]
 Environment=LAUNCH_JBOSS_IN_BACKGROUND=1
-EnvironmentFile=-/etc/{{ wildfly.config_name_prefix }}{{ item }}.conf
+EnvironmentFile=-/etc/{{ instance_name }}.conf
 User={{ wildfly.user }}
 Group={{ wildfly.group }}
-PIDFile={{ wildfly.basedir_prefix }}{{ item }}/{{ wildfly.config_name_prefix }}{{ item }}.pid
+PIDFile={{ wildfly.basedir_prefix }}/{{ instance_name }}.pid
 ExecStart={{ wildfly.home }}/bin/standalone.sh -c $WILDFLY_SERVER_CONFIG -b $WILDFLY_BIND $WILDFLY_OPTS
 
 [Install]

@@ -24,8 +24,9 @@ wildfly:
   group: wildfly
   bind_addr: "{{ override_wildfly_bind_addr | default('0.0.0.0') }}"
   port_range_offset: 0
-  base_config: standalone-ha.xml
-  config_name_prefix: wfly-
+  config:
+    base: standalone-ha.xml
+    name: wfly
   basedir_prefix: /var/run/wfly-
   min_mem: 64m
   max_mem: 512m

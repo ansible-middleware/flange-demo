@@ -1,7 +1,7 @@
 ---
 - name: 'Restart Wildfly instances'
   service:
-    name: "{{ wildfly.config_name_prefix }}{{ item }}"
+    name: "{{ wildfly.config.name }}-{{ item }}"
     state: restarted
   loop:
     - 1

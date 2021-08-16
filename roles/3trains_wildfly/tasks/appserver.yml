@@ -1,5 +1,7 @@
 ---
--
+- set_fact:
+    instance_id: "{{ item }}"
+
 - name: "Set up for Wildfly instance wfly-{{ item }}"
   include_tasks: set-up-wildfy-service.yml
 
