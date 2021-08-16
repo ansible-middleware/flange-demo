@@ -52,14 +52,15 @@
 
 - name: "Deploy Systemd configuration for Wildfly service"
   template:
-    src: templates/wfly.service.j2
+    src: templates/systemd/wfly.service.j2
     dest: "/usr/lib/systemd/system/{{ instance_name }}.service"
     group: root
     owner: root
+  register: daemon_reload
 
 - name: "Deploy Wildfly service instance configuration"
   template:
-    src: templates/wfly.conf.j2
+    src: templates/systemd/wfly.conf.j2
     dest: "/etc/{{ instance_name }}.conf"
     group: root
     owner: root
@@ -67,6 +68,9 @@
 - name: "Perform daemon-reload to ensure the changes are picked up"
   systemd:
     daemon_reload: yes
+  when:
+    - daemon_reload is defined
+    - daemon_reload.changed
 
 - name: "Start Wildfly Server named {{ instance_name }}"
   service:
