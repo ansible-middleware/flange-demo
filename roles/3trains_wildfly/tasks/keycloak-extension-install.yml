@@ -23,4 +23,7 @@
         {{ wildfly.home }}/bin/jboss-cli.sh -c --controller="localhost:{{ wildfly_instance_port }}" --command=":reload"
       args:
         chdir: "{{ wildfly.home }}"
-  when: (keycloak_installed.stdout | from_json)['outcome'] != "success"
+  when:
+    - not disable_keycloak is defined
+    - keycloak_download_url is defined
+    - (keycloak_installed.stdout | from_json)['outcome'] != "success"
