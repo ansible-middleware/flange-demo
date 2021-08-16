@@ -43,3 +43,5 @@
             - name: default
               proxies:
                 - proxy1
+  environment:
+    JAVA_HOME: "{{ java.home }}"
