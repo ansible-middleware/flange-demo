@@ -17,7 +17,7 @@ wfly_download_url: https://download.jboss.org/wildfly/{{ wfly_version }}/{{ wfly
 keycloak_adapter_version: 9.0.3
 keyclodk_download_url: https://downloads.jboss.org/keycloak/{{ keycloak_adapter_version }}/adapters/keycloak-oidc/keycloak-wildfly-adapter-dist-{{ keycloak_adapter_version }}.tar.gz
 java:
-  home: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.242.b08-0.fc31.x86_64/
+  home: "{{ override_widlfy_jvm | default('/usr/lib/jvm/java-1.8.0') }}"
 wildfly:
   home: "{{ workdir }}/wildfly-{{ wfly_version }}/"
   user: wildfly
