@@ -7,7 +7,17 @@
   include_tasks: install-wildfly.yml
 
 - name: "Install Postresql driver"
-  include_tasks: pgsql_jdbc_driver.yml
+  include_role:
+    name: wildfly_driver
+    tasks_from: jdbc_driver.yml
+  vars:
+      wildfly_user: "{{ wildfly.user }}"
+      jdbc_driver_module_dir: "{{ wildfly.home }}//modules/org/postgresql/main"
+      jdbc_driver_version: 9.2-1002-jdbc4
+      jdbc_driver_jar_filename: "postgresql-{{ jdbc_driver_version }}.jar"
+      jdbc_driver_jar_url: "https://repo.maven.apache.org/maven2/org/postgresql/postgresql/{{ jdbc_driver_version }}/{{ jdbc_driver_jar_filename }}"
+      jdbc_driver_jar_installation_path: "{{ jdbc_driver_module_dir }}/{{ jdbc_driver_jar_filename }}"
+      jdbc_driver_module_name: 'org.postgresql'
 
 - set_fact:
     nb_instances: "{{ (nb_instance_by_node | default(3) ) }}"
