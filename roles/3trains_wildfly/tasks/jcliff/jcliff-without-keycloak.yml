@@ -32,3 +32,5 @@
                 - proxy1
   environment:
     JAVA_HOME: "{{ java.home }}"
+  when:
+    - not skip_jcliff is defined
