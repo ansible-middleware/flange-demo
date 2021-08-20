@@ -1,6 +1,6 @@
 ---
 - name: Playbook for Postgresql Setup
-  hosts: wildfly
+  hosts: pgsql
   tasks:
     - name: Wildfly Role
       include_role:

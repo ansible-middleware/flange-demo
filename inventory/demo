@@ -14,6 +14,9 @@ wfly-3
 [keycloak]
 keycloak-0
 
+[pgsql]
+pgsql-0
+
 [threetrains:children]
 wildfly
 keycloak
