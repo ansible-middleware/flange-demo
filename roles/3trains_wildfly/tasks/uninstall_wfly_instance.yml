@@ -1,0 +1,23 @@
+---
+- name: 'Stop all Wildfly instances'
+  service:
+    name: "{{ wildfly.config.name }}-{{ item }}"
+    state: stopped
+  loop:
+    - 1
+    - 2
+    - 3
+
+- name: "Delete all runtimes data"
+  file:
+    state: absent
+    path: "{{ wildfly.basedir_prefix }}{{ item }}"
+  loop:
+    - 1
+    - 2
+    - 3
+
+- name: "Uninstall Wildfly binaries"
+  file:
+    state: absent
+    path: "{{ wildfly.home }}"
