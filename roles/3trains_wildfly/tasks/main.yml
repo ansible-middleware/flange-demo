@@ -20,7 +20,7 @@
       jdbc_driver_module_name: 'org.postgresql'
 
 - set_fact:
-    nb_instances: "{{ (nb_instance_by_node | default(3) ) }}"
+    nb_instances: "{{ (nb_instance_by_node | default(2) ) }}"
 
 - set_fact:
     nb_instances: "{{ (nb_instances | int) +1 }}"
