@@ -1,6 +1,8 @@
 ---
 packages_list:
-  - python-psycopg2
+  - python39
+  - python39-devel
+  - python3-psycopg2
   - postgresql-server
   - postgresql-devel
 db:
