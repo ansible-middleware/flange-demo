@@ -35,15 +35,13 @@
   when: datadir_init is success
 
 - name: "Create database {{ db.name }}"
-  become: true
-  postgresql_db:
+  community.postgresql.postgresql_db:
     name: "{{ db.name }}"
     encoding: UTF-8
     template: 'template0'
 
 - name: "Create user for database"
-  become: true
-  postgresql_user:
+  community.postgresql.postgresql_user:
     db: "{{ db.name }}"
     name: "{{ db.user }}"
     password: "{{ db.user }}"
