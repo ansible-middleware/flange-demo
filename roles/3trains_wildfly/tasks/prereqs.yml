@@ -9,15 +9,19 @@
     - procps-ng
     - initscripts
     - "{{ jvm_package | default('java-1.8.0-openjdk-devel') }}"
+    - firewalld
 
 - name: "Ensures required packages are installed"
   include_role:
     name: 3trains_fastpackages
-
-- name: install firewalld
-  become: yes
-  package:
-    name: firewalld
+  vars:
+    packages_list:
+      - zip
+      - unzip
+      - procps-ng
+      - initscripts
+      - "{{ jvm_package | default('java-1.8.0-openjdk-devel') }}"
+      - firewalld
 
 - name: enable and start the firewalld service
   become: yes
