@@ -3,13 +3,21 @@
     name: 3trains_fastpackages
 
 - set_fact:
-    pgdata: "{{ lookup('env','PGDATA') | default('/var/lib/pgsql/data') }}"
+    pgdata: '/var/lib/pgsql/data'
+
+- stat:
+    path: "{{ pgdata }}"
+  register: pgdatadir
 
 - name: "Init PostgesQL Db"
   command:
     cmd: /usr/bin/postgresql-setup initdb
     creates: /var/lib/pgsql/initdb.log
   register: datadir_init
+  when:
+    - pgdatadir is defined
+    - pgdatadir.stat is defined
+    - not pgdatadir.stat.exists
 
 - name: "Ensure PostgreSQL accept connection with password"
   template:
