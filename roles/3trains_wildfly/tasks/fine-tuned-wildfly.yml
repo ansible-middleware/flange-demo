@@ -47,15 +47,17 @@
   when:
     - info_app is defined
 
-- include_tasks: keycloak-configuration.yml
+- name: "Configure Wildfly WITHOUT Keycloak support"
+  block:
+    - include_tasks: keycloak-configuration.yml
+
+    - include_tasks: jcliff/jcliff-with-keycloak.yml
+
   when:
     - not disable_keycloak is defined
 
-- include_tasks: jcliff/jcliff-with-keycloak.yml
-  when:
-    - not disable_keycloak is defined
-
-- include_tasks: jcliff/jcliff-without-keycloak.yml
+- name: "Configure Wildfly with Keycloak support"
+  include_tasks: jcliff/jcliff-without-keycloak.yml
   when:
     - disable_keycloak is defined
 
