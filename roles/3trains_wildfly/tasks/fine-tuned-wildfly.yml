@@ -31,7 +31,7 @@
     path: "{{ app_dest }}"
   register: app_dest_path
 
-- name: "Download a demo app to deploy"
+- name: "Download a demo app to deploy from {{ app_detail.url }}"
   get_url:
     url: "{{ app_detail.url }}"
     dest: "{{ app_dest }}"
