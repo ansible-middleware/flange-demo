@@ -25,7 +25,7 @@
   vars:
       wildfly_user: "{{ wildfly.user }}"
       jdbc_driver_module_dir: "{{ wildfly.home }}//modules/org/postgresql/main"
-      jdbc_driver_version: "{{ override_pgsql_jdbc_driver_version | defautl('9.2-1002-jdbc4') }}"
+      jdbc_driver_version: "{{ override_pgsql_jdbc_driver_version | default('9.2-1002-jdbc4') }}"
       jdbc_driver_jar_filename: "postgresql-{{ jdbc_driver_version }}.jar"
       jdbc_driver_jar_url: "https://repo.maven.apache.org/maven2/org/postgresql/postgresql/{{ jdbc_driver_version }}/{{ jdbc_driver_jar_filename }}"
       jdbc_driver_jar_installation_path: "{{ jdbc_driver_module_dir }}/{{ jdbc_driver_jar_filename }}"
