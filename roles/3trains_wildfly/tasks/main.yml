@@ -4,7 +4,6 @@
       - wildfly is defined
       - wildfly.user is defined
       - wildfly.home is defined
-      - jdbc_driver_jar_filename is defined
       - jdbc_driver_module_dir is defined
     quiet: true
 
