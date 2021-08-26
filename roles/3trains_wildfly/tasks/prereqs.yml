@@ -36,9 +36,9 @@
     state: directory
 
 - name: "Deploy custom jcliff custom ruleset"
-  copy:
+  template:
     dest: /etc/jcliff/
-    src: files/custom/remote_sockets.jcliff.yml
+    src: templates/remote_sockets.jcliff.yml
 
 - name: Add missing rules to jcliff ruleset
   copy:
