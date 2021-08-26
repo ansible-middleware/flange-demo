@@ -6,9 +6,18 @@ LoadModule advertise_module modules/mod_advertise.so
 
 MemManagerFile /opt/jbcs-httpd24-2.4/httpd/cache/mod_cluster
 
+<VirtualHost *:80>
+  ProxyPreserveHost On
+  ProxyRequests Off
+  ServerName {{ ansible_nodename }}
+  ServerAlias {{ ansible_nodename }}
+  ProxyPass / http://localhost:{{ httpd.mod_cluster.port }
+  ProxyPassReverse / http://localhost:{{ httpd.mod_cluster.port }/
+</VirtualHost>
+
 <IfModule manager_module>
   Listen 6666
-  <VirtualHost *:{{ httpd.mod_cluster.port }}>
+  <VirtualHost localhost:{{ httpd.mod_cluster.port }}>
     DirectoryIndex disabled
     <Directory />
       Require {{ httpd.mod_cluster.require }}
