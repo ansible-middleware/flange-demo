@@ -43,7 +43,7 @@ demo_app_redirect_uris:
   - "https://{{ demo_app_host }}:8543{{ demo_app_endpoint }}/*"
   - "https://{{ demo_app_host }}:8643{{ demo_app_endpoint }}/*"
   - "https://{{ demo_app_host }}:8743{{ demo_app_endpoint }}/*"
-  - "https://{{ (groups['jbcs'][0] if groups['jbcs'] | length > 0 else 'localhost') }}:80/{{ demo_app_endpoint }}/*"
+  - "https://{{ (groups['jbcs'][0] if groups['jbcs'] | length > 0 else 'localhost') }}/{{ demo_app_endpoint }}/*"
 
 keycloak_clients:
   - name: "{{ keycloak_3trains_client_name }}"
