@@ -11,8 +11,8 @@ MemManagerFile /opt/jbcs-httpd24-2.4/httpd/cache/mod_cluster
   ProxyRequests Off
   ServerName {{ ansible_nodename }}
   ServerAlias {{ ansible_nodename }}
-  ProxyPass / http://localhost:{{ httpd.mod_cluster.port }
-  ProxyPassReverse / http://localhost:{{ httpd.mod_cluster.port }/
+  ProxyPass / http://localhost:{{ httpd.mod_cluster.port }}/
+  ProxyPassReverse / http://localhost:{{ httpd.mod_cluster.port }}/
 </VirtualHost>
 
 <IfModule manager_module>
