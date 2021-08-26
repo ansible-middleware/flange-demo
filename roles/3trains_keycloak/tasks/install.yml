@@ -88,6 +88,6 @@
 - name: "Deploy Keycloak's standalone.xml"
   template:
     src: templates/standalone.xml.j2
-    dest: "{{ keycloak_dest }}/keycloak-{{ keycloak_version }}/configuration/standalone.xml"
+    dest: "{{ keycloak_dest }}/keycloak-{{ keycloak_version }}/standalone/configuration/standalone.xml"
   notify:
     - restart keycloak
