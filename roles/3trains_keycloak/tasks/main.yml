@@ -89,31 +89,7 @@
     creates: "{{ keycloak_config_dir }}/keycloak-add-user.json"
   become: yes
 
-- name: "Ensures required package firewalld are installed"
-  include_role:
-    name: 3trains_fastpackages
-  vars:
-    packages_list:
-      - firewalld
-
-- name: enable and start the firewalld service
-  become: yes
-  systemd:
-    name: firewalld
-    enabled: yes
-    state: started
-
-- name: configure firewall for Keycloak ports
-  become: yes
-  firewalld:
-    port: "{{ item }}"
-    permanent: true
-    state: enabled
-    immediate: yes
-  loop:
-    - "{{ keycloak_http_port }}/tcp"
-    - "{{ keycloak_https_port }}/tcp"
-    - "8009/tcp"
+- include_tasks: tasks/firewalld.yml
 
 - include_tasks: tasks/systemd.yml
 
