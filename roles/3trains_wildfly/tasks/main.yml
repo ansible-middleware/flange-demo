@@ -1,4 +1,17 @@
 ---
+- assert:
+    that:
+      - wildfly is defined
+      - wildfly.user is defined
+      - wildfly.home is defined
+      - jdbc_driver_jar_filename is defined
+      - jdbc_driver_module_dir is defined
+    quiet: true
+
+- debug:
+    msg: "keycloak_3trains_url: {{ keycloak_3trains_url }}"
+  when:
+    - keycloak_3trains_url is defined
 
 - name: "Install Prerequisites"
   include_tasks: prereqs.yml
@@ -13,7 +26,7 @@
   vars:
       wildfly_user: "{{ wildfly.user }}"
       jdbc_driver_module_dir: "{{ wildfly.home }}//modules/org/postgresql/main"
-      jdbc_driver_version: 9.2-1002-jdbc4
+      jdbc_driver_version: "{{ override_pgsql_jdbc_driver_version | defautl('9.2-1002-jdbc4') }}"
       jdbc_driver_jar_filename: "postgresql-{{ jdbc_driver_version }}.jar"
       jdbc_driver_jar_url: "https://repo.maven.apache.org/maven2/org/postgresql/postgresql/{{ jdbc_driver_version }}/{{ jdbc_driver_jar_filename }}"
       jdbc_driver_jar_installation_path: "{{ jdbc_driver_module_dir }}/{{ jdbc_driver_jar_filename }}"
