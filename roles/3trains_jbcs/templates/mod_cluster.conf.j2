@@ -10,19 +10,19 @@ MemManagerFile /opt/jbcs-httpd24-2.4/httpd/cache/mod_cluster
   ProxyPreserveHost On
   ProxyRequests Off
   ServerName {{ ansible_nodename }}
-  ServerAlias {{ ansible_nodename }}
-  ProxyPass / http://localhost:{{ httpd.mod_cluster.port }}/
-  ProxyPassReverse / http://localhost:{{ httpd.mod_cluster.port }}/
+  ServerAlias {{ jbcs_host }}
+  ProxyPass / http://{{ jbcs_host }}:{{ httpd.mod_cluster.port }}/
+  ProxyPassReverse / http://{{ jbcs_host }}:{{ httpd.mod_cluster.port }}/
 </VirtualHost>
 
 <IfModule manager_module>
   Listen 6666
-  <VirtualHost localhost:{{ httpd.mod_cluster.port }}>
+  <VirtualHost {{ jbcs_host }}:{{ httpd.mod_cluster.port }}>
     DirectoryIndex disabled
     <Directory />
       Require {{ httpd.mod_cluster.require }}
     </Directory>
-    ServerAdvertise on {{ ansible_nodename }}:{{ httpd.mod_cluster.port }}
+    ServerAdvertise on {{ jbcs_host }}:{{ httpd.mod_cluster.port }}
     AdvertiseFrequency 5
     EnableMCPMReceive
     <Location /mod_cluster_manager>
