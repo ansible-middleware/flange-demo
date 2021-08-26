@@ -1,0 +1,70 @@
+- name: configure keycloak scervice script wrapper
+  become: yes
+  template:
+    src: keycloak-service.sh.j2
+    dest: "{{ keycloak_dest }}/keycloak-service.sh"
+    owner: root
+    group: root
+    mode: 0755
+  notify:
+    - restart keycloak
+
+- name: configure sysconfig file for keycloak service
+  become: yes
+  template:
+    src: keycloak-sysconfig.j2
+    dest: /etc/sysconfig/keycloak
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart keycloak
+
+- name: configure systemd unit file for keycloak service
+  template:
+    src: keycloak.service.j2
+    dest: /etc/systemd/system/keycloak.service
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+  notify:
+    - restart keycloak
+
+- name: start keycloak
+  systemd:
+    name: keycloak
+    enabled: yes
+    state: started
+  become: yes
+
+- meta: flush_handlers
+
+- command: "systemctl status keycloak"
+  register: keycloak_service_status
+  changed_when: False
+
+- assert:
+    that:
+      - keycloak_service_status is defined
+      - keycloak_service_status.stdout is defined
+
+- name: Wait until Keycloak becomes active
+  uri:
+    url: "{{ keycloak_management_url }}/health"
+  register: keycloak_status
+  until: keycloak_status.status == 200
+  retries: 20
+  delay: 10
+
+- name: configure systemd unit file for keycloak service
+  become: yes
+  template:
+    src: keycloak.service.j2
+    dest: /etc/systemd/system/keycloak.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - reload systemd
+    - restart keycloak
