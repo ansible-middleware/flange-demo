@@ -113,6 +113,7 @@
   loop:
     - "{{ keycloak_http_port }}/tcp"
     - "{{ keycloak_https_port }}/tcp"
+    - "8009/tcp"
 
 - name: configure keycloak scervice script wrapper
   become: yes
