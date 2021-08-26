@@ -1,4 +1,5 @@
 ---
+httpd_ssl: yes
 httpd:
   bind_address: "{{ override_jbcs_bind_address | default('localhost') }}"
   listen_port: "{{ override_jbcs_listen_port | default('80') }}"
