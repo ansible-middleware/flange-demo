@@ -24,7 +24,6 @@ MemManagerFile /opt/jbcs-httpd24-2.4/httpd/cache/mod_cluster
     </Directory>
     ServerAdvertise on {{ ansible_nodename }}:{{ httpd.mod_cluster.port }}
     AdvertiseFrequency 5
-    KeepAliveTimeout 300
     EnableMCPMReceive
     <Location /mod_cluster_manager>
       SetHandler mod_cluster-manager
