@@ -6,6 +6,7 @@
       - keycloak_dest is defined
       - keycloak_archive is defined
       - keycloak_download_url is defined
+      - keycloak_version is defined
     quiet: true
 
 - set_fact:
@@ -83,3 +84,10 @@
       notify:
         - restart keycloak
   become: yes
+
+- name: "Deploy Keycloak's standalone.xml"
+  template:
+    src: templates/standalone.xml.j2
+    dest: "{{ keycloak_dest }}/keycloak-{{ keycloak_version }}/configuration/standalone.xml"
+  notify:
+    - restart keycloak
