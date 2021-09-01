@@ -18,6 +18,7 @@
         {{ jboss_cli }} --command='/extension=org.keycloak.keycloak-adapter-subsystem:read-resource'
       args:
         chdir: "{{ wildfly.home }}"
+      changed_when: false
   rescue:
     - name: Install Keycloak Adapter and Reload
       block:
@@ -26,6 +27,7 @@
             {{ jboss_cli }} --file={{ wildfly.home }}/bin/adapter-elytron-install.cli
           args:
             chdir: "{{ wildfly.home }}"
+          changed_when: true
         - name: Reload After Keycloak Adapter Install
           command: >
             {{ jboss_cli }} --command=":reload"
