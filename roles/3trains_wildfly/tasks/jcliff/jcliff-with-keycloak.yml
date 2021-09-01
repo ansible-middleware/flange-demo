@@ -1,5 +1,5 @@
 ---
-- name: "Fine tuning configuration: {{ instance_name }}"
+- name: "Fine tuning configuration: {{ instance_name | default('localhost') }}"
   jcliff:
     wfly_home: "{{ wildfly.home }}"
     rule_file: roles/3trains_wildfly/files/custom/
