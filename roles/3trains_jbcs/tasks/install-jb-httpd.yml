@@ -67,40 +67,6 @@
   notify:
     - "Restart JBCS"
 
-- set_fact:
-    ssl_conf: "{{ httpd.home }}/httpd/conf.d/ssl.conf"
-
-- set_fact:
-    ssl_conf_disabled: "{{ ssl_conf }}.disabled"
-
-- stat:
-    path: "{{ ssl_conf }}"
-  register: ssl_conf_file
-
-- stat:
-    path: "{{ ssl_conf_disabled }}"
-  register: ssl_conf_disabled_file
-
-- name: "Disabled SSL"
-  file:
-    src: "{{ ssl_conf }}"
-    path: "{{ ssl_conf }}.disabled"
-    state: hard
-  when:
-    - ssl_conf_file.stat.exists
-    - not ssl_conf_disabled_file.stat.exists
-
-- stat:
-    path: "{{ ssl_conf }}.disabled"
-  register: ssl_conf_remove
-
-- name: "Remove old file"
-  file:
-    path: "{{ ssl_conf }}"
-    state: absent
-  when:
-    - ssl_conf_remove.stat.exists
-
 - name: "Start HTTPd Service"
   service:
     name: jbcs-httpd24-httpd.service
