@@ -1,11 +1,14 @@
 ---
 - import_playbook: preconds.yml
 
+# JBoss Core Services (Apache HTTPD)
+- import_playbook: jbcs.yml
+
 # Keycloak Playbook
 - import_playbook: keycloak.yml
 
-# JBoss Core Services (Apache HTTPD)
-- import_playbook: jbcs.yml
+# PGSL Playbook
+- import_playbook: postgresql.yml
 
 # Wildfly Playbook
 - import_playbook: wildfly.yml
