@@ -1,21 +1,25 @@
 ---
+- assert:
+    that:
+      - wildfly is defined
+      - wildfly.config is defined
+      - wildfly.config.name is defined
+      - wildfly.basedir_prefix is defined
+      - wildfly.home is defined
+      - nb_instance_by_node is defined
+    quiet: true
+
 - name: 'Stop all Wildfly instances'
   service:
     name: "{{ wildfly.config.name }}-{{ item }}"
     state: stopped
-  loop:
-    - 1
-    - 2
-    - 3
+  loop: "{{ nb_instance_by_node }}"
 
 - name: "Delete all runtimes data"
   file:
     state: absent
     path: "{{ wildfly.basedir_prefix }}{{ item }}"
-  loop:
-    - 1
-    - 2
-    - 3
+  loop: "{{ nb_instance_by_node }}"
 
 - name: "Uninstall Wildfly binaries"
   file:

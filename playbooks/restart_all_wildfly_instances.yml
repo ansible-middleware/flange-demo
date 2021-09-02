@@ -2,6 +2,10 @@
 - name: Playbook for Wildfly Hosts
   hosts: wildfly
   tasks:
+
+    - set_fact:
+        nb_instances: "{{ (nb_instance_by_node | default(2) ) }}"
+
     - name: Wildfly Role
       include_role:
         name: 3trains_wildfly
