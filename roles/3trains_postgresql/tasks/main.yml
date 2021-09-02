@@ -1,12 +1,11 @@
 - name: "Install PostgreSQL and relate packages"
   include_role:
     name: 3trains_fastpackages
-
-- set_fact:
-    pgdata: '/var/lib/pgsql/data'
+  vars:
+    packages_list: "{{ pgsql.packages_list }}"
 
 - stat:
-    path: "{{ pgdata }}"
+    path: "{{ pgsql.pgdata }}"
   register: pgdatadir
 
 - name: "Init PostgesQL Db"
@@ -34,16 +33,16 @@
     enabled: yes
   when: datadir_init is success
 
-- name: "Create database {{ db.name }}"
+- name: "Create database {{ pgsql.db.name }}"
   community.postgresql.postgresql_db:
-    name: "{{ db.name }}"
+    name: "{{ pgsql.db.name }}"
     encoding: UTF-8
     template: 'template0'
 
 - name: "Create user for database"
   community.postgresql.postgresql_user:
-    db: "{{ db.name }}"
-    name: "{{ db.user }}"
-    password: "{{ db.user }}"
+    db: "{{ pgsql.db.name }}"
+    name: "{{ pgsql.db.user }}"
+    password: "{{ pgsql.db.user }}"
     priv: ALL
     state: present
