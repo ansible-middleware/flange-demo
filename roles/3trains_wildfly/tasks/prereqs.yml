@@ -1,7 +1,7 @@
 ---
 
 - set_fact:
-    packages_list:
+    required_packages:
     - zip
     - unzip
     # - gcc
@@ -15,13 +15,7 @@
   include_role:
     name: 3trains_fastpackages
   vars:
-    packages_list:
-      - zip
-      - unzip
-      - procps-ng
-      - initscripts
-      - "{{ jvm_package | default('java-1.8.0-openjdk-devel') }}"
-      - firewalld
+    packages_list: "{{ required_packages }}"
 
 - name: enable and start the firewalld service
   become: yes
