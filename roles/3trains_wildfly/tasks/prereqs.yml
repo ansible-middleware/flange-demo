@@ -29,27 +29,3 @@
     name: firewalld
     enabled: yes
     state: started
-
-- name: "Create repo for custom rulesdir"
-  file:
-    path: /etc/jcliff
-    state: directory
-
-- name: "Deploy custom jcliff custom ruleset"
-  copy:
-    dest: /etc/jcliff/
-    src: files/custom/remote_sockets.jcliff.yml
-
-- name: Add missing rules to jcliff ruleset
-  copy:
-    src: "{{ item }}"
-    dest: "{{ jcliff_rules_dir }}"
-  loop:
-    - files/rules/modcluster
-    - files/rules/keycloak
-    - files/rules/standard-sockets
-
-- name: Update jcliff ruleset to add modcluster and keycloak
-  copy:
-    src: files/rules/rules
-    dest: "{{ jcliff_rules_dir }}/rules"
