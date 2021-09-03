@@ -1,6 +1,6 @@
 ---
 - name: Playbook to validate host met the preconditions
-  hosts: wildfly
+  hosts: all
   tasks:
 
     - assert:
@@ -15,3 +15,14 @@
           - ansible_python_version is version('3.6','>')
         quiet: true
         fail_msg: "This demo has been built for RHEL 8.4 using Ansible 2.9 running on Python 3"
+
+    - name: "Ensure target system {{ ansible_nodename }} is properly registered"
+      become: yes
+      community.general.redhat_subscription:
+        state: present
+        username: "{{ rhn_username }}"
+        password: "{{ rhn_password }}"
+        auto_attach: true
+      when:
+        - rhn_username is defined
+        - rhn_password is defined
