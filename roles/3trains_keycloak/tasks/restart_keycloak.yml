@@ -1,0 +1,7 @@
+---
+- name: configure keycloak scervice script wrapper
+  systemd:
+    name: keycloak
+    enabled: yes
+    state: restarted
+  become: yes

@@ -5,8 +5,4 @@
   become: yes
 
 - name: restart keycloak
-  systemd:
-    name: keycloak
-    enabled: yes
-    state: restarted
-  become: yes
+  include_tasks: restart_keycloak.yml
