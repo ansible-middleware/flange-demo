@@ -19,44 +19,34 @@
   loop_control:
     loop_var: port
 
-- name: Set application detail
-  set_fact:
-    app_detail: "{{ apps | selectattr('version','equalto', sample_app_version) | list | first }}"
+- set_fact:
+    demo_app: "{{ apps | selectattr('version','equalto', sample_app_version) | list | first }}"
+    info_app: "{{ apps | selectattr('name','equalto', 'info') | list | first }}"
 
-- name: Set Application Destination Directory
-  set_fact:
-    app_dest: "{{ app_dir + '/' + app_detail.name + '-' + app_detail.version + '.' + app_detail.extension }}"
+- set_fact:
+    demo_app_dest: "{{ app_dir + '/' + demo_app.name + '-' + demo_app.version + '.' + demo_app.extension }}"
+    info_app_dest: "{{ app_dir + '/' + info_app.name + '-' + info_app.version + '.' + info_app.extension }}"
 
-- stat:
-    path: "{{ app_dest }}"
-  register: app_dest_path
+- include_tasks: tasks/app_download.yml
+  vars:
+    app_detail: "{{ item.detail }}"
+    app_dest: "{{ item.dest }}"
+  loop:
+    - { detail: "{{ demo_app }}", dest: "{{ demo_app_dest }}" }
+    - { detail: "{{ info_app }}", dest: "{{ info_app_dest }}" }
 
-- name: "Download a demo app to deploy from {{ app_detail.url }}"
-  get_url:
-    url: "{{ app_detail.url }}"
-    dest: "{{ app_dest }}"
-  when:
-    - app_dest_path is defined
-    - app_dest_path.stat is defined
-    - not app_dest_path.stat.exists
-
-- name: "Download a info app to deploy"
-  get_url:
-    url: "http://people.redhat.com/~rpelisse/info-1.1.war"
-    dest: "/opt/info-1.1.war"
-  when:
-    - info_app is defined
-
-- name: "Configure Wildfly WITHOUT Keycloak support"
+- name: "Configure Wildfly with Keycloak support"
   block:
+    - set_fact:
+        secure_deployment_name: "{{ demo_app.name + '.' + demo_app.extension }}"
+
     - include_tasks: keycloak-configuration.yml
 
     - include_tasks: jcliff/jcliff-with-keycloak.yml
-
   when:
     - not disable_keycloak is defined
 
-- name: "Configure Wildfly with Keycloak support"
+- name: "Configure Wildfly without Keycloak support"
   include_tasks: jcliff/jcliff-without-keycloak.yml
   when:
     - disable_keycloak is defined

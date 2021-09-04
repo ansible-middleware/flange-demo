@@ -10,11 +10,11 @@
         - name: JBOSS_ID
           value: "{{ instance_name }}"
       - deployments:
-          - name: "{{ app_dest | basename }}"
-            path: "{{ app_dest }}"
-            replace_runtime_name_regex: "{{  (app_dest | basename).split('-')[0] }}-.*"
-          - name: info-1.0.war
-            path: /opt/info-1.0.war
+          - name: "{{ demo_app_dest | basename }}"
+            path: "{{ demo_app_dest }}"
+            replace_runtime_name_regex: "{{ (demo_app_dest | basename).split('-')[0] }}-.*"
+          - name: "{{ info_app_dest | basename }}"
+            path: "{{ info_app_dest }}"
       - drivers:
           - driver_name: postgresql
             driver_module_name: org.postgresql
@@ -30,7 +30,7 @@
             password: "{{ postgres.user.password }}"
       - keycloak:
           - secure_deployment:
-              - deployment_name: "{{ app_detail.name + '.' + app_detail.extension }}"
+              - deployment_name: "{{ secure_deployment_name }}"
                 realm: "{{ keycloak_realm }}"
                 auth_server_url: "{{ keycloak_url }}/auth/"
                 ssl_required: EXTERNAL

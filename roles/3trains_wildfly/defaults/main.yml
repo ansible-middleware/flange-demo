@@ -1,15 +1,20 @@
 ---
 sample_app_version: "{{ sample_app_version_to_deploy | default('0.0.1') }}"
+gdrive_url: 'https://drive.google.com/uc?export=download&id='
 apps:
   - name: kitchensink
     extension: war
     version: "0.0.1"
-    url: "https://drive.google.com/uc?export=download&id=1PfTn2zk-UVbLoPDT-xf9Z4AdkNaEfTh3"
+    url: "{{ gdrive_url }}1PfTn2zk-UVbLoPDT-xf9Z4AdkNaEfTh3"
   - name: kitchensink
     extension: war
     version: "0.0.2"
-    url: "https://drive.google.com/uc?export=download&id=1nrKPe6N7aDwilz6YIzImw1PznaYHuEDj"
-app_dir: /tmp
+    url: "{{ gdrive_url }}1nrKPe6N7aDwilz6YIzImw1PznaYHuEDj"
+  - name: info
+    extension: war
+    version: '1.1'
+    url: "{{ gdrive_url }}1w9ss5okctnjUvRAxhPEPyC7DmbUwmbhb"
+app_dir: /opt/apps/
 wfly_version: 19.0.0.Final
 workdir: /opt/wildfly/
 wfly_zipfile: "wildfly-{{ wfly_version }}.zip"

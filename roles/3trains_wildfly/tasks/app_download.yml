@@ -1,0 +1,20 @@
+---
+- assert:
+    that:
+      - app_detail is defined
+      - app_dir is defined
+      - app_dest is defined
+    quiet: true
+
+- stat:
+    path: "{{ app_dest }}"
+  register: app_dest_path
+
+- name: "Download a demo app to deploy from {{ app_detail.url }} into {{ app_dest }}"
+  get_url:
+    url: "{{ app_detail.url }}"
+    dest: "{{ app_dest }}"
+  when:
+    - app_dest_path is defined
+    - app_dest_path.stat is defined
+    - not app_dest_path.stat.exists
