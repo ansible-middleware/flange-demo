@@ -1,7 +1,7 @@
 ---
 - name: "Ensures JCliff version is appropriate"
   yum:
-    name: jcliff>=2.12.8
+    name: jcliff-2.12.8
     state: present
 
 - name: "Fine tuning configuration: {{ instance_name | default('localhost') }}"
