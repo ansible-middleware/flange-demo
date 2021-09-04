@@ -5,8 +5,8 @@
     packages_list: "{{ pgsql.packages_list }}"
 
 - stat:
-    path: "{{ pgsql.pgdata }}"
-  register: pgdatadir
+    path: "{{ pgsql.pgdata }}/pg_hba.conf"
+  register: pgdata_init
 
 - name: "Init PostgesQL Db"
   command:
@@ -14,9 +14,9 @@
     creates: /var/lib/pgsql/initdb.log
   register: datadir_init
   when:
-    - pgdatadir is defined
-    - pgdatadir.stat is defined
-    - not pgdatadir.stat.exists
+    - pgdata_init is defined
+    - pgdata_init.stat is defined
+    - not pgdata_init.stat.exists
 
 - name: "Ensure PostgreSQL accept connection with password"
   template:
