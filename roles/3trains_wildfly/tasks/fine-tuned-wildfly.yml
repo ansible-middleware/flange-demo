@@ -27,6 +27,11 @@
     demo_app_dest: "{{ app_dir + '/' + demo_app.name + '-' + demo_app.version + '.' + demo_app.extension }}"
     info_app_dest: "{{ app_dir + '/' + info_app.name + '-' + info_app.version + '.' + info_app.extension }}"
 
+- name: "Ensures apps repository folder {{ app_dir }} exits."
+  file:
+    path: "{{ app_dir }}"
+    state: directory
+
 - include_tasks: tasks/app_download.yml
   vars:
     app_detail: "{{ item.detail }}"
