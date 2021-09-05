@@ -34,11 +34,13 @@
 
 - include_tasks: tasks/app_download.yml
   vars:
-    app_detail: "{{ item.detail }}"
-    app_dest: "{{ item.dest }}"
+    app_detail: "{{ app.detail }}"
+    app_dest: "{{ app.dest }}"
   loop:
     - { detail: "{{ demo_app }}", dest: "{{ demo_app_dest }}" }
     - { detail: "{{ info_app }}", dest: "{{ info_app_dest }}" }
+  loop_control:
+    loop_var: app
 
 - name: "Configure Wildfly with Keycloak support"
   block:
