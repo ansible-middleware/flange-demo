@@ -18,13 +18,25 @@
     - pgdata_init.stat is defined
     - not pgdata_init.stat.exists
 
-- name: "Ensure PostgreSQL accept connection with password"
+- name: "Ensure PostgreSQL accept connection from app servers"
   template:
     src: pg_hba.conf
     dest: /var/lib/pgsql/data/pg_hba.conf
     owner: postgres
     group: postgres
     mode: 0600
+  notify:
+    - restart postgres
+
+- name: "Ensure PostgreSQL accept remote connection"
+  template:
+    src: postgresql.conf
+    dest: /var/lib/pgsql/data/postgresql.conf
+    owner: postgres
+    group: postgres
+    mode: 0600
+  notify:
+    - restart postgres
 
 - name: "Ensure the PostgreSQL service is running"
   service:
