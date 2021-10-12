@@ -4,7 +4,7 @@
   tasks:
 
     - set_fact:
-        nb_instances: "{{ (nb_instance_by_node | default(2) ) }}"
+        nb_instances: "{{ (nb_instance_by_node | default(2) | int ) }}"
 
     - name: Wildfly Role
       include_role:
