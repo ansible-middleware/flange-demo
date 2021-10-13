@@ -1,0 +1,12 @@
+---
+- assert:
+    that:
+      - wildfly is defined
+      - wildfly.home is defined
+      - nb_instance_by_node is defined
+    quiet: true
+
+- include_tasks: jboss_cli.yml
+  vars:
+    jboss_cli_query: roles/3trains_wildfly/tasks/undeploy_app.yml
+
