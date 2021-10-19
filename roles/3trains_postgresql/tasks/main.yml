@@ -37,6 +37,8 @@
     mode: 0600
   notify:
     - restart postgres
+  when:
+    - groups['pgsql'][0] != 'localhost'
 
 - name: "Ensure the PostgreSQL service is running"
   service:
