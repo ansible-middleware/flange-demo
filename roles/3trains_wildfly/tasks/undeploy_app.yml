@@ -4,9 +4,13 @@
       - wildfly is defined
       - wildfly.home is defined
       - nb_instance_by_node is defined
+      - app_name is defined
     quiet: true
 
-- include_tasks: jboss_cli.yml
+- name: "Undeploy {{ app_name }}"
+  include_tasks: jboss_cli.yml
   vars:
-    jboss_cli_query: roles/3trains_wildfly/tasks/undeploy_app.yml
-
+    jboss_cli_query: "undeploy {{ app_name }}"
+    wildfly_home: "{{ wildfly.home }}"
+    cli_port: "{{ 9990 + (item * 100) }}"
+  loop: "{{ range(1, (nb_instances|int + 1)) | list }}"

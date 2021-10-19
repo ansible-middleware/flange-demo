@@ -9,4 +9,10 @@
     - name: Wildfly Role
       include_role:
         name: 3trains_wildfly
-        tasks_from: restart_wfly_instance.yml
+        tasks_from: undeploy_app.yml
+      vars:
+        app_name: "{{ deployment_name }}"
+      loop:
+        - info-1.1.war
+      loop_control:
+        loop_var: deployment_name
