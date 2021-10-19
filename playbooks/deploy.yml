@@ -1,0 +1,18 @@
+---
+- name: Playbook for Wildfly Hosts
+  hosts: wildfly
+  tasks:
+
+    - set_fact:
+        nb_instances: "{{ (nb_instance_by_node | default(2) ) }}"
+
+    - name: Wildfly Role
+      include_role:
+        name: 3trains_wildfly
+        tasks_from: deploy_app.yml
+      vars:
+        info_app_dest: "{{ deployment_name }}"
+      loop:
+        - /opt/apps/info-1.1.war
+      loop_control:
+        loop_var: deployment_name
