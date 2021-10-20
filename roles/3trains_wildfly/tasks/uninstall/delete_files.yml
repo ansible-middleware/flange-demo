@@ -1,0 +1,23 @@
+---
+- assert:
+    that:
+      - wildfly is defined
+      - wildfly.basedir_prefix is defined
+      - wildfly.home is defined
+      - item is defined
+    quiet: true
+
+- name: "Delete all runtimes data"
+  file:
+    state: absent
+    path: "{{ wildfly.basedir_prefix }}{{ item }}"
+
+- name: "Delete configurations files"
+  file:
+    state: absent
+    path: "/etc/wfly-{{ item }}"
+
+- name: "Delete all systems services"
+  file:
+    state: absent
+    path: "/usr/lib/systemd/system/wfly-{{ item }}.service"

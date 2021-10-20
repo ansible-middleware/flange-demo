@@ -10,16 +10,16 @@
     quiet: true
 
 - name: 'Stop all Wildfly instances'
-  service:
-    name: "{{ wildfly.config.name }}-{{ item }}"
-    state: stopped
+  include_tasks: uninstall/stop_service.yml
   loop: "{{ range(1, (nb_instances|int + 1)) | list }}"
 
-- name: "Delete all runtimes data"
-  file:
-    state: absent
-    path: "{{ wildfly.basedir_prefix }}{{ item }}"
+- name: "Delete all runtime and configuration files"
+  include_tasks: uninstall/delete_files.yml
   loop: "{{ range(1, (nb_instances|int + 1)) | list }}"
+
+- name: "Perform daemon-reload to ensure all services are removed"
+  systemd:
+    daemon_reload: yes
 
 - name: "Uninstall Wildfly binaries"
   file:

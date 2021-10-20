@@ -1,0 +1,16 @@
+---
+- assert:
+    that:
+      - wildfly is defined
+      - wildfly.home is defined
+      - nb_instance_by_node is defined
+      - app_name is defined
+    quiet: true
+
+- debug:
+    msg: "nb_instance:{{ nb_instance_by_node }}"
+
+- include_tasks: undeploy_app.yml
+  loop: "{{ range(1, (nb_instance_by_node|int + 1)) | list }}"
+  loop_control:
+    loop_var: item

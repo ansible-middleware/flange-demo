@@ -12,10 +12,14 @@
 - set_fact:
     jboss_cli: "{{ wildfly_home }}/bin/jboss-cli.sh -c --controller={{ wildfly_admin_host }}:{{ wildfly_admin_port }}"
 
-- name: "Run CLI query {{ jboss_cli_query }}"
-  command: >
-    {{ jboss_cli }} "--command={{ jboss_cli_query }}"
-  args:
-    chdir: "{{ wildfly_home }}"
-  register: jboss_cli_results
-  changed_when: false
+- block:
+    - name: "Run CLI query {{ jboss_cli_query }} on {{ cli_host }}:{{ cli_port }}"
+      command: >
+        {{ jboss_cli }} "--command={{ jboss_cli_query }}"
+      args:
+        chdir: "{{ wildfly_home }}"
+      register: jboss_cli_results
+      changed_when: false
+  rescue:
+    - debug:
+        msg: "CLI query {{ jboss_cli_query }} failed {{ jboss_cli_results.stdout }}"
