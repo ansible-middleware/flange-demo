@@ -1,0 +1,36 @@
+---
+- assert:
+    that:
+      - nb_instances is defined
+    quiet: true
+
+- set_fact:
+    service_name: "{{ override_instance_prefix | default('wfly-') }}{{ item }}"
+  when: item is defined
+
+- set_fact:
+    service_name: "wfly"
+  when: not service_name is defined
+
+- block:
+  - command: "systemctl status {{ service_name }}"
+    register: wfly_status_res
+    changed_when: false
+  rescue:
+    - debug:
+        msg: "Error when requested status on {{ service_name }}"
+      when: debug_status is defined
+
+- block:
+    - debug:
+        msg: "service {{ service_name }} is running"
+      when:
+        - wfly_status_res.rc == 0
+
+    - debug:
+        msg: "service {{ service_name }} is NOT running"
+      changed_when: true
+      when:
+        - wfly_status_res.rc != 0
+  when:
+    - wfly_status_res is defined
