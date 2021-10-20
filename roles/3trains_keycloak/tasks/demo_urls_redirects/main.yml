@@ -1,9 +1,4 @@
 ---
-- assert:
-    that:
-      - nb_instances is defined
-    quiet: true
-
 - set_fact:
     demo_app_redirect_uris: []
 
