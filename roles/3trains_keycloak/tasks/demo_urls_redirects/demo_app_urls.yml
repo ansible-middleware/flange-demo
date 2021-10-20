@@ -1,0 +1,17 @@
+---
+- assert:
+    that:
+      - item is defined
+      - app_servers_list is defined
+    quiet: true
+
+- set_fact:
+    app_list_by_instance: []
+
+- set_fact:
+    url: "https://{{ item }}:"
+
+- include_tasks: demo_app_all_urls_by_host.yml
+
+- set_fact:
+    app_servers_list: "{{ app_servers_list }} + {{ app_list_by_instance }}"

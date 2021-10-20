@@ -58,6 +58,8 @@
     status_code: 201
   when: keycloak_realm_exists.status == 404
 
+- include_tasks: tasks/demo_urls_redirects/main.yml
+
 - name: Create 3trains Client
   community.general.keycloak_client:
     auth_client_id: "{{ keycloak_auth_client }}"
@@ -69,7 +71,7 @@
     realm: "{{ item.realm }}"
     default_roles: "{{ item.roles | default(omit) }}"
     root_url: "{{ item.root_url | default('') }}"
-    redirect_uris: "{{ item.redirect_uris | default([]) }}"
+    redirect_uris: "{{ demo_app_redirect_uris | default([]) }}"
     state: present
   register: create_client_result
   loop: "{{ keycloak_clients }}"

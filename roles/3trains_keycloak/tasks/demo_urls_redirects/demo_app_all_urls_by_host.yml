@@ -1,0 +1,14 @@
+---
+- assert:
+    that:
+      - nb_instances is defined
+      - url is defined
+      - app_list_by_instance is defined
+    quiet: true
+
+- set_fact:
+    app_list_by_instance: "{{ app_list_by_instance }} + ['{{ url }}:{{ 8080 + (port_shift * 100) }}']"
+  loop: "{{ range(1, (nb_instances|int + 1)) | list }}"
+  loop_control:
+    loop_var: port_shift
+
