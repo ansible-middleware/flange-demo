@@ -1,0 +1,20 @@
+---
+- assert:
+    that:
+      - zipfile is defined
+      - download_url is defined
+      - rhn_username is defined
+      - rhn_password is defined
+    quiet: true
+
+- name: "Install EAP with zipfile from RHN into JBOSS_HOME {{ zipfile }}"
+  redhat_csp_download:
+    url: "{{ download_url }}"
+    dest: "{{ zipfile }}"
+    username: "{{ rhn_username }}"
+    password: "{{ rhn_password }}"
+  no_log: "{{ log_rhn_output | default('yes') }}"
+
+- stat:
+    path: "{{ zipfile }}"
+  register: path_to_downloaded_artefact

@@ -1,0 +1,43 @@
+---
+- assert:
+    that:
+      - wildfly is defined
+      - wildfly.user is defined
+    quiet: true
+
+- set_fact:
+    required_packages:
+    - zip
+    - unzip
+    - procps-ng
+    - initscripts
+    - "{{ jvm_package | default('java-1.8.0-openjdk-devel') }}"
+    - firewalld
+
+- name: "Ensures required packages are installed"
+  include_role:
+    name: 3trains_fastpackages
+  vars:
+    packages_list: "{{ required_packages }}"
+
+- name: enable and start the firewalld service
+  become: yes
+  systemd:
+    name: firewalld
+    enabled: yes
+    state: started
+
+- name: "Ensure Wildfly user {{ wildfly.user }} exists"
+  user:
+    name: "{{ wildfly.user }}"
+    comment: "User to run Wildfly"
+
+- name: "Ensures directory '{{ item }}' exists"
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ wildfly.user }}"
+    group: "{{ wildfly.user }}"
+  loop:
+    - "{{ workdir }}"
+    - "{{ app_repository }}"

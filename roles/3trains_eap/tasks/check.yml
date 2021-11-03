@@ -1,0 +1,14 @@
+---
+- assert:
+    that:
+      - wildfly is defined
+      - wildfly.home is defined
+    quiet: true
+
+- command:
+    cmd: "grep -e '{{ item }}' {{ wildfly.home }}/standalone/log/server.log"
+  changed_when: false
+  register: grep_res
+
+- debug:
+    msg: "{{ grep_res.stdout_lines | last }}"

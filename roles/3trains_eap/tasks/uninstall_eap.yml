@@ -1,0 +1,48 @@
+---
+- assert:
+    that:
+      - wildfly is defined
+      - wildfly.config is defined
+      - wildfly.config.name is defined
+      - wildfly.home is defined
+    quiet: true
+
+- debug:
+    msg: 'Stop JBoss EAP services'
+  notify:
+    - "Stop service JBoss EAP"
+
+- meta: flush_handlers
+
+- name: "Delete all runtimes data"
+  file:
+    state: absent
+    path: "{{ wildfly.basedir_prefix }}"
+  when:
+    - wildfly.basedir_prefix is defined
+
+- name: "Delete configurations files"
+  file:
+    state: absent
+    path: "/etc/jboss-eap.conf"
+
+- name: "Delete all systems services"
+  file:
+    state: absent
+    path: "/usr/lib/systemd/system/jboss-eap.service"
+
+- name: "Perform daemon-reload to ensure all services are removed"
+  systemd:
+    daemon_reload: yes
+
+- name: "Uninstall binaries"
+  file:
+    state: absent
+    path: "{{ item }}"
+  loop:
+    - /opt/jboss-eap-7.2
+    - /opt/jboss-eap-7.3
+    - /opt/jboss-eap-7.4
+    - /opt/apps
+    - /opt/jdk-17.0.1
+    - /opt/openjdk-17.0.1_linux-x64_bin.tar.gz

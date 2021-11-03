@@ -1,0 +1,32 @@
+---
+- assert:
+    that:
+      - wildfly is defined
+      - wildfly.user is defined
+      - wildfly.home is defined
+      - wildfly.config is defined
+      - wildfly.config.base is defined
+    quiet: true
+
+- name: "Install Prerequisites"
+  include_tasks: prereqs.yml
+
+- name: "Install EAP"
+  include_tasks: install.yml
+
+- set_fact:
+    instance_name: jboss-eap
+
+- name: "Set up for EAP instance as '{{ instance_name }}' service under systemd control."
+  include_role:
+    name: wildfly_systemd
+  vars:
+    wildfly_home: "{{ wildfly.home }}"
+    wildfly_user: "{{ wildfly.user }}"
+    wildfly_group: "{{ wildfly.group | default(wildfly.user) }}"
+    wildfly_config_base: "{{ wildfly.config.base }}"
+    wildfly_basedir_prefix: "{{ wildfly.home }}/standalone/"
+    wildfly_config_name: "{{ wildfly.config.name }}"
+    wildfly_port_range_offset: 0
+
+- include_tasks: tasks/jdbc.yml
