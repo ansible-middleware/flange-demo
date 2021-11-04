@@ -86,6 +86,7 @@
   become: yes
 
 - name: "Deploy Keycloak's standalone.xml"
+  become: yes
   template:
     src: templates/standalone.xml.j2
     dest: "{{ keycloak_dest }}/keycloak-{{ keycloak_version }}/standalone/configuration/standalone.xml"
