@@ -21,6 +21,9 @@
     - wait_for:
         port: 8080
 
+    - wait_for:
+        timeout: 10
+
     - include_role:
         name: 3trains_eap
         tasks_from: check.yml

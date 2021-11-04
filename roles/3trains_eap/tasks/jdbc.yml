@@ -53,3 +53,9 @@
             path: "{{ app_dir }}/{{ app_filename }}"
   notify:
     - "Restart service JBoss EAP"
+
+- wait_for:
+    timeout: 10
+
+- wait_for:
+    port: 8080
