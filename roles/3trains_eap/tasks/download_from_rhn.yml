@@ -7,13 +7,24 @@
       - rhn_password is defined
     quiet: true
 
-- name: "Install EAP with zipfile from RHN into JBOSS_HOME {{ zipfile }}"
-  redhat_csp_download:
-    url: "{{ download_url }}"
-    dest: "{{ zipfile }}"
-    username: "{{ rhn_username }}"
-    password: "{{ rhn_password }}"
-  no_log: "{{ log_rhn_output | default('yes') }}"
+- block:
+    - name: "Install EAP with zipfile from RHN into JBOSS_HOME {{ zipfile }}"
+      redhat_csp_download:
+        url: "{{ download_url }}"
+        dest: "{{ zipfile }}"
+        username: "{{ rhn_username }}"
+        password: "{{ rhn_password }}"
+      no_log: "{{ log_rhn_output | default('yes') }}"
+  rescue:
+    - wait_for:
+        timeout: 30
+    - name: "Install EAP with zipfile from RHN into JBOSS_HOME {{ zipfile }}"
+      redhat_csp_download:
+        url: "{{ download_url }}"
+        dest: "{{ zipfile }}"
+        username: "{{ rhn_username }}"
+        password: "{{ rhn_password }}"
+      no_log: "{{ log_rhn_output | default('yes') }}"
 
 - stat:
     path: "{{ zipfile }}"
