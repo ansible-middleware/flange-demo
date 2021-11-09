@@ -21,7 +21,7 @@
         name: 3trains_eap
         tasks_from: update.yml
       vars:
-        eap_cp_id: 'jboss-eap-7.2.9.CP'
+        eap_cp_id: 'jboss-eap-7.3.9.CP'
         rhn_software_id: '101511'
         eap_cp_zipfile: "/opt/apps/{{ eap_cp_id }}.zip"
         rhn_eap_cp_download_url: "https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId={{ rhn_software_id }}"
