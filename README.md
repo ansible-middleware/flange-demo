@@ -1,7 +1,7 @@
 Three trains in the night...
 ====
 
-This repository contains a set of Ansible based roles and playbooks to demonstrate the integration between a [Wildfly](https://wildfly.org/) cluster with an application deployed and secured using [Keycloak](https://www.keycloak.org/) and built using [JCliff Ansible collection](https://github.com/wildfly-extras/ansible_collections_jcliff). Note that currently it is a work in progress, the playbooks is not fully functional (yet)!
+This repository contains a set of Ansible based roles and playbooks to demonstrate the integration between a [Wildfly](https://wildfly.org/) cluster with an application deployed and secured using [Keycloak](https://www.keycloak.org/) and built using [JCliff Ansible collection](https://github.com/wildfly-extras/ansible_collections_jcliff), and demonstrating integration with postgresql and datagrid. Note that currently it is a work in progress, the playbooks is not fully functional (yet)!
 
 ## Set up
 
@@ -9,7 +9,7 @@ The following sections describe the steps necessary to prepare your machine for 
 
 ### JCliff Integration
 
-First of all, you'll need to install the [JCliff Ansible collection](https://github.com/middleware_automation/ansible_collections_jcliff):
+First of all, you'll need to install the [JCliff Ansible collection](https://github.com/middleware_automation/ansible_collections_jcliff), and a few other dependencies:
 
     $ ansible-galaxy collection install -r collections/requirements.yml
 

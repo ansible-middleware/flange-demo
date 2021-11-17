@@ -14,7 +14,7 @@
           - ansible_python_version is defined
           - ansible_python_version is version('3.6','>')
         quiet: true
-        fail_msg: "This demo has been built for RHEL 8.4 using Ansible 2.9 running on Python 3"
+        fail_msg: "This demo has been built for RHEL 8.4 (found {{ansible_distribution_version}}) using Ansible 2.9 ({{ansible_version.string}}) running on Python 3 ({{ansible_python_version}})"
 
     - name: "Ensure target system {{ ansible_nodename }} is properly registered"
       become: yes
@@ -26,3 +26,4 @@
       when:
         - rhn_username is defined
         - rhn_password is defined
+        - ansible_facts['virtualization_type'] != "oci"
