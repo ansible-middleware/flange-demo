@@ -7,13 +7,6 @@
       - keycloak_download_url is defined
     quiet: true
 
-- name: Download Keycloak Adapter
-  unarchive:
-    src: "{{ keycloak_download_url }}"
-    dest: "{{ wildfly.home }}"
-    remote_src: yes
-    creates: "{{ wildfly.home }}/modules/system/add-ons/keycloak"
-
 - set_fact:
     wildfly_instance_port: "{{ 9990 + ((item - wildfly.port_range_offset) * 100) }}"
 

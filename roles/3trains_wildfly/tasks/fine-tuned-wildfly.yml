@@ -47,7 +47,7 @@
     - set_fact:
         secure_deployment_name: "{{ demo_app.name + '.' + demo_app.extension }}"
 
-    - include_tasks: keycloak-configuration.yml
+    - include_tasks: keycloak/keycloak-configuration.yml
 
     - include_tasks: jcliff-with-keycloak.yml
   when:

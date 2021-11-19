@@ -1,7 +1,6 @@
 ---
 - assert:
     that:
-      - eap_zipfile is defined
       - rhn_eap_download_url is defined
       - workdir is defined
       - rhn_username is defined
