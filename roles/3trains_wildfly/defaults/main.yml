@@ -18,9 +18,9 @@ app_dir: /opt/apps/
 wfly_version: 19.0.0.Final
 workdir: /opt/wildfly/
 wfly_zipfile: "wildfly-{{ wfly_version }}.zip"
-wfly_download_url: https://download.jboss.org/wildfly/{{ wfly_version }}/{{ wfly_zipfile }}
+wfly_download_url: "https://download.jboss.org/wildfly/{{ wfly_version }}/{{ wfly_zipfile }}"
 keycloak_adapter_version: 9.0.3
-keyclodk_download_url: https://downloads.jboss.org/keycloak/{{ keycloak_adapter_version }}/adapters/keycloak-oidc/keycloak-wildfly-adapter-dist-{{ keycloak_adapter_version }}.tar.gz
+keycloak_download_url: "https://downloads.jboss.org/keycloak/{{ keycloak_adapter_version }}/adapters/keycloak-oidc/keycloak-wildfly-adapter-dist-{{ keycloak_adapter_version }}.tar.gz"
 java:
   home: "{{ override_widlfy_jvm | default('/usr/lib/jvm/java-1.8.0') }}"
 wildfly:
