@@ -1,27 +1,16 @@
 ---
 - assert:
     that:
-      - eap_cp_zipfile is defined
-      - rhn_eap_cp_download_url is defined
+      - rhn_cp_id is defined
       - rhn_username is defined
       - rhn_password is defined
-      - instance_name is defined
     quiet: true
 
-- include_tasks: tasks/download_from_rhn.yml
+- name: "Apply patch with ID {{ rhn_cp_id }} to server."
+  include_role:
+    name: jboss_eap
+    tasks_from: apply_cp.yml
   vars:
-    download_url: "{{ rhn_eap_cp_download_url  }}"
-    zipfile: "{{ eap_cp_zipfile }}"
+    rhn_software_id: '101511'
 
-- include_tasks: tasks/jboss_cli.yml
-  vars:
-    wildfly_home: "{{ wildfly.home }}"
-    jboss_cli_query: "patch apply {{ eap_cp_zipfile }}"
-
-- debug:
-    msg: "{{ jboss_cli_results }}"
-  changed_when: jboss_cli_results.rc == 0
-  notify:
-    - "Restart service JBoss EAP"
-  when:
-    - jboss_cli_results is defined
+- meta: flush_handlers
