@@ -8,12 +8,7 @@
     - redhat_csp_download
     - jcliff
   vars:
-    apps_repository: /opt/apps/
-    eap_software_id: "{{ upgrade_eap_software_id | default('101511') }}"
-    zipfile: "{{ app_repository }}/eap-{{ eap_software_id }}.zip"
-    rhn_eap_download_url: "https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId={{ eap_software_id }}"
-    jvm_package: java-11-openjdk
-    instance_name: jboss-eap
+    wildfly_home: '/opt/jboss-eap-7.3'
   tasks:
 
     - name: "Update EAP to latest"
@@ -21,11 +16,7 @@
         name: 3trains_eap
         tasks_from: update.yml
       vars:
-        eap_cp_id: 'jboss-eap-7.3.9.CP'
-        rhn_software_id: '101511'
-        eap_cp_zipfile: "/opt/apps/{{ eap_cp_id }}.zip"
-        rhn_eap_cp_download_url: "https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId={{ rhn_software_id }}"
-        instance_name: jboss-eap
+        rhn_cp_id: "{{ upgrade_eap_software_id | default('101511') }}"
 
     - meta: flush_handlers
 
