@@ -16,10 +16,3 @@
     group: "{{ wildfly.user }}"
     remote_src: yes
     creates: "{{ wildfly.home }}"
-
-- name: Download Keycloak Adapter
-  unarchive:
-    src: "{{ keyclodk_download_url }}"
-    dest: "{{ wildfly.home }}"
-    remote_src: yes
-    creates: "{{ wildfly.home }}/modules/system/add-ons/keycloak"
