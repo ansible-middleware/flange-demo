@@ -1,5 +1,4 @@
 ---
-
 - set_fact:
     required_packages:
     - zip
@@ -23,3 +22,13 @@
     name: firewalld
     enabled: yes
     state: started
+
+- name: "Ensures workdir '{{ workdir }}' is created"
+  file:
+    path: "{{ workdir }}"
+    state: directory
+
+- name: "Ensure Wildfly user {{ wildfly.user }} exists"
+  user:
+    name: "{{ wildfly.user }}"
+    comment: "User to run Wildfly"

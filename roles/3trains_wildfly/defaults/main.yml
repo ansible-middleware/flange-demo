@@ -23,8 +23,9 @@ keycloak_adapter_version: 9.0.3
 keycloak_download_url: "https://downloads.jboss.org/keycloak/{{ keycloak_adapter_version }}/adapters/keycloak-oidc/keycloak-wildfly-adapter-dist-{{ keycloak_adapter_version }}.tar.gz"
 java:
   home: "{{ override_widlfy_jvm | default('/usr/lib/jvm/java-1.8.0') }}"
+wildfly_home_default: "{{ workdir }}/wildfly-{{ wfly_version }}/"
 wildfly:
-  home: "{{ workdir }}/wildfly-{{ wfly_version }}/"
+  home: "{{ override_wildfly_home | default(wildfly_home_default) }}"
   user: wildfly
   group: wildfly
   bind_addr: "{{ override_wildfly_bind_addr | default(ansible_nodename) }}"
