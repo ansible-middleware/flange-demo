@@ -17,10 +17,6 @@ jdg-0
 [pgsql]
 pgsql-0
 
-[eap]
-eap-1
-eap-2
-
 [threetrains:children]
 wildfly
 keycloak

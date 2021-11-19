@@ -18,9 +18,6 @@ localhost ansible_connection=local
 [jdg]
 localhost ansible_connection=local
 
-[eap]
-localhost ansible_connection=local
-
 [threetrains:children]
 wildfly
 keycloak
