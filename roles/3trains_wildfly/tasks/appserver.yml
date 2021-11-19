@@ -15,9 +15,8 @@
     wildfly_port_range_offset: 0
     instance_id: "{{ item }}"
 
-
 - name: "Install Keycloak Extension on instance wfly-{{ item }}"
-  include_tasks: keycloak-extension-install.yml
+  include_tasks: keycloak/keycloak-extension-install.yml
   when:
     - not disable_keycloak is defined
 

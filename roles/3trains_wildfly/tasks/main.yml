@@ -17,6 +17,18 @@
 
 - name: "Install Widfly"
   include_tasks: install-wildfly.yml
+  when:
+    - not jboss_eap_rhn_id is defined
+
+- name: "Install JBoss EAP"
+  include_tasks: install-jboss-eap.yml
+  when:
+    - rhn_username is defined
+    - rhn_password is defined
+    - jboss_eap_rhn_id is defined
+
+- name: "Install Keycloak module"
+  include_tasks: keycloak/keycloak-download.yml
 
 - name: "Install Postresql driver"
   include_role:
