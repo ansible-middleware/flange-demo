@@ -1,0 +1,6 @@
+---
+- name: Playbook for EAP hosts
+  hosts: all
+  tasks:
+    - debug:
+        msg: "Ansible Ping on {{ ansible_nodename }}"
