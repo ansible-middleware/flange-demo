@@ -1,5 +1,5 @@
 ---
-- name: Playbook for Wildfly Hosts
+- name: Playbook for JBCS Hosts
   hosts: jbcs
   collections:
     - middleware_automation.redhat_csp_download
