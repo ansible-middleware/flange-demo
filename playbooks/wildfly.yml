@@ -3,12 +3,16 @@
   hosts: wildfly
   collections:
     - middleware_automation.jcliff
+    - middleware_automation.redhat_csp_download
+  roles:
+    - redhat_csp_download
+
   tasks:
     - name: JCliff
       include_role:
         name: jcliff
 
-    - name: Wildfly Role
+    - name: Wildfly/EAP Role
       include_role:
         name: 3trains_wildfly
       vars:
