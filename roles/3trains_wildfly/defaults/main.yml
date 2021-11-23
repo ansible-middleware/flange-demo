@@ -16,7 +16,8 @@ apps:
     url: "{{ gdrive_url }}1w9ss5okctnjUvRAxhPEPyC7DmbUwmbhb"
 app_dir: /opt/apps/
 wfly_version: 19.0.0.Final
-workdir: /opt/wildfly/
+eap_version: '7.4'
+workdir: "{{ '/opt/wildfly/' if jboss_eap_rhn_id is not defined else '/opt/jboss-eap/' }}"
 wfly_zipfile: "wildfly-{{ wfly_version }}.zip"
 wfly_download_url: "https://download.jboss.org/wildfly/{{ wfly_version }}/{{ wfly_zipfile }}"
 keycloak_adapter_version: 9.0.3
@@ -24,8 +25,10 @@ keycloak_download_url: "https://downloads.jboss.org/keycloak/{{ keycloak_adapter
 java:
   home: "{{ override_widlfy_jvm | default('/usr/lib/jvm/java-1.8.0') }}"
 wildfly_home_default: "{{ workdir }}/wildfly-{{ wfly_version }}/"
+eap_home_default: "{{ workdir }}/jboss-eap-{{ eap_version }}/"
+home_default: "{{ wildfly_home_default if jboss_eap_rhn_id is not defined else eap_home_default }}"
 wildfly:
-  home: "{{ override_wildfly_home | default(wildfly_home_default) }}"
+  home: "{{ override_wildfly_home | default(home_default) }}"
   user: wildfly
   group: wildfly
   bind_addr: "{{ override_wildfly_bind_addr | default(ansible_nodename) }}"
