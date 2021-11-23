@@ -5,11 +5,16 @@
     quiet: true
     fail_msg: "Can't install EAP without RHN ID."
 
+- name: create download directory
+  file:
+    path: /opt/apps
+    state: directory
+
 - include_role:
     name: jboss_eap
     tasks_from: download_from_rhn.yml
   vars:
     rhn_id_file: "{{ jboss_eap_rhn_id }}"
     zipfile_dest: /opt/apps/jboss-eap-7.4.zip
-    workdir: "{{ workdir }}"
+    work_dir: "{{ workdir }}"
     target_dir: "{{ wildfly.home }}"
