@@ -1,5 +1,5 @@
 ---
-- name: configure keycloak scervice script wrapper
+- name: "Restart and enable keyclock service"
   systemd:
     name: keycloak
     enabled: yes
