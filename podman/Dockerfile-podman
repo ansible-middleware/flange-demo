@@ -1,6 +1,9 @@
 FROM registry.access.redhat.com/ubi8/ubi
 
-RUN subscription-manager register --username='...' --password='...' --name=ubi8-ansible-4
+ARG RHN_USERNAME
+ARG RHN_PASSWORD
+
+RUN subscription-manager register --username='$RHN_USERNAME' --password='$RHN_PASSWORD' --name=ubi8-ansible
 RUN subscription-manager attach --auto
 RUN subscription-manager attach --pool="8a85f98260c27fc50160c323247e39e0"
 RUN subscription-manager repos --enable ansible-2.9-for-rhel-8-x86_64-rpms
