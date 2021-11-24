@@ -22,10 +22,13 @@ wfly_zipfile: "wildfly-{{ wfly_version }}.zip"
 wfly_download_url: "https://download.jboss.org/wildfly/{{ wfly_version }}/{{ wfly_zipfile }}"
 keycloak_adapter_version: 9.0.3
 keycloak_download_url: "https://downloads.jboss.org/keycloak/{{ keycloak_adapter_version }}/adapters/keycloak-oidc/keycloak-wildfly-adapter-dist-{{ keycloak_adapter_version }}.tar.gz"
+rhsso_adapter_version: "15.0.2"
 java:
   home: "{{ override_widlfy_jvm | default('/usr/lib/jvm/java-1.8.0') }}"
 wildfly_home_default: "{{ workdir }}/wildfly-{{ wfly_version }}/"
 eap_home_default: "{{ workdir }}/jboss-eap-{{ eap_version }}/"
+disable_keycloak: False
+enable_rhsso: "{{ True if jboss_eap_rhn_id is not defined else False }}"
 home_default: "{{ wildfly_home_default if jboss_eap_rhn_id is not defined else eap_home_default }}"
 wildfly:
   home: "{{ override_wildfly_home | default(home_default) }}"

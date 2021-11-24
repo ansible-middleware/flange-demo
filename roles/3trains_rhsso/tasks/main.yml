@@ -1,0 +1,7 @@
+---
+- name: Prerequisites
+  include_tasks: prereqs.yml
+  tags:
+    - prereqs
+
+- include_tasks: tasks/install.yml

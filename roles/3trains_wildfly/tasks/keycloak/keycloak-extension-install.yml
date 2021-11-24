@@ -20,7 +20,7 @@
     connect_timeout: 3
     delay: 5
     timeout: 60
-        
+
 - block:
     - name: Check if Keycloak extensions installed
       command: >
@@ -43,4 +43,4 @@
           args:
             chdir: "{{ wildfly.home }}"
   when:
-    - not disable_keycloak is defined
+    - not disable_keycloak

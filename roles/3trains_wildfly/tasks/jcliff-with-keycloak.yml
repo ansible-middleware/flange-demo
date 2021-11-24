@@ -12,8 +12,8 @@
     management_port: "{{ wildfly_instance_management_port }}"
     components:
       - system_properties:
-        - name: JBOSS_ID
-          value: "{{ instance_name }}"
+          - name: JBOSS_ID
+            value: "{{ instance_name }}"
       - deployments:
           - name: "{{ demo_app_dest | basename }}"
             path: "{{ demo_app_dest }}"

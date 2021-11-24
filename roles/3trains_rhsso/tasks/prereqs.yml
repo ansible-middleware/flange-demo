@@ -1,0 +1,9 @@
+---
+- set_fact:
+    packages_list:
+      - "{{ jvm_package | default('java-1.8.0-openjdk-devel') }}"
+      - unzip
+
+- name: "Ensures required packages are installed"
+  include_role:
+    name: 3trains_fastpackages

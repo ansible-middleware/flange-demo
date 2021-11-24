@@ -17,7 +17,7 @@
         url: "{{ keycloak_url }}/auth/admin/realms/{{ keycloak_realm }}/clients"
         method: GET
         status_code:
-         - 200
+          - 200
         headers:
           Accept: "application/json"
           Authorization: "Bearer {{ keycloak_auth_response.json.access_token }}"
@@ -28,10 +28,10 @@
         url: "{{ keycloak_url }}/auth/admin/realms/{{ keycloak_realm }}/clients/{{ (keycloak_client_response.json | selectattr('clientId', 'equalto', keycloak_client) | list | first).id }}/client-secret"
         method: GET
         status_code:
-         - 200
+          - 200
         headers:
           Accept: "application/json"
           Authorization: "Bearer {{ keycloak_auth_response.json.access_token }}"
       register: keycloak_client_secret_response
   when:
-    - not disable_keycloak is defined
+    - not disable_keycloak
