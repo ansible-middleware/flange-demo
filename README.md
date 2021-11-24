@@ -50,7 +50,7 @@ where XXXX is the customer portal product ID for the version needed (ie. 99481 i
 
 That's all! You can now run the playbook to set up the demo:
 
-    $ ansible-playbook -e rhn-cres.yml -i inventory/ playbooks/demo.yml
+    $ ansible-playbook -e @rhn-creds.yml -i inventory/ playbooks/demo.yml
 
 ### Execution in a podman container
 
@@ -74,7 +74,7 @@ CMD ["/usr/sbin/init"]
 and run:
 
     $ subscription-manager refresh
-    $ podman build -f Dockerfile-podman
+    $ podman build -f podman/Dockerfile-podman
     cafebabe
     $ podman tag cafebabe ubi8-ansible:latest
 
@@ -106,7 +106,7 @@ transport = local
 and are ready to run:
 
     $ podrun demo
-    -> $ ANSIBLE_CONFIG=ansible-local.cfg ansible-playbook -i inventory/demo -e @rhn-creds.yml playbooks/demo.yml
+    -> $ ANSIBLE_CONFIG=podman/ansible-local.cfg ansible-playbook -i inventory/demo -e @rhn-creds.yml playbooks/demo.yml
 
 
 ### Execution in multiple podman containers
@@ -129,7 +129,7 @@ remote_user = root
 Create a pythonized image for containers based on ubi8.4, using the provided Dockerfile:
 
 ```
-$ podman build -f Dockerfile-podmanbase
+$ podman build -f podman/Dockerfile-podmanbase
 505e98b27d0
 $ podman tag 505e98b27d0 ubi8/ubi-ansible-3trains-demo:latest
 ```
@@ -149,5 +149,5 @@ Now you can startup the containers, using the [provided script (wip)](ansible-de
 
 And finally:
 
-    $ ANSIBLE_CONFIG=ansible-podman.cfg ansible-playbook -e @rhn-creds.yml -i inventory/demo playbooks/demo.yml 
+    $ ANSIBLE_CONFIG=podman/ansible-podman.cfg ansible-playbook -e @rhn-creds.yml -i inventory/demo playbooks/demo.yml 
 
