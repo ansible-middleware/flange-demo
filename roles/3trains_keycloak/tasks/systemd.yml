@@ -1,4 +1,4 @@
-- name: configure keycloak scervice script wrapper
+- name: configure keycloak service script wrapper
   become: yes
   template:
     src: keycloak-service.sh.j2
@@ -28,8 +28,15 @@
     group: root
     mode: 0644
   become: yes
+  register: systemdunit
   notify:
     - restart keycloak
+
+- name: reload systemd
+  become: yes
+  systemd:
+    daemon_reload: yes
+  when: systemdunit.changed
 
 - name: start keycloak
   systemd:
@@ -37,8 +44,6 @@
     enabled: yes
     state: started
   become: yes
-
-- meta: flush_handlers
 
 - command: "systemctl status keycloak"
   register: keycloak_service_status
@@ -65,6 +70,3 @@
     owner: root
     group: root
     mode: 0644
-  notify:
-    - reload systemd
-    - restart keycloak

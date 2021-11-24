@@ -6,7 +6,6 @@ pgsql:
     - python39-devel
     - python3-psycopg2
     - postgresql-server
-    - postgresql-devel
   db:
     name: "{{ postgres.db_name | default('default_db') }}"
     user: "{{ postgres.user.name | default('db_user') }}"

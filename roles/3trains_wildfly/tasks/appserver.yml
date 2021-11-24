@@ -18,7 +18,12 @@
 - name: "Install Keycloak Extension on instance wfly-{{ item }}"
   include_tasks: keycloak/keycloak-extension-install.yml
   when:
-    - not disable_keycloak is defined
+    - not enable_rhsso
+
+- name: "Install RHSSO Extension on instance wfly-{{ item }}"
+  include_tasks: keycloak/keycloak-extension-install.yml
+  when:
+    - enable_rhsso
 
 - name: "Deploy app on instance wfly-{{ item }}"
   include_tasks: fine-tuned-wildfly.yml

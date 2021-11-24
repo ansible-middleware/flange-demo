@@ -4,11 +4,25 @@
   vars:
     packages_list: "{{ pgsql.packages_list }}"
 
+- block:
+    - name: Downgrade systemd (only for containerized install), https://access.redhat.com/solutions/5605181
+      become: yes
+      yum:
+        name: systemd-239-18.el8.x86_64
+        state: present
+        allow_downgrade: True
+      register: systemd_version
+    - name: Restart systemd
+      become: yes
+      command: systemctl daemon-reexec
+      when: systemd_version.changed
+  when: ansible_facts['virtualization_type'] == "oci"
+
 - stat:
     path: "{{ pgsql.pgdata }}/pg_hba.conf"
   register: pgdata_init
 
-- name: "Init PostgesQL Db"
+- name: "Init PostgresQL Db"
   command:
     cmd: /usr/bin/postgresql-setup initdb
     creates: /var/lib/pgsql/initdb.log
