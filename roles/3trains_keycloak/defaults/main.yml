@@ -4,10 +4,18 @@ keycloak_archive: keycloak-{{ keycloak_version }}.zip
 keycloak_download_url: https://downloads.jboss.org/keycloak/{{
   keycloak_version }}/{{ keycloak_archive }}
 keycloak_local_download_dest: '{{ "~/keycloak_download" | expanduser }}'
+keycloak_installdir: "{{ keycloak_dest }}/keycloak-{{ keycloak_version }}"
+
+keycloak_rhsso_enable: "{{ True if rhsso_rhn_id is defined else False }}"
+keycloak_rhsso_client_adapter_rhn_id: '101951'
+keycloak_rhsso_saml_adapter_rhn_id: '101901'
+keycloak_rhsso_version: 7.5
+keycloak_rhsso_archive: rh-sso-{{ keycloak_rhsso_version }}-server-dist.zip
+keycloak_rhsso_installdir: "{{ keycloak_dest }}/rh-sso-{{ keycloak_rhsso_version }}"
 
 ### Install location and service settings
 keycloak_dest: /opt/keycloak
-keycloak_jboss_home: "{{ keycloak_dest }}/keycloak-{{ keycloak_version }}"
+keycloak_jboss_home: "{{ keycloak_rhsso_installdir if rhsso_rhn_id is defined else keycloak_installdir }}"
 keycloak_config_dir: "{{ keycloak_jboss_home }}/standalone/configuration"
 keycloak_service_user: keycloak
 keycloak_service_group: keycloak

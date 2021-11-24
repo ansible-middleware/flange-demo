@@ -84,11 +84,33 @@
       notify:
         - restart keycloak
   become: yes
+  when: not keycloak_rhsso_enable
+
+- block:
+    - assert:
+        that:
+          - rhsso_rhn_id is defined
+        quiet: true
+        fail_msg: "Can't install RHSSO without RHN ID."
+
+    - name: create download directory
+      file:
+        path: /opt/apps
+        state: directory
+
+    - include_tasks: download_from_rhn.yml
+      vars:
+        rhn_id_file: "{{ rhsso_rhn_id }}"
+        zipfile_dest: "{{ keycloak_dest }}/{{ keycloak_rhsso_archive }}"
+        work_dir: "{{ keycloak_dest }}"
+        target_dir: "{{ keycloak_jboss_home }}"
+  become: yes
+  when: keycloak_rhsso_enable
 
 - name: "Deploy Keycloak's standalone.xml"
   become: yes
   template:
     src: templates/standalone.xml.j2
-    dest: "{{ keycloak_dest }}/keycloak-{{ keycloak_version }}/standalone/configuration/standalone.xml"
+    dest: "{{ keycloak_jboss_home }}/standalone/configuration/standalone.xml"
   notify:
     - restart keycloak
