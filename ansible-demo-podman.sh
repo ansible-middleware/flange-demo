@@ -3,7 +3,7 @@
 # create dnsname enabled podman network
 # podman network create 3trains
 # { "capabilities": { "aliases": true }, "domainName": "dns.podman", "type": "dnsname" }
-
+podman network reload --all
 podman run --name=jbcs-0     --network 3trains --systemd=true  --workdir /work -v $(pwd):/work:rw  -dit localhost/ubi8/ubi-ansible-3trains-demo:latest /sbin/init
 podman run --name=jdg-0      --network 3trains --systemd=true  --workdir /work -v $(pwd):/work:rw  -dit localhost/ubi8/ubi-ansible-3trains-demo:latest /sbin/init
 podman run --name=keycloak-0 --network 3trains --systemd=true  --workdir /work -v $(pwd):/work:rw  -dit localhost/ubi8/ubi-ansible-3trains-demo:latest /sbin/init

@@ -50,4 +50,6 @@
     nb_instances: "{{ (nb_instances | int) +1 }}"
 
 - include_tasks: appserver.yml
-  loop: "{{ range(1, nb_instances|int) | list }}"
+  with_items:
+    - 0
+    - 1

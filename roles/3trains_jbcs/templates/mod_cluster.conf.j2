@@ -5,6 +5,7 @@ LoadModule manager_module modules/mod_manager.so
 LoadModule advertise_module modules/mod_advertise.so
 
 MemManagerFile /opt/jbcs-httpd24-2.4/httpd/cache/mod_cluster
+PersistSlots On
 
 <VirtualHost *:80>
   ProxyPreserveHost On
