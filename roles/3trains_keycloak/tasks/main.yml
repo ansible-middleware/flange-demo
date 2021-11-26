@@ -72,6 +72,8 @@
     default_roles: "{{ item.roles | default(omit) }}"
     root_url: "{{ item.root_url | default('') }}"
     redirect_uris: "{{ demo_app_redirect_uris | default([]) }}"
+    public_client: "{{ item.public_client | default(False) }}"
+    web_origins: "{{ item.web_origins | default('+') }}"
     state: present
   register: create_client_result
   loop: "{{ keycloak_clients }}"

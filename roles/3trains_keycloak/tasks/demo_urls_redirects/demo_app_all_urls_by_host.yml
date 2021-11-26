@@ -6,12 +6,12 @@
     quiet: true
 
 - set_fact:
-    nb_instances: 3
+    nb_instances: 2
   when:
     - not nb_instances is defined
 
 - set_fact:
-    app_list_by_instance: "{{ app_list_by_instance }} + ['{{ url }}:{{ 8080 + (port_shift * 100) }}']"
-  loop: "{{ range(1, (nb_instances|int + 1)) | list }}"
+    app_list_by_instance: "{{ app_list_by_instance }} + ['{{ url }}:{{ 8443 + (port_shift * 100) }}']"
+  loop: "{{ range(0, (nb_instances|int)) | flatten }}"
   loop_control:
     loop_var: port_shift

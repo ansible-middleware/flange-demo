@@ -53,6 +53,7 @@ keycloak_clients:
       - "{{ keycloak_3trains_user_role }}"
       - "{{ keycloak_3trains_admin_role }}"
     realm: "{{ keycloak_realm }}"
+    public_client: True
 
 keycloak_auth_realm: master
 keycloak_auth_client: admin-cli
