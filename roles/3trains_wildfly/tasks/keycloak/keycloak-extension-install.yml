@@ -44,3 +44,4 @@
             chdir: "{{ wildfly.home }}"
   when:
     - not disable_keycloak
+  throttle: 1
