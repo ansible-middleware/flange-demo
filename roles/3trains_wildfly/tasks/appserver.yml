@@ -12,7 +12,7 @@
     wildfly_config_base: "{{ wildfly.config.base }}"
     wildfly_basedir_prefix: "/var/run/{{ inventory_hostname }}"
     wildfly_config_name: "{{ inventory_hostname }}"
-    wildfly_port_range_offset: 0
+    wildfly_port_range_offset: -1
     wildfly_instance_name: "{{ inventory_hostname }}"
     instance_id: "{{ item }}"
 
