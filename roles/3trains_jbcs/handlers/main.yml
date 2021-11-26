@@ -4,7 +4,7 @@
     name: jbcs-httpd24-httpd.service
     state: restarted
 
-- name: "expire mod_cluster cache and restart"
+- name: 'expire mod_cluster cache and restart'
   become: true
   block:
     - service:
