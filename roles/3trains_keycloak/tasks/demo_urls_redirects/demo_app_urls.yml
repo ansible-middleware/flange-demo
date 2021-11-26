@@ -9,7 +9,7 @@
     app_list_by_instance: []
 
 - set_fact:
-    url: "https://{{ item }}:"
+    url: "https://{{ item }}"
 
 - include_tasks: demo_app_all_urls_by_host.yml
 
