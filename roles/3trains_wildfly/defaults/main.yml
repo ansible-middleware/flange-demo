@@ -35,7 +35,7 @@ wildfly:
   user: wildfly
   group: wildfly
   bind_addr: "{{ override_wildfly_bind_addr | default(ansible_nodename) }}"
-  port_range_offset: 0
+  port_range_offset: -1
   config:
     base: standalone-ha.xml
     name: wfly

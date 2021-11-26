@@ -3,3 +3,14 @@
   service:
     name: jbcs-httpd24-httpd.service
     state: restarted
+
+- name: "expire mod_cluster cache and restart"
+  become: true
+  block:
+    - service:
+        name: jbcs-httpd24-httpd.service
+        state: stopped
+    - command: rm {{ httpd.home }}/httpd/cache/mod_cluster/
+    - service:
+        name: jbcs-httpd24-httpd.service
+        state: started
