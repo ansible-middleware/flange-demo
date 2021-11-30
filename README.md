@@ -33,7 +33,7 @@ keycloak
 
 ## Execution
 
-Create a `rhn-creds.yml` file containing your RHN account credentials, neeeded to download packages, as follows:
+Create a `rhn-creds.yml` file containing your RHN account credentials, needed to download packages, as follows:
 
 ```
 rhn_username: '...'
@@ -149,5 +149,5 @@ Now you can startup the containers, using the [provided script (wip)](ansible-de
 
 And finally:
 
-    $ ANSIBLE_CONFIG=podman/ansible-podman.cfg ansible-playbook -e @rhn-creds.yml -i inventory/demo playbooks/demo.yml 
+    $ ANSIBLE_CONFIG=podman/ansible-podman.cfg ansible-playbook -e @rhn-creds.yml -i inventory/demo playbooks/demo.yml
 
