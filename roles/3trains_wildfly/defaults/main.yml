@@ -39,7 +39,7 @@ wildfly:
   config:
     base: standalone-ha.xml
     name: wfly
-  basedir_prefix: /var/run/wfly-
+  basedir_prefix: /opt/wfly-
   min_mem: 64m
   max_mem: 512m
   metaspace_size: 96m

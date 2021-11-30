@@ -11,17 +11,6 @@
       Authorization: "Bearer {{ keycloak_auth_response.json.access_token }}"
   register: client_role_realm
 
-- name: "Get Client"
-  uri:
-    url: "{{ keycloak_url }}/auth/admin/realms/{{ client_role.realm }}"
-    method: GET
-    status_code:
-     - 200
-    headers:
-      Accept: "application/json"
-      Authorization: "Bearer {{ keycloak_auth_response.json.access_token }}"
-  register: client_role_realm
-
 - name: Check if Mapping is available
   uri:
     url: "{{ keycloak_url }}/auth/admin/realms/{{ client_role.realm }}/users/{{ (keycloak_user.json | first).id }}/role-mappings/clients/{{ (create_client_result.results | selectattr('end_state.clientId', 'equalto', client_role.client) | list | first).end_state.id }}/available"
@@ -38,8 +27,7 @@
     url: "{{ keycloak_url }}/auth/admin/realms/{{ client_role.realm }}/users/{{ (keycloak_user.json | first).id }}/role-mappings/clients/{{ (create_client_result.results | selectattr('end_state.clientId', 'equalto', client_role.client) | list | first).end_state.id }}"
     method: POST
     body:
-      - 
-        id: "{{ item.id }}"
+      - id: "{{ item.id }}"
         clientRole: "{{ item.clientRole }}"
         containerId: "{{ item.containerId }}"
         name: "{{ item.name }}"
@@ -51,4 +39,3 @@
     status_code: 204
   loop: "{{ client_role_user_available.json }}"
   when: item.name == client_role.role
-
