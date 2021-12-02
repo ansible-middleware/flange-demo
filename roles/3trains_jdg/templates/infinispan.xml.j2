@@ -16,9 +16,9 @@
 
 {% if jdg_keycloak_cache.enabled %}
     <!-- keycloak caches -->
-    <cache-container name="keycloak">
+    <cache-container name="keycloak" statistics="true">
 {% for keycloak_cache in jdg_keycloak_cache.caches %}
-      <replicated-cache name="{{ keycloak_cache }}" statistics="true" mode="SYNC" start="EAGER">
+      <replicated-cache name="{{ keycloak_cache }}" mode="SYNC">
         <transaction mode="NONE" locking="PESSIMISTIC"/>
         <locking acquire-timeout="0" />
       </replicated-cache>
