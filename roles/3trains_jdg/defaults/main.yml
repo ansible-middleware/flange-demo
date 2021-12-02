@@ -11,11 +11,21 @@ jdg:
     template: "{{ override_jdg_config_template | default('templates/infinispan.xml.j2') }}"
     users: "{{ override_jdg_config_users_properties | default('users.properties') }}"
     groups: "{{ override_jdg_config_group_properties | default('groups.properties') }}"
-  user: 
+  user:
     name: "{{ override_jdg_user | default('jdg') }}"
-  group: 
+  group:
     name: "{{ override_jdg_group | default('jdg') }}"
   service:
     name: "{{ override_jdg_service_name | default('jdg') }}"
   users:
-    - { name: 'rpelisse', password: 'itsme', roles: 'supervisor' } 
+    - { name: 'rpelisse', password: 'itsme', roles: 'supervisor' }
+
+jdg_keycloak_cache:
+  enabled: True
+  caches:
+    - sessions
+    - offlineSessions
+    - clientSessions
+    - offlineClientSessions
+    - loginFailures
+    - actionTokens
