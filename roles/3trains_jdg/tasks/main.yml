@@ -64,6 +64,7 @@
     recurse: true
   changed_when: false
 
+- include_tasks: tasks/firewalld.yml
 
 - name: "Configure systemd unit file for JDG service"
   template:
@@ -103,7 +104,7 @@
     - jdg_daemon_reload is defined
     - jdg_daemon_reload.changed
 
-- name: Ensures JDG service is running
+- name: Ensures JDG service is running and enabled
   systemd:
     name: jdg
     state: started
@@ -124,4 +125,3 @@
     jdg_password: "{{ jdg.users[0].password }}"
     cache:
       name: kitchensink_sql_cache
-

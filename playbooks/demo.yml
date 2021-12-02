@@ -4,6 +4,9 @@
 # JBoss Core Services (Apache HTTPD)
 - import_playbook: jbcs.yml
 
+# Datagrid Playbook
+- import_playbook: jdg.yml
+
 # Keycloak Playbook
 - import_playbook: keycloak.yml
 

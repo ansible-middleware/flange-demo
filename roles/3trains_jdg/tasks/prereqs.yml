@@ -7,17 +7,9 @@
     - procps-ng
     - initscripts
     - "{{ jvm_package | default('java-1.8.0-openjdk-devel') }}"
-    - firewalld
 
 - name: "Ensures required packages are installed"
   include_role:
     name: 3trains_fastpackages
   vars:
     packages_list: "{{ required_packages }}"
-
-- name: enable and start the firewalld service
-  become: yes
-  systemd:
-    name: firewalld
-    enabled: yes
-    state: started
