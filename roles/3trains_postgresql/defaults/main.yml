@@ -7,6 +7,9 @@ pgsql:
     - python3-psycopg2
     - postgresql-server
   db:
-    name: "{{ postgres.db_name | default('default_db') }}"
-    user: "{{ postgres.user.name | default('db_user') }}"
-    password: "{{ postgres.user.password | default('db_password') }}"
+    - name: "{{ postgres.db_name | default('default_db') }}"
+      user: "{{ postgres.user.name | default('db_user') }}"
+      password: "{{ postgres.user.password | default('db_password') }}"
+    - name: "keycloak"
+      user: "keycloak-user"
+      password: "keycloak-pass"
