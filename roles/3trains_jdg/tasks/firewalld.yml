@@ -22,3 +22,4 @@
     immediate: yes
   loop:
     - "{{ jdg.port }}/tcp"
+    - 7800/tcp

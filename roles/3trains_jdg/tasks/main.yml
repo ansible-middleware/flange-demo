@@ -81,6 +81,8 @@
     state: started
     enabled: yes
 
+- meta: flush_handlers
+
 - name: "Wait for all used ports to be open"
   wait_for:
     port: "{{ jdg.port }}"

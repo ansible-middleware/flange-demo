@@ -28,7 +28,9 @@
    <server xmlns="urn:infinispan:server:12.1">
       <interfaces>
          <interface name="public">
-            <inet-address value="${infinispan.bind.address:127.0.0.1}"/>
+             <!--match-interface value="{{ ansible_default_ipv4.interface }}"/-->
+             <!--inet-address value="${infinispan.bind.address:127.0.0.1}"/-->
+             <any-address/>
          </interface>
       </interfaces>
 
@@ -62,6 +64,7 @@
       </security>
 
       <endpoints socket-binding="default" security-realm="default">
+        <hotrod-connector name="hotrod"/>
         <rest-connector name="rest">
           <authentication mechanisms="DIGEST BASIC"/>
         </rest-connector>

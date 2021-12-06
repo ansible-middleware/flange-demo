@@ -31,7 +31,7 @@ jdg:
   service:
     name: "{{ override_jdg_service_name | default('jdg') }}"
   users:
-    - { name: 'rpelisse', password: 'itsme', roles: 'supervisor' }
+    - { name: 'supervisor', password: 'itsme', roles: 'supervisor' }
 
 jdg_keycloak_cache:
   enabled: True
@@ -42,3 +42,4 @@ jdg_keycloak_cache:
     - offlineClientSessions
     - loginFailures
     - actionTokens
+    - work
