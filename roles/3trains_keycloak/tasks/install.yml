@@ -107,6 +107,20 @@
   become: yes
   when: keycloak_rhsso_enable
 
+- name: "Install Postresql driver"
+  include_role:
+    name: wildfly_driver
+    tasks_from: jdbc_driver.yml
+  vars:
+      wildfly_user: "{{ keycloak_service_user }}"
+      jdbc_driver_module_dir: "{{ keycloak_jdbc.postgres.driver_module_dir }}"
+      jdbc_driver_version: "{{ keycloak_jdbc.postgres.driver_version }}"
+      jdbc_driver_jar_filename: "{{ keycloak_jdbc.postgres.driver_jar_filename }}"
+      jdbc_driver_jar_url: "{{ keycloak_jdbc.postgres.driver_jar_url }}"
+      jdbc_driver_jar_installation_path: "{{ keycloak_jdbc.postgres.driver_module_dir }}/{{ keycloak_jdbc.postgres.driver_jar_filename }}"
+      jdbc_driver_module_name: "{{ keycloak_jdbc.postgres.driver_module_name }}"
+  when: keycloak_jdbc.postgres.enabled
+
 - name: "Deploy Keycloak's standalone.xml"
   become: yes
   template:
@@ -114,3 +128,13 @@
     dest: "{{ keycloak_jboss_home }}/standalone/configuration/standalone.xml"
   notify:
     - restart keycloak
+  when: not keycloak_remotecache.enabled
+
+- name: "Deploy Keycloak's standalone.xml with remote cache store"
+  become: yes
+  template:
+    src: "{{ 'templates/standalone-rhsso-jdg.xml.j2' if keycloak_rhsso_enable else 'templates/standalone-jdg.xml.j2' }}"
+    dest: "{{ keycloak_jboss_home }}/standalone/configuration/standalone.xml"
+  notify:
+    - restart keycloak
+  when: keycloak_remotecache.enabled
