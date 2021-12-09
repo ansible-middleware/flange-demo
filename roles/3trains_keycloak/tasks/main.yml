@@ -86,7 +86,7 @@
 
 - name: Manage User Roles
   include_tasks: manage_user_roles.yml
-  loop: "{{ keycloak_users }}"
+  loop: "{{ keycloak_users | flatten }}"
   loop_control:
     loop_var: user
-  when: "'client_roles' in user"
+  when: "{{ 'client_roles' in user }}"

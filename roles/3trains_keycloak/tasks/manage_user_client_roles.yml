@@ -1,11 +1,10 @@
 ---
-
-- name: "Get Realm"
+- name: "Get Realm for role"
   uri:
     url: "{{ keycloak_url }}/auth/admin/realms/{{ client_role.realm }}"
     method: GET
     status_code:
-     - 200
+      - 200
     headers:
       Accept: "application/json"
       Authorization: "Bearer {{ keycloak_auth_response.json.access_token }}"
@@ -16,7 +15,7 @@
     url: "{{ keycloak_url }}/auth/admin/realms/{{ client_role.realm }}/users/{{ (keycloak_user.json | first).id }}/role-mappings/clients/{{ (create_client_result.results | selectattr('end_state.clientId', 'equalto', client_role.client) | list | first).end_state.id }}/available"
     method: GET
     status_code:
-     - 200
+      - 200
     headers:
       Accept: "application/json"
       Authorization: "Bearer {{ keycloak_auth_response.json.access_token }}"
@@ -32,10 +31,10 @@
         containerId: "{{ item.containerId }}"
         name: "{{ item.name }}"
         composite: "{{ item.composite }}"
-    validate_certs: no
+    validate_certs: False
     body_format: json
     headers:
       Authorization: "Bearer {{ keycloak_auth_response.json.access_token }}"
     status_code: 204
-  loop: "{{ client_role_user_available.json }}"
+  loop: "{{ client_role_user_available.json | flatten }}"
   when: item.name == client_role.role
