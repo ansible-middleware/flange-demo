@@ -76,7 +76,14 @@
     web_origins: "{{ item.web_origins | default('+') }}"
     state: present
   register: create_client_result
-  loop: "{{ keycloak_clients }}"
+  loop: "{{ keycloak_clients | flatten }}"
+
+- name: Create 3trains client roles
+  include_tasks: manage_client_roles.yml
+  when: keycloak_rhsso_enable
+  loop: "{{ keycloak_clients | flatten }}"
+  loop_control:
+    loop_var: client
 
 - name: Manage Users
   include_tasks: manage_user.yml

@@ -78,8 +78,11 @@ keycloak_users:
         role: "{{ keycloak_3trains_user_role }}"
         realm: "{{ keycloak_realm }}"
 
+
+keycloak_ha_enabled: True
+
 keycloak_remotecache:
-  enabled: True
+  enabled: "{{ keycloak_ha_enabled }}"
   username: supervisor
   password: itsme
   realm: default
@@ -89,7 +92,7 @@ keycloak_remotecache:
 
 keycloak_jdbc:
   postgres:
-    enabled: True
+    enabled: "{{ keycloak_ha_enabled }}"
     driver_module_name: "org.postgresql"
     driver_module_dir: "{{ keycloak_jboss_home }}/modules/org/postgresql/main"
     driver_version: 9.4.1212

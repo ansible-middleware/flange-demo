@@ -43,7 +43,7 @@
                 credential: "{{ keycloak_client_secret_response.json.value | default(omit) }}"
                 verify_token_audience: true
                 use_resource_role_mappings: true
-                disable_trust_manager: {{ keycloak_disable_trust_manager | default(false) }}
+                disable_trust_manager: "{{ keycloak_disable_trust_manager | default(false) }}"
       - modcluster:
           proxy:
             - name: default
