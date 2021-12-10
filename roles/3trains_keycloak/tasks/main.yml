@@ -96,4 +96,4 @@
   loop: "{{ keycloak_users | flatten }}"
   loop_control:
     loop_var: user
-  when: "{{ 'client_roles' in user }}"
+  when: "'client_roles' in user"
