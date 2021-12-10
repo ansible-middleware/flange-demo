@@ -5,19 +5,30 @@
         xmlns="urn:infinispan:config:12.1"
         xmlns:server="urn:infinispan:server:12.1">
 
-   <cache-container name="default" statistics="true">
+    <cache-container name="default" statistics="true">
       <transport cluster="${infinispan.cluster.name:cluster}" stack="${infinispan.cluster.stack:tcp}" node-name="${infinispan.node.name:}"/>
       <security>
-	<authorization>
+        <authorization>
           <role name="supervisor" permissions="READ WRITE EXEC CREATE"/>
-	</authorization>
+	      </authorization>
       </security>
-   </cache-container>
+    </cache-container>
 
+{% if jdg_keycloak_cache.enabled %}
+    <!-- keycloak caches -->
+    <cache-container name="keycloak" statistics="true">
+{% for keycloak_cache in jdg_keycloak_cache.caches %}
+      <replicated-cache name="{{ keycloak_cache }}" mode="SYNC">
+        <transaction mode="NONE" locking="PESSIMISTIC"/>
+        <locking acquire-timeout="0" />
+      </replicated-cache>
+{% endfor %}
+    </cache-container>
+{% endif %}
    <server xmlns="urn:infinispan:server:12.1">
       <interfaces>
          <interface name="public">
-            <inet-address value="${infinispan.bind.address:127.0.0.1}"/>
+             <any-address/>
          </interface>
       </interfaces>
 
@@ -51,9 +62,10 @@
       </security>
 
       <endpoints socket-binding="default" security-realm="default">
+        <hotrod-connector name="hotrod"/>
         <rest-connector name="rest">
           <authentication mechanisms="DIGEST BASIC"/>
-	</rest-connector>
+        </rest-connector>
       </endpoints>
    </server>
 </infinispan>

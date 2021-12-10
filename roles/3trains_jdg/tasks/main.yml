@@ -12,58 +12,29 @@
 
 - include_tasks: prereqs.yml
 
-- group:
+- name: "Create group {{ jdg.group.name }}"
+  group:
     name: "{{ jdg.group.name }}"
     state: present
     gid: "{{ jdg.group.id | default(omit) }}"
 
-- user:
+- name: "Create user {{ jdg.user.name }}"
+  user:
     name: "{{ jdg.user.name }}"
     state: present
     uid: "{{ jdg.user.id | default(omit) }}"
 
-- set_fact:
-    zip_file_repo: /opt/apps
-
-- set_fact:
-    jdg_src: "{{ zip_file_repo }}/jdg-{{ jdg_version }}.zip"
-
-- file:
-    path: "{{ zip_file_repo }}"
+- name: "Create download directory"
+  file:
+    path: "{{ jdg_app_download_dir }}"
     state: directory
 
-- name: Download JBoss Core Services from CSP
-  redhat_csp_download:
-    url: "https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=98151"
-    dest: "{{ jdg_src }}"
-    username: "{{ rhn_username }}"
-    password: "{{ rhn_password }}"
-  when:
-    - not jdg_installed is defined
+- include_tasks: tasks/install.yml
 
-- stat:
-    path: "/opt/redhat-datagrid-8.2.0-server/"
-  register: jdg_home
+- include_tasks: tasks/firewalld.yml
 
 - debug:
-    msg: "{{ jdg_home }}"
-
-- name: Unarchive JDG
-  unarchive:
-    src: "{{ jdg_src }}"
-    remote_src: yes
-    dest: /opt
-    creates: "/opt/redhat-datagrid-8.2.0-server/server"
-  when:
-    - not jdg_home.stat.exists
-
-- file:
-    path: "{{ jdg.home }}"
-    owner: "{{ jdg.user.name }}"
-    group: "{{ jdg.group.name }}"
-    recurse: true
-  changed_when: false
-
+    msg: "{{ 'Red Hat Datagrid' if jdg_rhn_id is defined else 'Infinispan' }} installed at path {{ jdg.home }}"
 
 - name: "Configure systemd unit file for JDG service"
   template:
@@ -76,6 +47,13 @@
   notify:
     - restart jdg
 
+- name: "Perform daemon-reload to ensure the changes on jdg service are picked up"
+  systemd:
+    daemon_reload: yes
+  when:
+    - jdg_daemon_reload is defined
+    - jdg_daemon_reload.changed
+
 - name: "Ensures JDG configuration is deployed: {{ jdg.config.name }}"
   template:
     src: "{{ jdg.config.template }}"
@@ -83,6 +61,7 @@
     owner: "{{ jdg.user.name }}"
     group: "{{ jdg.group.name }}"
     mode: 0644
+    backup: yes
   when:
     - jdg.config is defined
     - jdg.config.name is defined
@@ -96,18 +75,13 @@
     - jdg.users is defined
     - jdg.users | length > 0
 
-- name: "Perform daemon-reload to ensure the changes on jdg service are picked up"
-  systemd:
-    daemon_reload: yes
-  when:
-    - jdg_daemon_reload is defined
-    - jdg_daemon_reload.changed
-
-- name: Ensures JDG service is running
+- name: Ensures JDG service is running and enabled
   systemd:
     name: jdg
     state: started
     enabled: yes
+
+- meta: flush_handlers
 
 - name: "Wait for all used ports to be open"
   wait_for:
@@ -124,4 +98,3 @@
     jdg_password: "{{ jdg.users[0].password }}"
     cache:
       name: kitchensink_sql_cache
-

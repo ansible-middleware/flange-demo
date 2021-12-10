@@ -77,3 +77,27 @@ keycloak_users:
       - client: "{{ keycloak_3trains_client_name }}"
         role: "{{ keycloak_3trains_user_role }}"
         realm: "{{ keycloak_realm }}"
+
+
+keycloak_ha_enabled: True
+
+keycloak_remotecache:
+  enabled: "{{ keycloak_ha_enabled }}"
+  username: supervisor
+  password: itsme
+  realm: default
+  server_name: jdg-0
+  trust_store_path:
+  trust_store_password: changeme
+
+keycloak_jdbc:
+  postgres:
+    enabled: "{{ keycloak_ha_enabled }}"
+    driver_module_name: "org.postgresql"
+    driver_module_dir: "{{ keycloak_jboss_home }}/modules/org/postgresql/main"
+    driver_version: 9.4.1212
+    driver_jar_filename: "postgresql-9.4.1212.jar"
+    driver_jar_url: "https://repo.maven.apache.org/maven2/org/postgresql/postgresql/9.4.1212/postgresql-9.4.1212.jar"
+    connection_url: "jdbc:postgresql://pgsql-0:5432/keycloak"
+    db_user: "keycloak-user"
+    db_password: "keycloak-pass"

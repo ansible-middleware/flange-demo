@@ -63,14 +63,16 @@
 
 - name: "Create database {{ pgsql.db.name }}"
   community.postgresql.postgresql_db:
-    name: "{{ pgsql.db.name }}"
+    name: "{{ item.name }}"
     encoding: UTF-8
     template: 'template0'
+  with_items: "{{ pgsql.db }}"
 
 - name: "Create user for database"
   community.postgresql.postgresql_user:
-    db: "{{ pgsql.db.name }}"
-    name: "{{ pgsql.db.user }}"
-    password: "{{ pgsql.db.user }}"
+    db: "{{ item.name }}"
+    name: "{{ item.user }}"
+    password: "{{ item.password }}"
     priv: ALL
     state: present
+  with_items: "{{ pgsql.db }}"

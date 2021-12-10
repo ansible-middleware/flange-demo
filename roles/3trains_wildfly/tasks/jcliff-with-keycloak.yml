@@ -37,12 +37,13 @@
           - secure_deployment:
               - deployment_name: "{{ secure_deployment_name }}"
                 realm: "{{ keycloak_realm }}"
-                auth_server_url: "{{ keycloak_url }}/auth/"
+                auth_server_url: "{{ keycloak_redirect_url }}/auth/"
                 ssl_required: EXTERNAL
                 resource: "{{ keycloak_client }}"
                 credential: "{{ keycloak_client_secret_response.json.value | default(omit) }}"
                 verify_token_audience: true
                 use_resource_role_mappings: true
+                disable_trust_manager: "{{ keycloak_disable_trust_manager | default(false) }}"
       - modcluster:
           proxy:
             - name: default
