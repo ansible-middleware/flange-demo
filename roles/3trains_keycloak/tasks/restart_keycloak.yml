@@ -1,7 +1,0 @@
----
-- name: "Restart and enable keycloack service"
-  systemd:
-    name: keycloak
-    enabled: yes
-    state: restarted
-  become: yes
