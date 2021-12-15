@@ -4,6 +4,7 @@
   become: yes
   collections:
     - middleware_automation.redhat_csp_download
+    - middleware_automation.infinispan
   roles:
     - redhat_csp_download
   tasks:

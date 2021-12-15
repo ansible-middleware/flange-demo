@@ -4,11 +4,7 @@ collections:
     version: "=0.0.19"
   - name: middleware_automation.redhat_csp_download
     version: ">=1.2.1"
-  - name: git@github.com:ansible-middleware/infinispan
-    type: git
-    version: v0.0.2
-  - name: git@github.com:ansible-middleware/keycloak
-    type: git
-    version: 6e3a798
+  - name: middleware_automation.infinispan
+    version: ">=0.0.4"
   - name: community.general
   - name: community.postgresql

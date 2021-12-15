@@ -1,5 +1,4 @@
 ---
----
 - name: "Install Red Hat Data Grid"
   include_role:
     name: infinispan
