@@ -2,6 +2,10 @@
 - name: "Install Red Hat Data Grid"
   include_role:
     name: infinispan
+  vars:
+    supervisor_password: "{{ jdg_admin_password }}"
+    infinispan_keycloak_caches: "{{ keycloak_caches|bool }}"
+    infinispan_users: "{{ jdg_users }}"
 
 - name: "Configure firewalld for Red Hat Data Grid"
   include_role:
@@ -15,6 +19,6 @@
   vars:
     jdg_url: "http://localhost:11222"
     jdg_username: 'supervisor'
-    jdg_password: "{{ supervisor_password }}"
+    jdg_password: "{{ jdg_admin_password }}"
     cache:
       name: kitchensink_sql_cache

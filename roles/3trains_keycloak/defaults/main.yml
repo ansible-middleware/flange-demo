@@ -2,17 +2,17 @@
 
 admin_password: "redhat1!"
 
-keycloak_ha_enabled: True
+ha_enabled: True
 
 reverse_proxy_url: jbcs-0
 
-infinispan_user: supervisor
-infinispan_pass: itsme
-infinispan_url: jdg-1
+jdg_user: supervisor
+jdg_pass: itsme
+jdg_url: jdg-1
 
-postgres_jdbc_url: jdbc:postgresql://pgsql-0:5432/keycloak
-postgres_db_user: keycloak-user
-postgres_db_pass: keycloak-pass
+postgres_url: jdbc:postgresql://pgsql-0:5432/keycloak
+postgres_user: keycloak-user
+postgres_pass: keycloak-pass
 
 
 # Demo Realm and App

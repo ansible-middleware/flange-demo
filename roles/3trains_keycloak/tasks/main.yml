@@ -4,8 +4,16 @@
 - name: Include keycloak install role
   include_role:
     name: keycloak
-    vars:
-      keycloak_admin_password: "{{ admin_password }}"
+  vars:
+    keycloak_admin_password: "{{ admin_password }}"
+    keycloak_ha_enabled: "{{ ha_enabled }}"
+    keycloak_modcluster_url: "{{ reverse_proxy_url }}"
+    infinispan_user: "{{ jdg_user }}"
+    infinispan_pass: "{{ jdg_pass }}"
+    infinispan_url: "{{ jdg_url }}"
+    postgres_jdbc_url: "{{ postgres_url }}"
+    postgres_db_user: "{{ postgres_user }}"
+    postgres_db_pass: "{{ postgres_pass }}"
 
 - name: Include keycloak firewall tasks
   include_role:
@@ -15,15 +23,15 @@
 - include_tasks: demo_urls_redirects/main.yml
 
 - set_fact:
-    keycloak_3trains_realm: "{{{ keycloak_3trains_realm | combine ( { web_origins: demo_app_redirect_uris } ) }}"
+    keycloak_3trains_client: "{{ keycloak_3trains_client | combine ( { 'web_origins': demo_app_redirect_uris } ) }}"
 
 - name: Create demo realm and client
   include_role:
     name: keycloak
     tasks_from: manage_realm.yml
-    vars:
-      keycloak_admin_password: "{{ admin_password }}"
-      keycloak_realm: "{{ keycloak_3trains_realm }}"
-      keycloak_clients:
-        - "{{ keycloak_3trains_client }}"
-      keycloak_users: "{{ keycloak_3trains_users }}"
+  vars:
+    keycloak_admin_password: "{{ admin_password }}"
+    keycloak_realm: "{{ keycloak_3trains_realm }}"
+    keycloak_clients:
+      - "{{ keycloak_3trains_client }}"
+    keycloak_users: "{{ keycloak_3trains_users }}"

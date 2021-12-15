@@ -6,5 +6,8 @@ collections:
     version: ">=1.2.1"
   - name: middleware_automation.infinispan
     version: ">=0.0.4"
+  - name: git@github.com:ansible-middleware/keycloak
+    type: git
+    version: "ab35489"
   - name: community.general
   - name: community.postgresql
