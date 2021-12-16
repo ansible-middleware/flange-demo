@@ -2,6 +2,6 @@
 - name: Playbook for Postgresql Setup
   hosts: pgsql
   tasks:
-    - name: Wildfly Role
+    - name: pgsql Role
       include_role:
         name: 3trains_postgresql

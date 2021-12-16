@@ -1,9 +1,10 @@
 ---
-- name: Playbook for Wildfly Hosts
+- name: Playbook for keycloak Hosts
   hosts: keycloak
+  collections:
+    - middleware_automation.infinispan
   tasks:
-
-    - name: Wildfly Role
+    - name: keycloak restart
       include_role:
-        name: 3trains_keycloak
+        name: keycloak
         tasks_from: restart_keycloak.yml

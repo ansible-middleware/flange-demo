@@ -2,8 +2,7 @@
 - name: Playbook for Wildfly Hosts
   hosts: keycloak
   tasks:
-
     - name: Wildfly Role
       include_role:
-        name: 3trains_keycloak
+        name: keycloak
         tasks_from: stop_keycloak.yml
