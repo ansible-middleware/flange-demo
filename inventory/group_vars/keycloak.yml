@@ -1,19 +1,15 @@
 ---
+keycloak_ha_enabled: True
+keycloak_modcluster_url: jbcs-0
+admin_pass: "redhat1!"
 
-admin_password: "redhat1!"
+infinispan_url: jdg-1
+infinispan_user: supervisor
+infinispan_pass: itsme
 
-ha_enabled: True
-
-reverse_proxy_url: jbcs-0
-
-jdg_user: supervisor
-jdg_pass: itsme
-jdg_url: jdg-1
-
-postgres_url: jdbc:postgresql://pgsql-0:5432/keycloak
-postgres_user: keycloak-user
-postgres_pass: keycloak-pass
-
+postgres_jdbc_url: jdbc:postgresql://pgsql-0:5432/keycloak
+postgres_db_user: keycloak-user
+postgres_db_pass: keycloak-pass
 
 # Demo Realm and App
 keycloak_3trains_realm: 3trains

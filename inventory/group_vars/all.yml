@@ -1,4 +1,1 @@
 ---
-keycloak_realm: 3trains
-keycloak_admin_user: admin
-keycloak_admin_password: "redhat1!"

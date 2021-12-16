@@ -3,7 +3,7 @@
 # create dnsname enabled podman network
 # podman network create 3trains
 # { "capabilities": { "aliases": true }, "domainName": "dns.podman", "type": "dnsname" }
-podman network reload --all 2>&1 >/dev/null
+# make sure the podman host doesn't override dns in /etc/hosts for guests
 while read node ; do
     echo -n "Starting container ${node}.... "
     podman run --name=${node} --network 3trains --systemd=true  --workdir /work -v $(pwd):/work:rw  -d localhost/ubi8/ubi-ansible-3trains-demo:latest /sbin/init

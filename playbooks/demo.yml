@@ -7,9 +7,6 @@
 # JBoss Core Services (Apache HTTPD)
 - import_playbook: jbcs.yml
 
-# PGSL Playbook
-- import_playbook: postgresql.yml
-
 # Datagrid Playbook
 - import_playbook: jdg.yml
 

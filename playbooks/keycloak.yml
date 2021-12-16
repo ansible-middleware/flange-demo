@@ -10,4 +10,4 @@
       include_role:
         name: 3trains_keycloak
       vars:
-        trains_app_host: "{{ (groups['wildfly'][0]) if groups['wildfly']| length > 0 else 'localhost' }}"
+        keycloak_admin_password: "{{ admin_pass }}"

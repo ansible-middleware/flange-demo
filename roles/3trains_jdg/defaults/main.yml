@@ -1,7 +1,0 @@
----
-jdg_admin_password: "itsme"
-keycloak_caches: True
-jdg_users:
-  - { name: 'ggraziol', password: 'admin', roles: 'deployer' }
-  - { name: 'rpelisse', password: 'admin', roles: 'observer' }
-  - { name: 'kitchensink', password: 'kspasswordks', roles: 'application' }

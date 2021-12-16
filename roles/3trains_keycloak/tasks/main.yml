@@ -1,19 +1,8 @@
 ---
 # tasks file for keycloak
-
 - name: Include keycloak install role
   include_role:
     name: keycloak
-  vars:
-    keycloak_admin_password: "{{ admin_password }}"
-    keycloak_ha_enabled: "{{ ha_enabled }}"
-    keycloak_modcluster_url: "{{ reverse_proxy_url }}"
-    infinispan_user: "{{ jdg_user }}"
-    infinispan_pass: "{{ jdg_pass }}"
-    infinispan_url: "{{ jdg_url }}"
-    postgres_jdbc_url: "{{ postgres_url }}"
-    postgres_db_user: "{{ postgres_user }}"
-    postgres_db_pass: "{{ postgres_pass }}"
 
 - name: Include keycloak firewall tasks
   include_role:
@@ -30,7 +19,6 @@
     name: keycloak
     tasks_from: manage_realm.yml
   vars:
-    keycloak_admin_password: "{{ admin_password }}"
     keycloak_realm: "{{ keycloak_3trains_realm }}"
     keycloak_clients:
       - "{{ keycloak_3trains_client }}"
