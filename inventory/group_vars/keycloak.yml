@@ -5,7 +5,7 @@ admin_pass: "redhat1!"
 
 infinispan_url: jdg-1
 infinispan_user: supervisor
-infinispan_pass: itsme
+infinispan_pass: admin_password
 
 postgres_jdbc_url: jdbc:postgresql://pgsql-0:5432/keycloak
 postgres_db_user: keycloak-user
