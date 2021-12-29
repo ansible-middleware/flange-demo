@@ -11,3 +11,5 @@
         name: 3trains_keycloak
       vars:
         keycloak_admin_password: "{{ admin_pass }}"
+        keycloak_clients:
+          - "{{ keycloak_3trains_client }}"

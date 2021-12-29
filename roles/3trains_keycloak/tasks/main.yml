@@ -16,8 +16,7 @@
 
 - name: Create demo realm and client
   include_role:
-    name: keycloak
-    tasks_from: manage_realm.yml
+    name: keycloak_realm
   vars:
     keycloak_realm: "{{ keycloak_3trains_realm }}"
     keycloak_clients:

@@ -27,6 +27,7 @@ keycloak_3trains_client:
   realm: "{{ keycloak_3trains_realm }}"
   public_client: True
   web_origins: '+'
+  users: "{{ keycloak_3trains_users }}"
 
 keycloak_3trains_users:
   - username: 3trainsadmin
