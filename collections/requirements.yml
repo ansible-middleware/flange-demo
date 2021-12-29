@@ -4,5 +4,9 @@ collections:
     version: "=0.0.19"
   - name: middleware_automation.redhat_csp_download
     version: ">=1.2.1"
+  - name: middleware_automation.infinispan
+    version: ">=0.0.9"
+  - name: middleware_automation.keycloak
+    version: ">=0.0.4"
   - name: community.general
   - name: community.postgresql

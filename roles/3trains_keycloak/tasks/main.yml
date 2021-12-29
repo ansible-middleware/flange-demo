@@ -1,99 +1,24 @@
 ---
 # tasks file for keycloak
+- name: Include keycloak install role
+  include_role:
+    name: keycloak
 
-- name: Prerequisites
-  include_tasks: prereqs.yml
-  tags:
-    - prereqs
+- name: Include keycloak firewall tasks
+  include_role:
+    name: keycloak
+    tasks_from: firewalld
 
-- include_tasks: tasks/install.yml
+- include_tasks: demo_urls_redirects/main.yml
 
-- name: create Keycloak admin user
-  command:
-  args:
-    argv:
-      - "{{ keycloak_jboss_home }}/bin/add-user-keycloak.sh"
-      - -rmaster
-      - -u{{ keycloak_admin_user }}
-      - -p{{ keycloak_admin_password }}
-    creates: "{{ keycloak_config_dir }}/keycloak-add-user.json"
-  become: yes
+- set_fact:
+    keycloak_3trains_client: "{{ keycloak_3trains_client | combine ( { 'web_origins': demo_app_redirect_uris } ) }}"
 
-- include_tasks: tasks/firewalld.yml
-
-- include_tasks: tasks/systemd.yml
-
-- name: Generate keycloak auth token
-  uri:
-    url: "{{ keycloak_url }}/auth/realms/master/protocol/openid-connect/token"
-    method: POST
-    body: "client_id={{ keycloak_auth_client }}&username={{ keycloak_admin_user }}&password={{ keycloak_admin_password }}&grant_type=password"
-    validate_certs: no
-  register: keycloak_auth_response
-  until: keycloak_auth_response.status == 200
-  retries: 5
-  delay: 2
-
-- name: "Determine if realm exists"
-  uri:
-    url: "{{ keycloak_url }}/auth/admin/realms/{{ keycloak_realm }}"
-    method: GET
-    status_code:
-      - 200
-      - 404
-    headers:
-      Accept: "application/json"
-      Authorization: "Bearer {{ keycloak_auth_response.json.access_token }}"
-  register: keycloak_realm_exists
-
-- name: "Create realm"
-  uri:
-    url: "{{ keycloak_url }}/auth/admin/realms"
-    method: POST
-    body: "{{ lookup('template','realm.json.j2') }}"
-    validate_certs: no
-    body_format: json
-    headers:
-      Authorization: "Bearer {{ keycloak_auth_response.json.access_token }}"
-    status_code: 201
-  when: keycloak_realm_exists.status == 404
-
-- include_tasks: tasks/demo_urls_redirects/main.yml
-
-- name: Create 3trains Client
-  community.general.keycloak_client:
-    auth_client_id: "{{ keycloak_auth_client }}"
-    auth_keycloak_url: "{{ keycloak_url }}/auth"
-    auth_realm: "{{ keycloak_auth_realm }}"
-    auth_username: "{{ keycloak_admin_user }}"
-    auth_password: "{{ keycloak_admin_password }}"
-    client_id: "{{ item.name }}"
-    realm: "{{ item.realm }}"
-    default_roles: "{{ item.roles | default(omit) }}"
-    root_url: "{{ item.root_url | default('') }}"
-    redirect_uris: "{{ demo_app_redirect_uris | default([]) }}"
-    public_client: "{{ item.public_client | default(False) }}"
-    web_origins: "{{ item.web_origins | default('+') }}"
-    state: present
-  register: create_client_result
-  loop: "{{ keycloak_clients | flatten }}"
-
-- name: Create 3trains client roles
-  include_tasks: manage_client_roles.yml
-  when: keycloak_rhsso_enable
-  loop: "{{ keycloak_clients | flatten }}"
-  loop_control:
-    loop_var: client
-
-- name: Manage Users
-  include_tasks: manage_user.yml
-  loop: "{{ keycloak_users }}"
-  loop_control:
-    loop_var: user
-
-- name: Manage User Roles
-  include_tasks: manage_user_roles.yml
-  loop: "{{ keycloak_users | flatten }}"
-  loop_control:
-    loop_var: user
-  when: "'client_roles' in user"
+- name: Create demo realm and client
+  include_role:
+    name: keycloak_realm
+  vars:
+    keycloak_realm: "{{ keycloak_3trains_realm }}"
+    keycloak_clients:
+      - "{{ keycloak_3trains_client }}"
+    keycloak_users: "{{ keycloak_3trains_users }}"

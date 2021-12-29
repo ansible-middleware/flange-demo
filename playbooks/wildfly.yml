@@ -15,5 +15,3 @@
     - name: Wildfly/EAP Role
       include_role:
         name: 3trains_wildfly
-      vars:
-        keycloak_3trains_url: "{{ 'http://' + (groups['keycloak'][0] if groups['keycloak']| length > 0 else 'localhost')  + ':8080' }}"

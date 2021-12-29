@@ -2,8 +2,6 @@
 - name: Playbook for Postgresql Setup
   hosts: pgsql
   tasks:
-    - name: Wildfly Role
+    - name: pgsql Role
       include_role:
         name: 3trains_postgresql
-        #      vars:
-        #keycloak_3trains_url: "{{ 'http://' + (groups['keycloak'][0] if groups['keycloak']| length > 0 else 'localhost')  + ':8080' }}"

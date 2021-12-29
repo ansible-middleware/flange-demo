@@ -1,7 +1,0 @@
----
-- name: "Stop SSO service"
-  systemd:
-    name: keycloak
-    enabled: yes
-    state: stopped
-  become: yes
