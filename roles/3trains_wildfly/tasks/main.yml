@@ -15,17 +15,12 @@
 - name: "Install Prerequisites"
   include_tasks: prereqs.yml
 
-- name: "Install Widfly"
-  include_tasks: install-wildfly.yml
-  when:
-    - not jboss_eap_rhn_id is defined
-
-- name: "Install JBoss EAP"
-  include_tasks: install-jboss-eap.yml
-  when:
-    - rhn_username is defined
-    - rhn_password is defined
-    - jboss_eap_rhn_id is defined
+- include_role:
+    name: wildfly_install
+  vars:
+    wildfly_user: 'wildfly'
+    wildfly_install_workdir: '/opt/jboss-eap/'
+    wildfly_home: "{{ wildfly_install_workdir }}/jboss-eap-7.4/"
 
 - name: "Install Keycloak module"
   include_tasks: keycloak/keycloak-download.yml
@@ -50,6 +45,4 @@
     nb_instances: "{{ (nb_instances | int) +1 }}"
 
 - include_tasks: appserver.yml
-  with_items:
-    - 0
-    - 1
+  loop: "{{ range(1, (nb_instance_by_node|int + 1)) | list }}"

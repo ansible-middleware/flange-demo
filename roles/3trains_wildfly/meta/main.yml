@@ -1,3 +1,4 @@
 ---
 collections:
   - middleware_automation.jcliff
+  - middleware_automation.wildfly
