@@ -1,5 +1,9 @@
 ---
 jdg_url: http://localhost:11222
+jdg_jdbc_engine: postgres
+jdg_jdbc_url: jdbc:postgresql://pgsql-0:5432/keycloak
+jdg_jdbc_user: keycloak-user
+jdg_jdbc_pass: keycloak-pass
 admin_pass: admin_password
 user_accounts:
   - { name: 'ggraziol', password: 'admin', roles: 'deployer' }
