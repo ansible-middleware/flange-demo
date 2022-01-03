@@ -1,22 +1,21 @@
 # Placeholder Group
 [threetrains]
 
-# Wildfly Group
+[jbcs]
+jbcs-0 ansible_connection=local
+
 [wildfly]
-localhost ansible_connection=local
+wfly-0 ansible_connection=local
 
 # Keycloak Group
 [keycloak]
-localhost ansible_connection=local
-
-[jbcs]
-localhost ansible_connection=local
-
-[pgsql]
-localhost ansible_connection=local
+keycloak-0 ansible_connection=local
 
 [jdg]
-localhost ansible_connection=local
+jdg-0 ansible_connection=local
+
+[pgsql]
+pgsql-0 ansible_connection=local
 
 [threetrains:children]
 wildfly
