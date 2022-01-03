@@ -27,3 +27,17 @@
         - rhn_username is defined
         - rhn_password is defined
         - ansible_facts['virtualization_type'] != "oci"
+
+
+    - name: "Ensure that OS has the required packages installed"
+      include_role:
+        name: 3trains_fastpackages
+      vars:
+        packages_list:
+          - yum-utils
+          - hostname
+          - net-tools
+          - iproute
+          - bind-utils
+          - glibc-locale-source
+          - glibc-langpack-en
