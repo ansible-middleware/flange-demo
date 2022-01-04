@@ -1,0 +1,50 @@
+---
+dependency:
+  name: galaxy
+  options:
+    requirements-file: molecule/default/requirements.yml
+driver:
+  name: docker
+# lint: |
+#   set -e
+#   yamllint .
+#   flake8
+#   ansible-lint --force-color
+platforms:
+  - name: instance
+    image: registry.access.redhat.com/ubi8/ubi-init:latest
+    pre_build_image: true
+    privileged: true
+    command: "/usr/sbin/init"
+    port_bindings:
+      - 8080:8080
+    published_ports:
+      - 0.0.0.0:8080:8080/TCP
+provisioner:
+  name: ansible
+  playbooks:
+    converge: ../../playbooks/demo.yml
+  env:
+    CATALINA_HOME: "/opt/apache-tomcat-9.0.50"
+  inventory:
+    links:
+      hosts: ../../inventory/hosts
+      group_vars: ../../inventory/group_vars
+      ansible_python_interpreter: "{{ ansible_playbook_python }}"
+verifier:
+  name: ansible
+scenario:
+  test_sequence:
+    - dependency
+    - lint
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    # -   idempotence
+    - side_effect
+    - verify
+    - cleanup
+    - destroy

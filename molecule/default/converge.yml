@@ -1,0 +1,19 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include 3trains_fastpackages role"
+      include_role:
+        name: "3trains_fastpackages"
+    - name: "Include 3trains_jbcs role"
+      include_role:
+        name: "3trains_jbcs"
+    - name: "Include 3trains_keycloak role"
+      include_role:
+        name: "3trains_keycloak"
+    - name: "Include 3trains_postgresql role"
+      include_role:
+        name: "3trains_postgresql"
+    - name: "Include 3trains_wildfly role"
+      include_role:
+        name: "3trains_wildfly"
