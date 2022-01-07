@@ -34,6 +34,7 @@ jobs:
       - name: Run molecule test
         run: |
           molecule test
+        working-directory: ./3trains-cluster-demo
         env:
           PY_COLORS: "1"
           ANSIBLE_FORCE_COLOR: "1"
