@@ -7,9 +7,9 @@ infinispan_url: jdg-1
 infinispan_user: supervisor
 infinispan_pass: admin_password
 
-postgres_jdbc_url: jdbc:postgresql://pgsql-0:5432/keycloak
-postgres_db_user: keycloak-user
-postgres_db_pass: keycloak-pass
+keycloak_jdbc_url: jdbc:postgresql://pgsql-0:5432/keycloak
+keycloak_db_user: keycloak-user
+keycloak_db_pass: keycloak-pass
 
 # Demo Realm and App
 keycloak_3trains_realm: 3trains
