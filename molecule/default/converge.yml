@@ -1,19 +1,24 @@
 ---
-- name: Converge
-  hosts: all
-  tasks:
-    - name: "Include 3trains_fastpackages role"
-      include_role:
-        name: "3trains_fastpackages"
-    - name: "Include 3trains_jbcs role"
-      include_role:
-        name: "3trains_jbcs"
-    - name: "Include 3trains_keycloak role"
-      include_role:
-        name: "3trains_keycloak"
-    - name: "Include 3trains_postgresql role"
-      include_role:
-        name: "3trains_postgresql"
-    - name: "Include 3trains_wildfly role"
-      include_role:
-        name: "3trains_wildfly"
+- import_playbook: ../../playbooks/preconds.yml
+
+# PGSL Playbook
+- import_playbook: ../../playbooks/postgresql.yml
+
+# JBoss Core Services (Apache HTTPD)
+#- import_playbook: jbcs.yml
+
+# Datagrid Playbook
+- import_playbook: ../../playbooks/jdg.yml
+  vars:
+    ansible_distribution: 'RedHat'
+
+# Keycloak Playbook
+- import_playbook: ../../playbooks/keycloak.yml
+  vars:
+    ansible_distribution: 'RedHat'
+
+# Wildfly Playbook
+- import_playbook: ../../playbooks/wildfly.yml
+  vars:
+    ansible_distribution: 'RedHat'
+

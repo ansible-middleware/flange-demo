@@ -16,7 +16,7 @@
       become: yes
       command: systemctl daemon-reexec
       when: systemd_version.changed
-  when: ansible_facts['virtualization_type'] == "oci"
+  when: ansible_facts['virtualization_type'] in ['oci','containerd']
 
 - stat:
     path: "{{ pgsql.pgdata }}/pg_hba.conf"

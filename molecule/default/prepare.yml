@@ -9,4 +9,13 @@
           - sudo
           - iproute
           - net-tools
+          - bind-utils
+          - glibc-locale-source
+          - glibc-langpack-en
         state: present
+    - name: Upgrade systemd (for postgres)
+      yum:
+        use_backend: dnf
+        name:
+          - systemd
+        state: latest

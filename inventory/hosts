@@ -3,12 +3,12 @@
 
 # Wildfly Group
 [wildfly]
-
-
-# Keycloak Group
 [keycloak]
-
+[jdg]
+[pgsql]
 
 [threetrains:children]
 wildfly
 keycloak
+jdg
+pgsql
