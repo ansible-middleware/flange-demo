@@ -1,5 +1,7 @@
 ---
 - import_playbook: ../../playbooks/preconds.yml
+  vars:
+    ansible_distribution: 'RedHat'
 
 # PGSL Playbook
 - import_playbook: ../../playbooks/postgresql.yml

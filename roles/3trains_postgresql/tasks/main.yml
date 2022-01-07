@@ -8,7 +8,7 @@
     - name: Downgrade systemd (only for containerized install), https://access.redhat.com/solutions/5605181
       become: yes
       yum:
-        name: systemd-239-18.el8.x86_64
+        name: ftp://ftp.pbone.net/mirror/vault.centos.org/8.1.1911/BaseOS/x86_64/os/Packages/systemd-239-18.el8.x86_64.rpm
         state: present
         allow_downgrade: True
       register: systemd_version
