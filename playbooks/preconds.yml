@@ -8,13 +8,13 @@
           - ansible_distribution is defined
           - ansible_distribution == "RedHat"
           - ansible_distribution_version is defined
-          - ansible_distribution_version == "8.4"
+          - ansible_distribution_version is version('8.4','>=')
           - ansible_version is defined
           - ansible_version.string is version('2.9','>')
           - ansible_python_version is defined
           - ansible_python_version is version('3.6','>')
         quiet: true
-        fail_msg: "This demo has been built for RHEL 8.4 (found {{ansible_distribution_version}}) using Ansible 2.9 ({{ansible_version.string}}) running on Python 3 ({{ansible_python_version}})"
+        fail_msg: "This demo has been built for RHEL 8.4+ (found {{ansible_distribution}} {{ansible_distribution_version}}) using Ansible 2.9 ({{ansible_version.string}}) running on Python 3 ({{ansible_python_version}})"
 
     - name: "Ensure target system {{ ansible_nodename }} is properly registered"
       become: yes

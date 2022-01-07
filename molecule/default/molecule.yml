@@ -1,19 +1,27 @@
 ---
 dependency:
   name: galaxy
+  options:
+    ignore-certs: True
+    ignore-errors: True
+    requirements-file: requirements.yml
 driver:
-  name: podman
-# lint: |
-#   set -e
-#   yamllint .
-#   flake8
-#   ansible-lint --force-color
+  name: docker
 platforms:
   - name: instance
     image: registry.access.redhat.com/ubi8/ubi-init:latest
     pre_build_image: true
     privileged: true
     command: "/usr/sbin/init"
+    etc_hosts:
+      jbcs-0: "127.0.0.1"
+      wfly-1: "127.0.0.1"
+      pgsql-0: "127.0.0.1"
+      jdg-1: "127.0.0.1"
+      keycloak-0: "127.0.0.1"
+    groups:
+      - wildfly
+      - keycloak
     port_bindings:
       - 8080:8080
     published_ports:
@@ -26,16 +34,19 @@ provisioner:
     ssh_connection:
       pipelining: false
   playbooks:
+    prepare: prepare.yml
     converge: ../../playbooks/demo.yml
   env:
     CATALINA_HOME: "/opt/apache-tomcat-9.0.50"
     ANSIBLE_FORCE_COLOR: "true"
   inventory:
     links:
-      hosts: ../../inventory/localhost
+      hosts: ../../inventory/hosts
       group_vars: ../../inventory/group_vars
     localhost:
       ansible_python_interpreter: "{{ ansible_playbook_python }}"
+    vars:
+      ansible_distribution: 'RedHat'
 verifier:
   name: ansible
 scenario:
