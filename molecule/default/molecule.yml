@@ -1,10 +1,8 @@
 ---
 dependency:
   name: galaxy
-  options:
-    requirements-file: molecule/default/requirements.yml
 driver:
-  name: docker
+  name: podman
 # lint: |
 #   set -e
 #   yamllint .
@@ -22,14 +20,21 @@ platforms:
       - 0.0.0.0:8080:8080/TCP
 provisioner:
   name: ansible
+  config_options:
+    defaults:
+      interpreter_python: auto_silent
+    ssh_connection:
+      pipelining: false
   playbooks:
     converge: ../../playbooks/demo.yml
   env:
     CATALINA_HOME: "/opt/apache-tomcat-9.0.50"
+    ANSIBLE_FORCE_COLOR: "true"
   inventory:
     links:
-      hosts: ../../inventory/hosts
+      hosts: ../../inventory/localhost
       group_vars: ../../inventory/group_vars
+    localhost:
       ansible_python_interpreter: "{{ ansible_playbook_python }}"
 verifier:
   name: ansible
