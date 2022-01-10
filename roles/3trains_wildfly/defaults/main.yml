@@ -1,4 +1,12 @@
 ---
+wfly_version: preview-26.0.0.Final
+eap_version: '7.4'
+wildfly_home_default: "{{ workdir }}/wildfly-{{ wfly_version }}/"
+eap_home_default: "{{ workdir }}/jboss-eap-{{ eap_version }}/"
+wildfly_install_workdir: "{{ wildfly_home_default if jboss_eap_rhn_id is not defined or jboss_eap_rhn_id == 'none' else eap_home_default }}"
+
+home_default: "{{ wildfly_home_default if jboss_eap_rhn_id is not defined or jboss_eap_rhn_id == 'none' else eap_home_default }}"
+
 sample_app_version: "{{ sample_app_version_to_deploy | default('0.0.1') }}"
 gdrive_url: 'https://drive.google.com/uc?export=download&id='
 apps:
@@ -15,9 +23,7 @@ apps:
     version: '1.1'
     url: "{{ gdrive_url }}1w9ss5okctnjUvRAxhPEPyC7DmbUwmbhb"
 app_dir: /opt/apps/
-wfly_version: 19.0.0.Final
-eap_version: '7.4'
-workdir: "{{ '/opt/wildfly/' if jboss_eap_rhn_id is not defined else '/opt/jboss-eap/' }}"
+workdir: "{{ '/opt/wildfly/' if jboss_eap_rhn_id is not defined or jboss_eap_rhn_id == 'none' else '/opt/jboss-eap/' }}"
 wfly_zipfile: "wildfly-{{ wfly_version }}.zip"
 wfly_download_url: "https://download.jboss.org/wildfly/{{ wfly_version }}/{{ wfly_zipfile }}"
 keycloak_adapter_version: 9.0.3
@@ -25,11 +31,10 @@ keycloak_download_url: "https://downloads.jboss.org/keycloak/{{ keycloak_adapter
 rhsso_adapter_version: "15.0.2"
 java:
   home: "{{ override_widlfy_jvm | default('/usr/lib/jvm/java-1.8.0') }}"
-wildfly_home_default: "{{ workdir }}/wildfly-{{ wfly_version }}/"
-eap_home_default: "{{ workdir }}/jboss-eap-{{ eap_version }}/"
+
 disable_keycloak: False
 enable_rhsso: "{{ True if jboss_eap_rhn_id is not defined else False }}"
-home_default: "{{ wildfly_home_default if jboss_eap_rhn_id is not defined else eap_home_default }}"
+
 wildfly:
   home: "{{ override_wildfly_home | default(home_default) }}"
   user: wildfly
@@ -49,6 +54,7 @@ postgres:
   user:
     name: wildfly
     password: wildfly
+
 # can't use a structure for the jdbc_driver because of the interpolation between variables.
 jdbc_driver_module_dir: "{{ wildfly.home }}//modules/org/postgresql/main"
 jdbc_driver_version: 9.2-1002-jdbc4
