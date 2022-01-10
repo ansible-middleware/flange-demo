@@ -1,5 +1,5 @@
 ---
-keycloak_ha_enabled: True
+keycloak_ha_enabled: False
 keycloak_modcluster_url: jbcs-0
 admin_pass: "redhat1!"
 

@@ -1,11 +1,18 @@
 ---
 - set_fact:
     demo_app_redirect_uris: []
+    origin_host: localhost
 
-- set_fact:
+- name: Use loadbalancer as origin when defined
+  set_fact:
+    origin_host: "{{ groups['jbcs'][0] }}"
+  when: groups['jbcs'] is defined and groups['jbcs'][0]|length > 0
+
+- name: Interpolate web origins list
+  set_fact:
     demo_app_redirect_uris: "{{ demo_app_redirect_uris + item }}"
   loop:
-    - [ "https://{{ (groups['jbcs'][0] if groups['jbcs'] | length > 0 else 'localhost') }}{{ demo_app_endpoint }}/*"]
+    - [ "https://{{ origin_host }}{{ demo_app_endpoint }}/*"]
 
 - set_fact:
     app_servers_list: []

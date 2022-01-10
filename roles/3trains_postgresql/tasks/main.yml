@@ -4,20 +4,6 @@
   vars:
     packages_list: "{{ pgsql.packages_list }}"
 
-- block:
-    - name: Downgrade systemd (only for containerized install), https://access.redhat.com/solutions/5605181
-      become: yes
-      yum:
-        name: ftp://ftp.pbone.net/mirror/vault.centos.org/8.1.1911/BaseOS/x86_64/os/Packages/systemd-239-18.el8.x86_64.rpm
-        state: present
-        allow_downgrade: True
-      register: systemd_version
-    - name: Restart systemd
-      become: yes
-      command: systemctl daemon-reexec
-      when: systemd_version.changed
-  when: ansible_facts['virtualization_type'] in ['oci','containerd']
-
 - stat:
     path: "{{ pgsql.pgdata }}/pg_hba.conf"
   register: pgdata_init
