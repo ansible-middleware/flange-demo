@@ -1,5 +1,6 @@
 ---
-wfly_version: preview-26.0.0.Final
+wfly_version: '19.0.0.Final'
+wildfly_version: '19.0.0.Final'
 eap_version: '7.4'
 wildfly_home_default: "{{ workdir }}/wildfly-{{ wfly_version }}/"
 eap_home_default: "{{ workdir }}/jboss-eap-{{ eap_version }}/"
@@ -26,7 +27,8 @@ app_dir: /opt/apps/
 workdir: "{{ '/opt/wildfly/' if jboss_eap_rhn_id is not defined or jboss_eap_rhn_id == 'none' else '/opt/jboss-eap/' }}"
 wfly_zipfile: "wildfly-{{ wfly_version }}.zip"
 wfly_download_url: "https://download.jboss.org/wildfly/{{ wfly_version }}/{{ wfly_zipfile }}"
-keycloak_adapter_version: 9.0.3
+keycloak_adapter_version: '9.0.3'
+keycloak_download_url12: "https://github.com/keycloak/keycloak/releases/download/{{ keycloak_adapter_version }}/keycloak-oidc-wildfly-adapter-{{ keycloak_adapter_version }}.zip"
 keycloak_download_url: "https://downloads.jboss.org/keycloak/{{ keycloak_adapter_version }}/adapters/keycloak-oidc/keycloak-wildfly-adapter-dist-{{ keycloak_adapter_version }}.tar.gz"
 rhsso_adapter_version: "15.0.2"
 java:

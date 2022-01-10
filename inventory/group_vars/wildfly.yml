@@ -1,5 +1,8 @@
 ---
 ansible_become: true
 jcliff_yum_backend: dnf
+wildfly_version: '19.0.0.Final'
+wildfly_archive_filename: "wildfly-{{ wildfly_version }}.zip"
+wildfly_install_download_url: "https://download.jboss.org/wildfly/{{ wildfly_version }}/{{ wildfly_archive_filename }}"
 wildfly_bind_addr: 0.0.0.0
 nb_instance_by_node: 2
