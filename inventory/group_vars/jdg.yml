@@ -10,4 +10,5 @@ user_accounts:
   - { name: 'ggraziol', password: 'admin', roles: 'deployer' }
   - { name: 'rpelisse', password: 'admin', roles: 'observer' }
   - { name: 'kitchensink', password: 'kspasswordks', roles: 'application' }
+  - { name: 'keycloak', password: 'keycloakpassword', roles: 'application' }
 infinispan_keycloak_caches: True

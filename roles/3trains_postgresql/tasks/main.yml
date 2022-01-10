@@ -18,6 +18,24 @@
     - pgdata_init.stat is defined
     - not pgdata_init.stat.exists
 
+- name: Ensures postgresql.service.d/ dir exists
+  file:
+    path: /etc/systemd/system/postgresql.service.d/
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Install workaround systemd config for https://access.redhat.com/solutions/5605181"
+  template:
+    src: postgresql-unit-stop.conf
+    dest: /etc/systemd/system/postgresql.service.d/stop.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart postgres
+
 - name: "Ensure PostgreSQL accept connection from app servers"
   template:
     src: pg_hba.conf
