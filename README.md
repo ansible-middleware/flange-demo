@@ -11,7 +11,7 @@ The following sections describe the steps necessary to prepare your machine for 
 
 First of all, you'll need to install the [JCliff Ansible collection](https://github.com/middleware_automation/ansible_collections_jcliff), and a few other dependencies:
 
-    $ ansible-galaxy collection install -r collections/requirements.yml
+    $ ansible-galaxy collection install -r requirements.yml
 
 ### Ansible Inventory
 

@@ -7,6 +7,6 @@ collections:
   - name: middleware_automation.infinispan
     version: ">=0.0.12"
   - name: middleware_automation.keycloak
-    version: ">=0.1.2"
+    version: ">=0.1.4"
   - name: community.general
   - name: community.postgresql

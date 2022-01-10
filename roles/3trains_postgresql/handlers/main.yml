@@ -1,5 +1,3 @@
 ---
 - name: "restart postgres"
-  service:
-    name: postgresql
-    state: restarted
+  include_tasks: tasks/restart_postgres.yml

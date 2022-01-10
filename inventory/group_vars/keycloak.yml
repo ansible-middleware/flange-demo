@@ -1,11 +1,11 @@
 ---
-keycloak_ha_enabled: False
+keycloak_ha_enabled: True
 keycloak_modcluster_url: jbcs-0
 admin_pass: "redhat1!"
 
 infinispan_url: jdg-1
-infinispan_user: supervisor
-infinispan_pass: admin_password
+infinispan_user: keycloak
+infinispan_pass: keycloakpassword
 
 keycloak_jdbc_url: jdbc:postgresql://pgsql-0:5432/keycloak
 keycloak_db_user: keycloak-user
