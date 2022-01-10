@@ -9,6 +9,13 @@
     name: keycloak
     tasks_from: firewalld
 
+- name: Debug keycloak log
+  command: tail -n 250 /opt/keycloak/keycloak.log
+  register: keycloak_output
+
+- debug:
+    msg: "Keycloak logfile: {{ keycloak_output.stdout_lines }}"
+
 - include_tasks: demo_urls_redirects/main.yml
 
 - set_fact:
