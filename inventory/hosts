@@ -1,5 +1,5 @@
 # Placeholder Group
-[threetrains]
+[flange]
 
 # Wildfly Group
 [wildfly]
@@ -7,7 +7,7 @@
 [jdg]
 [pgsql]
 
-[threetrains:children]
+[flange:children]
 wildfly
 keycloak
 jdg
