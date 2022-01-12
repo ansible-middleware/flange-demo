@@ -8,9 +8,9 @@
     quiet: true
 
 - debug:
-    msg: "keycloak_3trains_url: {{ keycloak_3trains_url }}"
+    msg: "keycloak_flange_url: {{ keycloak_flange_url }}"
   when:
-    - keycloak_3trains_url is defined
+    - keycloak_flange_url is defined
 
 - name: "Install Prerequisites"
   include_tasks: prereqs.yml

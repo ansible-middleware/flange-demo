@@ -1,6 +1,6 @@
 - name: "Install PostgreSQL and relate packages"
   include_role:
-    name: 3trains_fastpackages
+    name: flange_fastpackages
   vars:
     packages_list: "{{ pgsql.packages_list }}"
 

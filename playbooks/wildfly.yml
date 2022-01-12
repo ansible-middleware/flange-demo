@@ -15,4 +15,4 @@
 
     - name: Wildfly/EAP Role
       include_role:
-        name: 3trains_wildfly
+        name: flange_wildfly

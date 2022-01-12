@@ -68,8 +68,8 @@ jcliff_rules_dir: /usr/share/jcliff/rules
 keycloak_auth_client: admin-cli
 keycloak_admin_user: admin
 keycloak_admin_password: "redhat1!"
-keycloak_realm: 3trains
-keycloak_url: "{{ keycloak_3trains_url | default('http://keycloak-0:8080') }}"
-keycloak_redirect_url: "{{ keycloak_3trains_redirect_url | default('https://jbcs-0') }}"
-keycloak_client: 3trains
+keycloak_realm: flange
+keycloak_url: "{{ keycloak_flange_url | default('http://keycloak-0:8080') }}"
+keycloak_redirect_url: "{{ keycloak_flange_redirect_url | default('https://jbcs-0') }}"
+keycloak_client: flange
 keycloak_disable_trust_manager: True

@@ -7,7 +7,7 @@
 - name: "Fine tuning configuration: {{ instance_name | default('localhost') }}"
   jcliff:
     wfly_home: "{{ wildfly.home }}"
-    rule_file: roles/3trains_wildfly/files/custom/
+    rule_file: roles/flange_wildfly/files/custom/
     timeout: 7000
     management_port: "{{ wildfly_instance_management_port }}"
     components:

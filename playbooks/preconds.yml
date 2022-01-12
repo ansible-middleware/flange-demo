@@ -31,7 +31,7 @@
 
     - name: "Ensure that OS has the required packages installed"
       include_role:
-        name: 3trains_fastpackages
+        name: flange_fastpackages
       vars:
         packages_list:
           - yum-utils

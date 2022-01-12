@@ -8,5 +8,5 @@
 
     - name: Wildfly Role
       include_role:
-        name: 3trains_wildfly
+        name: flange_wildfly
         tasks_from: uninstall_wfly_instance.yml
