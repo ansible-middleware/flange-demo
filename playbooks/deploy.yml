@@ -8,7 +8,7 @@
 
     - name: Wildfly Role
       include_role:
-        name: 3trains_wildfly
+        name: flange_wildfly
         tasks_from: deploy_app.yml
       vars:
         info_app_dest: "{{ deployment_name }}"

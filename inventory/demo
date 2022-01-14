@@ -1,4 +1,16 @@
-[threetrains]
+[flange]
+jbcs-0
+wfly-1
+wfly-2
+wfly-3
+keycloak-0
+jdg-1
+
+[flange:children]
+wildfly
+keycloak
+jbcs
+pgsql
 
 [jbcs]
 jbcs-0
@@ -17,7 +29,3 @@ jdg-1
 [pgsql]
 pgsql-0
 
-[threetrains:children]
-wildfly
-keycloak
-jbcs

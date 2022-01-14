@@ -1,0 +1,24 @@
+---
+# tasks file for keycloak
+- name: Include keycloak install role
+  include_role:
+    name: keycloak
+
+- name: Include keycloak firewall tasks
+  include_role:
+    name: keycloak
+    tasks_from: firewalld
+
+- include_tasks: demo_urls_redirects/main.yml
+
+- set_fact:
+    keycloak_flange_client: "{{ keycloak_flange_client | combine ( { 'web_origins': demo_app_redirect_uris } ) }}"
+
+- name: Create demo realm and client
+  include_role:
+    name: keycloak_realm
+  vars:
+    keycloak_realm: "{{ keycloak_flange_realm }}"
+    keycloak_clients:
+      - "{{ keycloak_flange_client }}"
+    keycloak_users: "{{ keycloak_flange_users }}"

@@ -12,36 +12,36 @@ keycloak_db_user: keycloak-user
 keycloak_db_pass: keycloak-pass
 
 # Demo Realm and App
-keycloak_3trains_realm: 3trains
-keycloak_3trains_client_name: 3trains
-keycloak_3trains_admin_role: 3trainsadmin
-keycloak_3trains_user_role: 3trainsuser
+keycloak_flange_realm: flange
+keycloak_flange_client_name: flange
+keycloak_flange_admin_role: flangeadmin
+keycloak_flange_user_role: flangeuser
 
 demo_app_host: "{{ trains_app_host | default('localhost') }}"
 demo_app_endpoint: "{{ train_app_endpoint | default('/kitchensink') }}"
-keycloak_3trains_client:
-  name: "{{ keycloak_3trains_client_name }}"
+keycloak_flange_client:
+  name: "{{ keycloak_flange_client_name }}"
   roles:
-    - "{{ keycloak_3trains_user_role }}"
-    - "{{ keycloak_3trains_admin_role }}"
-  realm: "{{ keycloak_3trains_realm }}"
+    - "{{ keycloak_flange_user_role }}"
+    - "{{ keycloak_flange_admin_role }}"
+  realm: "{{ keycloak_flange_realm }}"
   public_client: True
   web_origins: '+'
-  users: "{{ keycloak_3trains_users }}"
+  users: "{{ keycloak_flange_users }}"
 
-keycloak_3trains_users:
-  - username: 3trainsadmin
+keycloak_flange_users:
+  - username: flangeadmin
     password: password
     client_roles:
-      - client: "{{ keycloak_3trains_client_name }}"
-        role: "{{ keycloak_3trains_admin_role }}"
-        realm: "{{ keycloak_3trains_realm }}"
-      - client: "{{ keycloak_3trains_client_name }}"
-        role: "{{ keycloak_3trains_user_role }}"
-        realm: "{{ keycloak_3trains_realm }}"
-  - username: 3trainsuser
+      - client: "{{ keycloak_flange_client_name }}"
+        role: "{{ keycloak_flange_admin_role }}"
+        realm: "{{ keycloak_flange_realm }}"
+      - client: "{{ keycloak_flange_client_name }}"
+        role: "{{ keycloak_flange_user_role }}"
+        realm: "{{ keycloak_flange_realm }}"
+  - username: flangeuser
     password: password
     client_roles:
-      - client: "{{ keycloak_3trains_client_name }}"
-        role: "{{ keycloak_3trains_user_role }}"
-        realm: "{{ keycloak_3trains_realm }}"
+      - client: "{{ keycloak_flange_client_name }}"
+        role: "{{ keycloak_flange_user_role }}"
+        realm: "{{ keycloak_flange_realm }}"

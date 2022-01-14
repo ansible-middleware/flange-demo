@@ -131,7 +131,7 @@ Create a pythonized image for containers based on ubi8.4, using the provided Doc
 ```
 $ podman build -f podman/Dockerfile-podmanbase
 505e98b27d0
-$ podman tag 505e98b27d0 ubi8/ubi-ansible-3trains-demo:latest
+$ podman tag 505e98b27d0 ubi8/ubi-ansible-flange-demo:latest
 ```
 
 Make sure the podman network has the dnsname plugin enabled:
@@ -144,7 +144,7 @@ NETWORK ID    NAME        VERSION     PLUGINS
 
 Now you can startup the containers, using the [provided script (wip)](ansible-demo-podman.sh), which reads the inventory and names each one accordingly
 
-    $ podman run --name=keycloak-0 --systemd=true  --workdir /work -v $(pwd):/work:rw  -dit localhost/ubi8/ubi-ansible-3trains-demo:latest /sbin/init
+    $ podman run --name=keycloak-0 --systemd=true  --workdir /work -v $(pwd):/work:rw  -dit localhost/ubi8/ubi-ansible-flange-demo:latest /sbin/init
     [...]
 
 And finally:

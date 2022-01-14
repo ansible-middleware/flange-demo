@@ -8,8 +8,8 @@
   tasks:
     - name: Keycloak Role
       include_role:
-        name: 3trains_keycloak
+        name: flange_keycloak
       vars:
         keycloak_admin_password: "{{ admin_pass }}"
         keycloak_clients:
-          - "{{ keycloak_3trains_client }}"
+          - "{{ keycloak_flange_client }}"
