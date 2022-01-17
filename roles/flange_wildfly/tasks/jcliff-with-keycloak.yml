@@ -28,7 +28,7 @@
       - datasources:
           - name: "{{ instance_name }}db"
             use_java_context: 'true'
-            jndi_name: "java:jboss/datasources/{{ postgres.db_name }}"
+            jndi_name: "java:jboss/datasources/{{ postgres.jndi_ds }}"
             connection_url: "jdbc:postgresql://{{ (groups['pgsql'][0] if groups['pgsql'] | length > 0 else 'localhost') }}:5432/{{ postgres.db_name }}"
             driver_name: postgresql
             user_name: "{{ postgres.user.name }}"

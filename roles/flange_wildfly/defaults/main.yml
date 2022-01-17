@@ -8,17 +8,17 @@ wildfly_home_default: "{{ workdir }}/wildfly-{{ wildfly_version }}/"
 eap_home_default: "{{ workdir }}/jboss-eap-{{ eap_version }}/"
 home_default: "{{ wildfly_home_default if jboss_eap_rhn_id is not defined or jboss_eap_rhn_id == 'none' else eap_home_default }}"
 
-sample_app_version: "{{ sample_app_version_to_deploy | default('0.0.1') }}"
+sample_app_version: "{{ sample_app_version_to_deploy | default('1.1.0') }}"
 gdrive_url: 'https://drive.google.com/uc?export=download&id='
 apps:
   - name: kitchensink
     extension: war
-    version: "0.0.1"
-    url: "{{ gdrive_url }}1PfTn2zk-UVbLoPDT-xf9Z4AdkNaEfTh3"
+    version: "1.1.0"
+    url: "https://github.com/ansible-middleware/addressbook/releases/download/1.1.0/addressbook.war"
   - name: kitchensink
     extension: war
-    version: "0.0.2"
-    url: "{{ gdrive_url }}1nrKPe6N7aDwilz6YIzImw1PznaYHuEDj"
+    version: "1.1.1"
+    url: "https://github.com/ansible-middleware/addressbook/releases/download/1.1.1/addressbook.war"
   - name: info
     extension: war
     version: '1.1'
@@ -51,13 +51,14 @@ wildfly:
   metaspace_maxsize: 256m
 postgres:
   db_name: wildfly
+  jndi_ds: AddressbookDS
   user:
     name: wildfly
     password: wildfly
 
 # can't use a structure for the jdbc_driver because of the interpolation between variables.
 jdbc_driver_module_dir: "{{ wildfly.home }}/modules/org/postgresql/main"
-jdbc_driver_version: 9.2-1002-jdbc4
+jdbc_driver_default_version: 9.4.1212
 jdbc_driver_jar_filename: "postgresql-{{ jdbc_driver_version }}.jar"
 jdbc_driver_jar_url: "https://repo.maven.apache.org/maven2/org/postgresql/postgresql/{{ jdbc_driver_version }}/{{ jdbc_driver_jar_filename }}"
 jdbc_driver_jar_installation_path: "{{ jdbc_driver_module_dir }}/{{ jdbc_driver_jar_filename }}"
