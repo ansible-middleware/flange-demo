@@ -8,17 +8,17 @@ wildfly_home_default: "{{ workdir }}/wildfly-{{ wildfly_version }}/"
 eap_home_default: "{{ workdir }}/jboss-eap-{{ eap_version }}/"
 home_default: "{{ wildfly_home_default if jboss_eap_rhn_id is not defined or jboss_eap_rhn_id == 'none' else eap_home_default }}"
 
-sample_app_version: "{{ sample_app_version_to_deploy | default('1.1.0') }}"
+sample_app_version: "{{ sample_app_version_to_deploy | default('1.1.2') }}"
 gdrive_url: 'https://drive.google.com/uc?export=download&id='
 apps:
   - name: kitchensink
     extension: war
-    version: "1.1.0"
-    url: "https://github.com/ansible-middleware/addressbook/releases/download/1.1.0/addressbook.war"
+    version: "1.1.1"
+    url: "https://github.com/ansible-middleware/addressbook/releases/download/1.0.2/addressbook.war"
   - name: kitchensink
     extension: war
-    version: "1.1.1"
-    url: "https://github.com/ansible-middleware/addressbook/releases/download/1.1.1/addressbook.war"
+    version: "1.1.2"
+    url: "https://github.com/ansible-middleware/addressbook/releases/download/1.1.2/addressbook.war"
   - name: info
     extension: war
     version: '1.1'
