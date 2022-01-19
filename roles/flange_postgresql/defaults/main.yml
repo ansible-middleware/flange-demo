@@ -13,3 +13,6 @@ pgsql:
     - name: "keycloak"
       user: "keycloak-user"
       password: "keycloak-pass"
+    - name: wildfly
+      user: wildfly
+      password: wildfly
