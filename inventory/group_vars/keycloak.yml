@@ -1,7 +1,7 @@
 ---
 keycloak_ha_enabled: True
 keycloak_modcluster_url: jbcs-0
-keycloak_frontend_url: "https://{{keycloak_modcluster_url}}"
+keycloak_frontend_url: "https://{{keycloak_modcluster_url}}/auth"
 admin_pass: "redhat1!"
 
 infinispan_url: jdg-1
@@ -18,10 +18,10 @@ keycloak_flange_client_name: flange
 keycloak_flange_admin_role: flangeadmin
 keycloak_flange_user_role: flangeuser
 
-demo_app_host: "{{ trains_app_host | default('localhost') }}"
-demo_app_endpoint: "{{ train_app_endpoint | default('/kitchensink') }}"
+demo_app_endpoint: "/addressbook"
 keycloak_flange_client:
   name: "{{ keycloak_flange_client_name }}"
+  client_id: "{{ keycloak_flange_client_name }}"
   roles:
     - "{{ keycloak_flange_user_role }}"
     - "{{ keycloak_flange_admin_role }}"

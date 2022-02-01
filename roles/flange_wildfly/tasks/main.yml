@@ -15,16 +15,9 @@
 - name: "Install Prerequisites"
   include_tasks: prereqs.yml
 
-- debug:
-    msg: "Workdir: {{ workdir }} Wildfly home: {{ home_default }}"
-
 - name: "Install wildfly"
   include_role:
     name: wildfly_install
-  vars:
-    wildfly_user: 'wildfly'
-    wildfly_install_workdir: "{{ workdir }}"
-    wildfly_home: "{{ home_default }}"
 
 - name: "Install Keycloak module"
   include_tasks: keycloak/keycloak-download.yml

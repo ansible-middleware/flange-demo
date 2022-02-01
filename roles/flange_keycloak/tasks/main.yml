@@ -1,18 +1,27 @@
 ---
 # tasks file for keycloak
-- name: Include keycloak install role
-  include_role:
-    name: keycloak
-
 - name: Include keycloak firewall tasks
   include_role:
     name: keycloak
     tasks_from: firewalld
 
+- name: Include keycloak install role
+  include_role:
+    name: keycloak
+
+- set_fact:
+    demo_app_redirect_uris: []
+    origin_host: localhost
+
+- name: Use loadbalancer as origin when defined
+  set_fact:
+    origin_host: "{{ groups['jbcs'][0] }}"
+  when: groups['jbcs'] is defined and groups['jbcs'][0]|length > 0
+
 - include_tasks: demo_urls_redirects/main.yml
 
 - set_fact:
-    keycloak_flange_client: "{{ keycloak_flange_client | combine ( { 'web_origins': demo_app_redirect_uris } ) }}"
+    keycloak_flange_client: "{{ keycloak_flange_client | combine ( { 'web_origins': demo_app_redirect_uris, 'redirect_uris': 'https://'+origin_host+demo_app_endpoint+'/*' } ) }}"
 
 - name: Create demo realm and client
   include_role:

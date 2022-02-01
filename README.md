@@ -18,7 +18,7 @@ First of all, you'll need to install the [JCliff Ansible collection](https://git
 Ansible groups are used to define the Keycloak and Wildfly instances. Configure these groups in the [hosts](inventory/hosts) file similar to the following:
 
 ```
-[threetrains]
+[flange]
 
 [wildfly]
 192.168.22.4
@@ -26,7 +26,7 @@ Ansible groups are used to define the Keycloak and Wildfly instances. Configure 
 [keycloak]
 192.168.22.5
 
-[threetrains:children]
+[flange:children]
 wildfly
 keycloak
 ```
@@ -50,7 +50,7 @@ where XXXX is the customer portal product ID for the version needed (ie. 99481 i
 
 That's all! You can now run the playbook to set up the demo:
 
-    $ ansible-playbook -e @rhn-creds.yml -i inventory/ playbooks/demo.yml
+    $ ansible-playbook -e @rhn-creds.yml -i inventory/demo playbooks/demo.yml
 
 ### Execution in a podman container
 
