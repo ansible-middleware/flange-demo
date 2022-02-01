@@ -22,6 +22,7 @@
     immediate: yes
   loop:
     - "80/tcp"
+    - "443/tcp"    
     - "6666/tcp"
   loop_control:
     loop_var: port

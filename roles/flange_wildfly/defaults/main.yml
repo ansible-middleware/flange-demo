@@ -1,42 +1,32 @@
 ---
-wildfly_version: '26.0.0.Final'
-eap_version: '7.4'
-
-wildfly_install_workdir: "{{ wildfly_home_default if jboss_eap_rhn_id is not defined or jboss_eap_rhn_id == 'none' else eap_home_default }}"
-
-wildfly_home_default: "{{ workdir }}/wildfly-{{ wildfly_version }}/"
-eap_home_default: "{{ workdir }}/jboss-eap-{{ eap_version }}/"
-home_default: "{{ wildfly_home_default if jboss_eap_rhn_id is not defined or jboss_eap_rhn_id == 'none' else eap_home_default }}"
-
-sample_app_version: "{{ sample_app_version_to_deploy | default('1.1.2') }}"
+wildfly_version: '26.0.1.Final'
+sample_app_version: "{{ sample_app_version_to_deploy | default('1.0.4') }}"
 gdrive_url: 'https://drive.google.com/uc?export=download&id='
 apps:
-  - name: kitchensink
+  - name: addressbook
     extension: war
-    version: "1.1.1"
-    url: "https://github.com/ansible-middleware/addressbook/releases/download/1.0.2/addressbook.war"
-  - name: kitchensink
-    extension: war
-    version: "1.1.2"
-    url: "https://github.com/ansible-middleware/addressbook/releases/download/1.1.2/addressbook.war"
+    version: "{{ sample_app_version }}"
+    url: "https://github.com/ansible-middleware/addressbook/releases/download/{{ sample_app_version }}/addressbook.war"
   - name: info
     extension: war
     version: '1.1'
     url: "{{ gdrive_url }}1w9ss5okctnjUvRAxhPEPyC7DmbUwmbhb"
 app_dir: /opt/apps/
-workdir: "{{ '/opt/wildfly/' if jboss_eap_rhn_id is not defined or jboss_eap_rhn_id == 'none' else '/opt/jboss-eap/' }}"
 
-keycloak_adapter_version: '15.0.2'
-keycloak_download_url: "https://github.com/keycloak/keycloak/releases/download/{{ keycloak_adapter_version }}/keycloak-oidc-wildfly-adapter-{{ keycloak_adapter_version }}.zip"
+
+keycloak_adapter_version: '9.0.3'
+keycloak_download_url: "https://downloads.jboss.org/keycloak/{{ keycloak_adapter_version }}/adapters/keycloak-oidc/keycloak-wildfly-adapter-dist-{{ keycloak_adapter_version }}.tar.gz"
+keycloak_adapter_version12: '15.0.2'
+keycloak_download_url12: "https://github.com/keycloak/keycloak/releases/download/{{ keycloak_adapter_version }}/keycloak-oidc-wildfly-adapter-{{ keycloak_adapter_version }}.zip"
 
 java:
   home: "{{ override_widlfy_jvm | default('/usr/lib/jvm/java-1.8.0') }}"
 
 disable_keycloak: False
-enable_rhsso: "{{ True if jboss_eap_rhn_id is not defined else False }}"
+enable_rhsso: True
 
 wildfly:
-  home: "{{ override_wildfly_home | default(home_default) }}"
+  home: "/opt/wildfly/jboss-eap-7.4/"
   user: wildfly
   group: wildfly
   bind_addr: "{{ override_wildfly_bind_addr | default(ansible_nodename) }}"
@@ -62,7 +52,6 @@ jdbc_driver_default_version: 9.4.1212
 jdbc_driver_jar_filename: "postgresql-{{ jdbc_driver_version }}.jar"
 jdbc_driver_jar_url: "https://repo.maven.apache.org/maven2/org/postgresql/postgresql/{{ jdbc_driver_version }}/{{ jdbc_driver_jar_filename }}"
 jdbc_driver_jar_installation_path: "{{ jdbc_driver_module_dir }}/{{ jdbc_driver_jar_filename }}"
-ansible_distribution: Fedora
 jcliff_rules_dir: /usr/share/jcliff/rules
 keycloak_auth_client: admin-cli
 keycloak_admin_user: admin
