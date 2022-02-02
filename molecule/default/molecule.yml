@@ -16,11 +16,11 @@ platforms:
       pgsql-0: "127.0.0.1"
       jdg-1: "127.0.0.1"
       keycloak-0: "127.0.0.1"
-    groups:
-      - wildfly
-      - keycloak
-      - jdg
-      - pgsql
+#    groups:
+#      - wildfly
+#      - keycloak
+#      - jdg
+#      - pgsql
 #    port_bindings:
 #      - "8080/tcp"
 #      - "8443/tcp"
