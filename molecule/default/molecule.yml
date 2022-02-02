@@ -7,29 +7,29 @@ driver:
   name: docker
 platforms:
   - name: instance
-#    image: centos:8
-#    privileged: true
-#    command: "/usr/sbin/init"
-#    etc_hosts:
-#      jbcs-0: "127.0.0.1"
-#      wfly-1: "127.0.0.1"
-#      pgsql-0: "127.0.0.1"
-#      jdg-1: "127.0.0.1"
-#      keycloak-0: "127.0.0.1"
-#    groups:
-#      - wildfly
-#      - keycloak
-#      - jdg
-#      - pgsql
-#    port_bindings:
-#      - "8080/tcp"
-#      - "8443/tcp"
-#      - "8009/tcp"
-#      - "11222/tcp"
-#      - "5432/tcp"
-#      - "8280/tcp"
-#      - "8643/tcp"
-#      - "8209/tcp"
+    image: centos:8
+    privileged: true
+    command: "/usr/sbin/init"
+    etc_hosts:
+      jbcs-0: "127.0.0.1"
+      wfly-1: "127.0.0.1"
+      pgsql-0: "127.0.0.1"
+      jdg-1: "127.0.0.1"
+      keycloak-0: "127.0.0.1"
+    groups:
+      - wildfly
+      - keycloak
+      - jdg
+      - pgsql
+    port_bindings:
+      - "8080/tcp"
+      - "8443/tcp"
+      - "8009/tcp"
+      - "11222/tcp"
+      - "5432/tcp"
+      - "8280/tcp"
+      - "8643/tcp"
+      - "8209/tcp"
 provisioner:
   name: ansible
   playbooks:
