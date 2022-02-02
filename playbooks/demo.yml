@@ -6,6 +6,8 @@
 
 # JBoss Core Services (Apache HTTPD)
 - import_playbook: jbcs.yml
+  when:
+    - rhn_username is defined
 
 # Datagrid Playbook
 - import_playbook: jdg.yml

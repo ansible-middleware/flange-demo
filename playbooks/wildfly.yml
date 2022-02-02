@@ -1,6 +1,8 @@
 ---
 - name: Playbook for Wildfly Hosts
   hosts: wildfly
+  vars:
+    wildfly_home: /opt/wildfly/wildfly-26.0.1.Final
   collections:
     - middleware_automation.jcliff
     - middleware_automation.wildfly

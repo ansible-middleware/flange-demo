@@ -26,7 +26,7 @@ disable_keycloak: False
 enable_rhsso: True
 
 wildfly:
-  home: "/opt/wildfly/jboss-eap-7.4/"
+  home: "{{ override_wildfly_home | default('/opt/wildfly/jboss-eap-7.4/') }}"
   user: wildfly
   group: wildfly
   bind_addr: "{{ override_wildfly_bind_addr | default(ansible_nodename) }}"

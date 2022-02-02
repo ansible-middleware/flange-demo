@@ -23,6 +23,13 @@
           Authorization: "Bearer {{ keycloak_auth_response.json.access_token }}"
       register: keycloak_client_response
 
+    - assert:
+        that:
+          - keycloak_client_response is defined
+          - keycloak_client_response.json
+        quiet: yes
+        fail_msg: "Invalid answers from {{ keycloak_url }}/auth/admin/realms/{{ keycloak_realm }}/clients"
+
     - name: "Get Client Secret"
       uri:
         url: "{{ keycloak_url }}/auth/admin/realms/{{ keycloak_realm }}/clients/{{ (keycloak_client_response.json | selectattr('clientId', 'equalto', keycloak_client) | list | first).id }}/client-secret"
