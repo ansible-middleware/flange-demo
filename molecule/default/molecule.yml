@@ -8,8 +8,8 @@ driver:
 platforms:
   - name: instance
     image: centos:8
-    privileged: true
-    command: "/usr/sbin/init"
+      #    privileged: true
+      #command: "/usr/sbin/init"
     etc_hosts:
       jbcs-0: "127.0.0.1"
       wfly-1: "127.0.0.1"
