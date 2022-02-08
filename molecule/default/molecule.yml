@@ -6,7 +6,7 @@ driver:
   name: docker
 platforms:
   - name: instance
-    image: centos:8
+    image: rockylinux:8
     privileged: true
     command: "/usr/sbin/init"
     etc_hosts:
@@ -60,7 +60,7 @@ scenario:
     - create
     - prepare
     - converge
-    # -   idempotence
+    - idempotence
     - side_effect
     - verify
     - cleanup
