@@ -20,13 +20,13 @@ keycloak_adapter_version12: '15.0.2'
 keycloak_download_url12: "https://github.com/keycloak/keycloak/releases/download/{{ keycloak_adapter_version }}/keycloak-oidc-wildfly-adapter-{{ keycloak_adapter_version }}.zip"
 
 java:
-  home: "{{ override_widlfy_jvm | default('/usr/lib/jvm/java-1.8.0') }}"
+  home: "{{ override_wildfly_jvm | default('/usr/lib/jvm/java-1.8.0') }}"
 
 disable_keycloak: False
 enable_rhsso: True
 
 wildfly:
-  home: "/opt/wildfly/jboss-eap-7.4/"
+  home: "{{ '/opt/wildfly/jboss-eap-7.4/' if rhn_username is defined and rhn_password is defined else '/opt/wildfly/wildfly-26.0.0.Final/' }}"
   user: wildfly
   group: wildfly
   bind_addr: "{{ override_wildfly_bind_addr | default(ansible_nodename) }}"
