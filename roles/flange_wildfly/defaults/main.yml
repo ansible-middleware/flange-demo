@@ -26,7 +26,7 @@ disable_keycloak: False
 enable_rhsso: True
 
 wildfly:
-  home: "{{ '/opt/wildfly/jboss-eap-7.4/' if rhn_username is defined and rhn_password is defined else '/opt/wildfly/wildfly-26.0.0.Final/' }}"
+  home: "{{ '/opt/wildfly/jboss-eap-7.4/' if rhn_username is defined and rhn_password is defined else '/opt/wildfly/wildfly-26.0.1.Final/' }}"
   user: wildfly
   group: wildfly
   bind_addr: "{{ override_wildfly_bind_addr | default(ansible_nodename) }}"
