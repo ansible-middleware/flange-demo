@@ -1,6 +1,6 @@
 ---
 wildfly_version: '26.0.1.Final'
-sample_app_version: "{{ sample_app_version_to_deploy | default('1.0.4') }}"
+sample_app_version: "{{ '1.0.4' if rhn_username is defined and rhn_password is defined else '1.1.2' }}"
 gdrive_url: 'https://drive.google.com/uc?export=download&id='
 apps:
   - name: addressbook
