@@ -12,5 +12,6 @@ collections:
     version: ">=0.0.5"
   - name: community.general
   - name: community.postgresql
+  - name: ansible.posix
   - name: community.docker
     version: ">=1.9.1"

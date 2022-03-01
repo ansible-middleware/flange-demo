@@ -12,3 +12,4 @@ collections:
     version: ">=0.0.5"
   - name: community.general
   - name: community.postgresql
+  - name: ansible.posix
