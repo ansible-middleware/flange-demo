@@ -8,12 +8,12 @@
     quiet: true
 
 - set_fact:
-    wildfly_instance_port: "{{ 9990 + ((item - wildfly.port_range_offset) * 100) }}"
+    wildfly_instance_port: "{{ 9990 + (item * 100) }}"
 
 - set_fact:
     jboss_cli: "{{ wildfly.home }}/bin/jboss-cli.sh -c --controller=localhost:{{ wildfly_instance_port }}"
 
-- name: Wait for wildfly port
+- name: "Wait for wildfly port {{wildfly_instance_port|int}}"
   wait_for:
     port: "{{wildfly_instance_port|int}}"
     host: localhost
