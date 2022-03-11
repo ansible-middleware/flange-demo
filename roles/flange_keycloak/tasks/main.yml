@@ -1,10 +1,5 @@
 ---
 # tasks file for keycloak
-- name: Include keycloak firewall tasks
-  include_role:
-    name: keycloak
-    tasks_from: firewalld
-
 - name: Include keycloak install role
   include_role:
     name: keycloak

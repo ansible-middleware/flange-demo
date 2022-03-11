@@ -3,6 +3,7 @@ keycloak_ha_enabled: True
 keycloak_modcluster_url: jbcs-0
 keycloak_frontend_url: "https://{{keycloak_modcluster_url}}/auth"
 admin_pass: "redhat1!"
+keycloak_configure_firewalld: True
 
 infinispan_url: jdg-1
 infinispan_user: keycloak
