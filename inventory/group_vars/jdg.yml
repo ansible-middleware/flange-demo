@@ -6,7 +6,8 @@ jdg_jdbc_user: keycloak-user
 jdg_jdbc_pass: keycloak-pass
 jdg_jdbc_driver_version: 9.4.1212
 jdg_version: '8.2.3'
-admin_pass: admin_password
+jdg_configure_firewalld: True
+admin_pass: admin_password16
 user_accounts:
   - { name: 'ggraziol', password: 'admin', roles: 'deployer' }
   - { name: 'rpelisse', password: 'admin', roles: 'observer' }

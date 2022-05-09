@@ -55,7 +55,7 @@ jdbc_driver_jar_installation_path: "{{ jdbc_driver_module_dir }}/{{ jdbc_driver_
 jcliff_rules_dir: /usr/share/jcliff/rules
 keycloak_auth_client: admin-cli
 keycloak_admin_user: admin
-keycloak_admin_password: "redhat1!"
+keycloak_admin_password: "admin_password16"
 keycloak_realm: flange
 keycloak_url: "{{ keycloak_flange_url | default('http://keycloak-0:8080') }}"
 keycloak_redirect_url: "{{ keycloak_flange_redirect_url | default('https://jbcs-0') }}"

@@ -5,6 +5,8 @@
     - middleware_automation.redhat_csp_download
   roles:
     - redhat_csp_download
+    - name: keycloak
+      keycloak_admin_password: "{{ admin_pass }}"
   tasks:
     - name: Keycloak Role
       include_role:

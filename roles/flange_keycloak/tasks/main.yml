@@ -1,9 +1,4 @@
 ---
-# tasks file for keycloak
-- name: Include keycloak install role
-  include_role:
-    name: keycloak
-
 - set_fact:
     demo_app_redirect_uris: []
     origin_host: localhost
