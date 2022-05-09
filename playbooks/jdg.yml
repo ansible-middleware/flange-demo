@@ -6,16 +6,12 @@
     - middleware_automation.infinispan
   roles:
     - redhat_csp_download
-    - name: infinispan
+    - role: infinispan
       supervisor_password: "{{ admin_pass }}"
       infinispan_users: "{{ user_accounts }}"
-  tasks:
-    - name: "Create kitchensink cache"
-      include_role:
-        name: infinispan_cache
-      vars:
-        deployer_password: "{{ admin_pass }}"
-        cache_xml: >
-             <local-cache name="kitchensink_sql_cache" statistics="true">
-               <encoding media-type="application/x-protostream"/>
-             </local-cache>
+    - role: infinispan_cache
+      deployer_password: "{{ admin_pass }}"
+      cache_xml: >
+           <local-cache name="kitchensink_sql_cache" statistics="true">
+             <encoding media-type="application/x-protostream"/>
+           </local-cache>

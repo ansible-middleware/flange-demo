@@ -3,15 +3,12 @@
   hosts: keycloak
   collections:
     - middleware_automation.redhat_csp_download
+    - middleware_automation.keycloak
   roles:
     - redhat_csp_download
-    - name: keycloak
+    - role: keycloak
       keycloak_admin_password: "{{ admin_pass }}"
-  tasks:
-    - name: Keycloak Role
-      include_role:
-        name: flange_keycloak
-      vars:
-        keycloak_admin_password: "{{ admin_pass }}"
-        keycloak_clients:
-          - "{{ keycloak_flange_client }}"
+    - role: flange_keycloak
+      keycloak_admin_password: "{{ admin_pass }}"
+      keycloak_clients:
+        - "{{ keycloak_flange_client }}"
