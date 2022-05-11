@@ -1,7 +1,7 @@
-Three trains in the night...
-====
+Flange-demo: middleware integration
+===================================
 
-This repository contains a set of Ansible based roles and playbooks to demonstrate the integration between a [Wildfly](https://wildfly.org/) cluster with an application deployed and secured using [Keycloak](https://www.keycloak.org/) and built using [JCliff Ansible collection](https://github.com/wildfly-extras/ansible_collections_jcliff), and demonstrating integration with postgresql and datagrid. Note that currently it is a work in progress, the playbooks is not fully functional (yet)!
+This repository contains a set of Ansible based roles and playbooks to demonstrate the integration between a [Wildfly](https://wildfly.org/) cluster with an application deployed and secured using [Keycloak](https://www.keycloak.org/) and built using [JCliff Ansible collection](https://github.com/wildfly-extras/ansible_collections_jcliff), and demonstrating integration with postgresql and datagrid. 
 
 ## Set up
 
@@ -9,9 +9,18 @@ The following sections describe the steps necessary to prepare your machine for 
 
 ### JCliff Integration
 
-First of all, you'll need to install the [JCliff Ansible collection](https://github.com/middleware_automation/ansible_collections_jcliff), and a few other dependencies:
+First of all, you'll need to install the collection from middleware_automation and their dependencies:
 
+- [JCliff](https://github.com/middleware_automation/ansible_collections_jcliff)
+- [Wildfly](https://github.com/middleware_automation/wildfly)
+- [Keycloak](https://github.com/middleware_automation/keycloak)
+- [Infinispan](https://github.com/middleware_automation/infinispan)
+
+Install via:
+
+    $ pip install -r requirements.txt
     $ ansible-galaxy collection install -r requirements.yml
+
 
 ### Ansible Inventory
 
@@ -39,14 +48,6 @@ Create a `rhn-creds.yml` file containing your RHN account credentials, needed to
 rhn_username: '...'
 rhn_password: '...'
 ```
-
-If you wish to install JBoss EAP instead of wildfly, also add:
-
-```
-jboss_eap_rhn_id: 'XXXX'
-```
-
-where XXXX is the customer portal product ID for the version needed (ie. 99481 is 7.4).
 
 That's all! You can now run the playbook to set up the demo:
 
