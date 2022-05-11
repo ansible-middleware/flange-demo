@@ -34,8 +34,6 @@ provisioner:
   config_options:
     defaults:
       interpreter_python: auto_silent
-    ssh_connection:
-      pipelining: false
   playbooks:
     prepare: prepare.yml
     converge: converge.yml
