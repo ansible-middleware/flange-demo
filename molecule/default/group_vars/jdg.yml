@@ -5,7 +5,7 @@ jdg_jdbc_url: jdbc:postgresql://pgsql-0:5432/keycloak
 jdg_jdbc_user: keycloak-user
 jdg_jdbc_pass: keycloak-pass
 jdg_jdbc_driver_version: 9.4.1212
-jdg_configure_firewalld: True
+jdg_configure_firewalld: False
 admin_pass: admin_password16
 user_accounts:
   - { name: 'ggraziol', password: 'admin', roles: 'deployer' }

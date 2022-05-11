@@ -7,12 +7,5 @@
     - middleware_automation.redhat_csp_download
   roles:
     - redhat_csp_download
-
-  tasks:
-    - name: JCliff
-      include_role:
-        name: jcliff
-
-    - name: Wildfly/EAP Role
-      include_role:
-        name: flange_wildfly
+    - jcliff
+    - flange_wildfly
