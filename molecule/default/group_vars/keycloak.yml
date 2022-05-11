@@ -1,0 +1,49 @@
+---
+keycloak_ha_enabled: True
+keycloak_modcluster_url: jbcs-0
+keycloak_frontend_url: "https://{{keycloak_modcluster_url}}/auth"
+admin_pass: "admin_password16"
+keycloak_configure_firewalld: False
+
+infinispan_url: jdg-1
+infinispan_user: keycloak
+infinispan_pass: keycloakpassword
+
+keycloak_jdbc_url: jdbc:postgresql://pgsql-0:5432/keycloak
+keycloak_db_user: keycloak-user
+keycloak_db_pass: keycloak-pass
+
+# Demo Realm and App
+keycloak_flange_realm: flange
+keycloak_flange_client_name: flange
+keycloak_flange_admin_role: flangeadmin
+keycloak_flange_user_role: flangeuser
+
+demo_app_endpoint: "/addressbook"
+keycloak_flange_client:
+  name: "{{ keycloak_flange_client_name }}"
+  client_id: "{{ keycloak_flange_client_name }}"
+  roles:
+    - "{{ keycloak_flange_user_role }}"
+    - "{{ keycloak_flange_admin_role }}"
+  realm: "{{ keycloak_flange_realm }}"
+  public_client: True
+  web_origins: '+'
+  users: "{{ keycloak_flange_users }}"
+
+keycloak_flange_users:
+  - username: flangeadmin
+    password: password
+    client_roles:
+      - client: "{{ keycloak_flange_client_name }}"
+        role: "{{ keycloak_flange_admin_role }}"
+        realm: "{{ keycloak_flange_realm }}"
+      - client: "{{ keycloak_flange_client_name }}"
+        role: "{{ keycloak_flange_user_role }}"
+        realm: "{{ keycloak_flange_realm }}"
+  - username: flangeuser
+    password: password
+    client_roles:
+      - client: "{{ keycloak_flange_client_name }}"
+        role: "{{ keycloak_flange_user_role }}"
+        realm: "{{ keycloak_flange_realm }}"

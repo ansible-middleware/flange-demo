@@ -6,3 +6,5 @@
 lxml
 jmespath
 netaddr
+psycopg
+

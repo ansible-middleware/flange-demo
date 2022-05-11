@@ -9,9 +9,13 @@
     - role: infinispan
       supervisor_password: "{{ admin_pass }}"
       infinispan_users: "{{ user_accounts }}"
-    - role: infinispan_cache
-      deployer_password: "{{ admin_pass }}"
-      cache_xml: >
-           <local-cache name="kitchensink_sql_cache" statistics="true">
-             <encoding media-type="application/x-protostream"/>
-           </local-cache>
+  tasks:
+    - include_role:
+        name: infinispan_cache
+      vars:
+        deployer_password: "{{ admin_pass }}"
+        cache_xml: >
+             <local-cache name="kitchensink_sql_cache" statistics="true">
+               <encoding media-type="application/x-protostream"/>
+             </local-cache>
+
