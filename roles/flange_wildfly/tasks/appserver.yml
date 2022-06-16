@@ -13,7 +13,7 @@
     wildfly_basedir_prefix: "/opt/{{ inventory_hostname }}"
     wildfly_config_name: "{{ inventory_hostname }}"
     wildfly_instance_name: "{{ inventory_hostname }}"
-    instance_id: "{{ item }}"
+    wildfly_instance_id: "{{ item }}"
     service_systemd_env_file: "/etc/eap-{{ item }}.conf"
     service_systemd_conf_file: "/usr/lib/systemd/system/{{ inventory_hostname }}-{{ item }}.service"
 
