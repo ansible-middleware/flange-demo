@@ -1,15 +1,17 @@
 ---
-jdg_url: http://localhost:11222
-jdg_jdbc_engine: postgres
-jdg_jdbc_url: jdbc:postgresql://pgsql-0:5432/keycloak
-jdg_jdbc_user: keycloak-user
-jdg_jdbc_pass: keycloak-pass
-jdg_jdbc_driver_version: 9.4.1212
-jdg_configure_firewalld: False
+infinispan_bind_address: localhost
+infinispan_port: 11222
+infinispan_jdbc_engine: postgres
+infinispan_jdbc_url: jdbc:postgresql://pgsql-0:5432/keycloak
+infinispan_jdbc_user: keycloak-user
+infinispan_jdbc_pass: keycloak-pass
+infinispan_jdbc_driver_version: 9.4.1212
+infinispan_configure_firewalld: False
 admin_pass: admin_password16
 user_accounts:
   - { name: 'ggraziol', password: 'admin', roles: 'deployer' }
   - { name: 'rpelisse', password: 'admin', roles: 'observer' }
   - { name: 'kitchensink', password: 'kspasswordks', roles: 'application' }
   - { name: 'keycloak', password: 'keycloakpassword', roles: 'application' }
-infinispan_keycloak_caches: True
+infinispan_keycloak_caches: False
+infinispan_healthcheck: True

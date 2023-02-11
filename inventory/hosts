@@ -3,9 +3,13 @@
 
 # Wildfly Group
 [wildfly]
+instance
 [keycloak]
+instance
 [jdg]
+instance
 [pgsql]
+instance
 
 [flange:children]
 wildfly

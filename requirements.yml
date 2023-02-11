@@ -1,15 +1,15 @@
 ---
 collections:
   - name: middleware_automation.jcliff
-    version: ">=0.0.21"
+    version: ">=0.0.23"
   - name: middleware_automation.redhat_csp_download
-    version: ">=1.2.1"
+    version: ">=1.2.2"
   - name: middleware_automation.infinispan
-    version: ">=1.0.3"
+    version: ">=1.1.2"
   - name: middleware_automation.keycloak
-    version: ">=1.0.4"
+    version: ">=1.0.7"
   - name: middleware_automation.wildfly
-    version: ">=0.0.5"
+    version: ">=1.2.1"
   - name: community.general
   - name: community.postgresql
   - name: ansible.netcommon

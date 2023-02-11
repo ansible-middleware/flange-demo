@@ -7,15 +7,14 @@
   roles:
     - redhat_csp_download
     - role: infinispan
-      supervisor_password: "{{ admin_pass }}"
+      infinispan_supervisor_password: "{{ admin_pass }}"
       infinispan_users: "{{ user_accounts }}"
   tasks:
     - include_role:
         name: infinispan_cache
       vars:
-        deployer_password: "{{ admin_pass }}"
-        cache_xml: >
+        infinispan_deployer_password: "{{ admin_pass }}"
+        infinispan_cache_xml: >
              <local-cache name="kitchensink_sql_cache" statistics="true">
                <encoding media-type="application/x-protostream"/>
              </local-cache>
-

@@ -1,5 +1,5 @@
 ---
-wildfly_version: '26.0.1.Final'
+wildfly_version: '27.0.0.Final'
 sample_app_version: "{{ '1.0.4' if rhn_username is defined and rhn_password is defined else '1.1.2' }}"
 gdrive_url: 'https://drive.google.com/uc?export=download&id='
 apps:
@@ -14,19 +14,19 @@ apps:
 app_dir: /opt/apps/
 
 
-keycloak_adapter_version: '9.0.3'
+keycloak_adapter_version: '9.0.2'
 keycloak_download_url: "https://downloads.jboss.org/keycloak/{{ keycloak_adapter_version }}/adapters/keycloak-oidc/keycloak-wildfly-adapter-dist-{{ keycloak_adapter_version }}.tar.gz"
-keycloak_adapter_version12: '15.0.2'
+keycloak_adapter_version12: '15.0.8'
 keycloak_download_url12: "https://github.com/keycloak/keycloak/releases/download/{{ keycloak_adapter_version }}/keycloak-oidc-wildfly-adapter-{{ keycloak_adapter_version }}.zip"
 
 java:
-  home: "{{ override_wildfly_jvm | default('/usr/lib/jvm/java-1.8.0') }}"
+  home: "{{ override_wildfly_jvm | default('/usr/lib/jvm/java-11') }}"
 
 disable_keycloak: False
 enable_rhsso: True
 
 wildfly:
-  home: "{{ '/opt/wildfly/jboss-eap-7.4/' if rhn_username is defined and rhn_password is defined else '/opt/wildfly/wildfly-26.0.1.Final/' }}"
+  home: "{{ '/opt/wildfly/jboss-eap-7.4/' if rhn_username is defined and rhn_password is defined else '/opt/wildfly/wildfly-27.0.0.Final/' }}"
   user: wildfly
   group: wildfly
   bind_addr: "{{ override_wildfly_bind_addr | default(ansible_nodename) }}"

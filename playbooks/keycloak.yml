@@ -8,7 +8,7 @@
     - redhat_csp_download
     - role: keycloak
       keycloak_admin_password: "{{ admin_pass }}"
-    - role: flange_keycloak
+    - role: keycloak_realm
       keycloak_admin_password: "{{ admin_pass }}"
       keycloak_clients:
         - "{{ keycloak_flange_client }}"

@@ -5,6 +5,7 @@
     state: present
 
 - name: "Fine tuning configuration: {{ instance_name | default('localhost') }}"
+  when: rhn_username is defined
   jcliff:
     wfly_home: "{{ wildfly.home }}"
     rule_file: roles/flange_wildfly/files/custom/
