@@ -1,13 +1,15 @@
 ---
-keycloak_ha_enabled: True
+keycloak_jvm_package: java-1.8.0-openjdk-headless
+keycloak_version: 18.0.2
+keycloak_ha_enabled: False
 keycloak_modcluster_url: jbcs-0
 keycloak_frontend_url: "https://{{keycloak_modcluster_url}}/auth"
 admin_pass: "admin_password16"
 keycloak_configure_firewalld: False
 
-infinispan_url: jdg-1
-infinispan_user: keycloak
-infinispan_pass: keycloakpassword
+keycloak_infinispan_url: jdg-1
+keycloak_infinispan_user: keycloak
+keycloak_infinispan_pass: keycloakpassword
 
 keycloak_jdbc_url: jdbc:postgresql://pgsql-0:5432/keycloak
 keycloak_db_user: keycloak-user

@@ -1,2 +1,2 @@
 ---
-jvm_package: java-1.8.0-openjdk-devel
+jvm_package: java-11-openjdk-headless

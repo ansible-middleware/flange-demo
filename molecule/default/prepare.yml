@@ -5,7 +5,7 @@
     - name: Install required packages
       yum:
         use_backend: dnf
-        name: 
+        name:
           - sudo
           - iproute
           - net-tools
@@ -19,3 +19,7 @@
         name:
           - systemd
         state: latest
+
+    - ansible.builtin.file:
+        state: directory
+        path: "/opt/keycloak/keycloak-{{ keycloak_version }}/standalone/configuration"

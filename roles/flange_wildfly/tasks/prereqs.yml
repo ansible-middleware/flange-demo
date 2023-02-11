@@ -3,7 +3,7 @@
     required_packages:
     - procps-ng
     - initscripts
-    - "{{ jvm_package | default('java-1.8.0-openjdk-devel') }}"
+    - "{{ jvm_package | default('java-11-openjdk-headless') }}"
     - firewalld
 
 - name: "Ensures required packages are installed"

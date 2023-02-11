@@ -35,3 +35,4 @@
       register: keycloak_client_secret_response
   when:
     - not disable_keycloak
+    - rhn_username is defined
