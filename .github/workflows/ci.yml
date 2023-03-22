@@ -33,6 +33,16 @@ jobs:
           pip install ansible-base==2.10.17 yamllint 'molecule[docker]~=3.5.2' ansible-compat==2.0.2 ansible-core netaddr flake8 ansible-lint voluptuous
           pip install -r requirements.txt
 
+      - name: Create default collection path
+        run: |
+          mkdir -p /home/runner/.ansible/collections/ansible_collections
+
+      - name: Install ansible-lint custom rules
+        uses: actions/checkout@v2
+        with:
+          repository: ansible-middleware/ansible-lint-custom-rules
+          path: ansible_collections/ansible-lint-custom-rules/
+
       - name: Run molecule test
         run: molecule test
         env:

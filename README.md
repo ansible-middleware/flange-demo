@@ -1,5 +1,6 @@
 Flange-demo: middleware integration
 ===================================
+[![CI](https://github.com/ansible-middleware/flange-demo/actions/workflows/ci.yml/badge.svg)](https://github.com/ansible-middleware/flange-demo/actions/workflows/ci.yml)
 
 This repository contains a set of Ansible based roles and playbooks to demonstrate the integration between a [Wildfly](https://wildfly.org/) cluster with an application deployed and secured using [Keycloak](https://www.keycloak.org/) and built using [JCliff Ansible collection](https://github.com/wildfly-extras/ansible_collections_jcliff), and demonstrating integration with postgresql and datagrid. 
 
