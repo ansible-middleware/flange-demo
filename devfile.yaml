@@ -1,0 +1,36 @@
+schemaVersion: 2.1.0
+
+metadata:
+  name: flange-demo
+attributes:
+  controller.devfile.io/storage-type: ephemeral
+
+projects:
+  - name: flange-demo
+    git:
+      remotes:
+        origin: "https://github.com/ansible-middleware/flange-demo.git"
+
+components:
+  - name: tooling-container
+    container:
+      image: ghcr.io/ansible/ansible-workspace-env-reference:v24.6.3
+      memoryRequest: 256M
+      memoryLimit: 6Gi
+      cpuRequest: 250m
+      cpuLimit: 2000m
+      args: ['tail', '-f', '/dev/null']
+      env:
+        - name: 'ANSIBLE_COLLECTIONS_PATH'
+          value: '~/.ansible/collections:/usr/share/ansible/collections:/projects/ansible-devspaces-demo/collections'
+
+commands:
+  - id: install-requirements
+    exec:
+      component: tooling-container
+      commandLine: "ansible-galaxy install -r molecule/default/requirements.yml"
+      workingDir: "${PROJECTS_ROOT}/flange-demo"
+      label: Install required collections.
+events:
+  postStart:
+    - "install-requirements"
