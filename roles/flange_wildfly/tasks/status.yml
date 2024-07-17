@@ -1,19 +1,19 @@
 ---
-- assert:
+- ansible.builtin.assert:
     that:
       - nb_instances is defined
     quiet: true
 
-- set_fact:
+- ansible.builtin.set_fact:
     service_name: "{{ override_instance_prefix | default('wfly-') }}{{ item }}"
   when: item is defined
 
-- set_fact:
+- ansible.builtin.set_fact:
     service_name: "wfly"
   when: not service_name is defined
 
 - block:
-  - command: "systemctl status {{ service_name }}"
+  - ansible.builtin.command: "systemctl status {{ service_name }}"
     register: wfly_status_res
     changed_when: false
   rescue:
@@ -22,17 +22,17 @@
       when: debug_status is defined
 
 - block:
-    - set_fact:
+    - ansible.builtin.set_fact:
         status_result: "{{ ansible_nodename }} : service {{ service_name }} is running"
       when:
         - wfly_status_res.rc == 0
 
-    - set_fact:
+    - ansible.builtin.set_fact:
         status_result: "{{ ansible_nodename }} : service {{ service_name }} is NOT running"
       when:
         - wfly_status_res.rc != 0
 
-    - set_fact:
+    - ansible.builtin.set_fact:
         status_report: "{{ status_report }} + ['{{ status_result }}']"
   when:
     - wfly_status_res is defined

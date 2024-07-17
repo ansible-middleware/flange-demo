@@ -30,7 +30,7 @@
         - ansible_facts['virtualization_type'] not in ['docker','oci','containerd','podman']
 
     - name: "Ensure that OS has the required packages installed"
-      include_role:
+      ansible.builtin.include_role:
         name: flange_fastpackages
       vars:
         packages_list:

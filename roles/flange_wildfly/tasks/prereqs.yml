@@ -1,21 +1,31 @@
 ---
-- set_fact:
+- ansible.builtin.set_fact:
     required_packages:
     - procps-ng
     - initscripts
     - "{{ jvm_package | default('java-11-openjdk-headless') }}"
     - firewalld
+    - nftables
+    - iptables
+    - python3-firewall
+    - python3-pip
+    - python3-virtualenv
+    - python3-setuptools
 
 - name: "Ensures required packages are installed"
-  include_role:
+  ansible.builtin.include_role:
     name: flange_fastpackages
   vars:
     packages_list: "{{ required_packages }}"
 
+- name: Install python-nftables from Git repository
+  become: yes
+  ansible.builtin.pip:
+    name: 'git+https://salsa.debian.org/pkg-netfilter-team/pkg-nftables#egg=nftables&subdirectory=py'
+
 - name: enable and start the firewalld service
   become: yes
-  systemd:
+  ansible.builtin.systemd:
     name: firewalld
     enabled: yes
     state: started
-

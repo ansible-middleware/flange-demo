@@ -1,5 +1,13 @@
 ---
-wildfly_version: '27.0.0.Final'
+wildfly_version: '32.0.0.Final'
+wildfly_install_workdir: '/opt/wildfly/'
+wildfly_home: '{{ wildfly_install_workdir }}wildfly-{{ wildfly_version }}/'
+wildfly_java_home: '/usr/lib/jvm/jre-openjdk/'
+wildfly_java_package_name: java-11-openjdk-headless
+wildfly_user: 'wildfly'
+wildfly_group: "{{ wildfly_user }}"
+wildfly_enable_yml_config: True
+wildfly_yml_configs: [ wildfly_ymlconfig.yml.j2 ]
 sample_app_version: "{{ '1.0.4' if rhn_username is defined and rhn_password is defined else '1.1.2' }}"
 gdrive_url: 'https://drive.google.com/uc?export=download&id='
 apps:
@@ -26,7 +34,7 @@ disable_keycloak: False
 enable_rhsso: True
 
 wildfly:
-  home: "{{ '/opt/wildfly/jboss-eap-7.4/' if rhn_username is defined and rhn_password is defined else '/opt/wildfly/wildfly-27.0.0.Final/' }}"
+  home: "{{ '/opt/wildfly/jboss-eap-7.4/' if rhn_username is defined and rhn_password is defined else '/opt/wildfly/wildfly-32.0.0.Final/' }}"
   user: wildfly
   group: wildfly
   bind_addr: "{{ override_wildfly_bind_addr | default(ansible_nodename) }}"
@@ -46,13 +54,12 @@ postgres:
     name: wildfly
     password: wildfly
 
-# can't use a structure for the jdbc_driver because of the interpolation between variables.
-jdbc_driver_module_dir: "{{ wildfly.home }}/modules/org/postgresql/main"
-jdbc_driver_default_version: 9.4.1212
-jdbc_driver_jar_filename: "postgresql-{{ jdbc_driver_version }}.jar"
-jdbc_driver_jar_url: "https://repo.maven.apache.org/maven2/org/postgresql/postgresql/{{ jdbc_driver_version }}/{{ jdbc_driver_jar_filename }}"
-jdbc_driver_jar_installation_path: "{{ jdbc_driver_module_dir }}/{{ jdbc_driver_jar_filename }}"
-jcliff_rules_dir: /usr/share/jcliff/rules
+# can't use a structure for the wildfly_driver because of the interpolation between variables.
+wildfly_driver_module_dir: "{{ wildfly.home }}/modules/org/postgresql/main"
+wildfly_driver_default_version: 9.4.1212
+wildfly_driver_jar_filename: "postgresql-{{ wildfly_driver_default_version }}.jar"
+wildfly_driver_jar_url: "https://repo.maven.apache.org/maven2/org/postgresql/postgresql/{{ wildfly_driver_default_version }}/{{ wildfly_driver_jar_filename }}"
+wildfly_driver_jar_installation_path: "{{ wildfly_driver_module_dir }}/{{ wildfly_driver_jar_filename }}"
 keycloak_auth_client: admin-cli
 keycloak_admin_user: admin
 keycloak_admin_password: "admin_password16"
@@ -61,3 +68,6 @@ keycloak_url: "{{ keycloak_flange_url | default('http://keycloak-0:8080') }}"
 keycloak_redirect_url: "{{ keycloak_flange_redirect_url | default('https://jbcs-0') }}"
 keycloak_client: flange
 keycloak_disable_trust_manager: True
+
+#Olympus variable
+flange_firewall_enable: "{{ lookup('env', 'FLANGE_FIREWALL_ENABLE') | default(true) | bool }}"

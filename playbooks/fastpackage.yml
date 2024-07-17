@@ -2,8 +2,8 @@
 - name: Playbook to demonstrate use of fastpackage role
   hosts: wildfly
   tasks:
-    - name: Fast package 
-      include_role:
+    - name: Fast package
+      ansible.builtin.include_role:
         name: flange_fastpackages
       vars:
         packages_list: 

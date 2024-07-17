@@ -1,18 +1,7 @@
 ---
-- assert:
+- ansible.builtin.assert:
     that:
       - wildfly is defined
       - wildfly.home is defined
       - info_app_dest is defined
     quiet: true
-
-- name: "Fine tuning configuration: {{ instance_name | default('localhost') }}"
-  jcliff:
-    wfly_home: "{{ wildfly.home }}"
-    timeout: 7000
-    management_port: "{{ 9990 + (item * 100) }}"
-    components:
-      - deployments:
-          - name: "{{ info_app_dest | basename }}"
-            path: "{{ info_app_dest }}"
-  loop: "{{ range(1, (nb_instances|int + 1)) | list }}"

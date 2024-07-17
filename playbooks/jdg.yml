@@ -10,7 +10,7 @@
       infinispan_supervisor_password: "{{ admin_pass }}"
       infinispan_users: "{{ user_accounts }}"
   tasks:
-    - include_role:
+    - ansible.builtin.include_role:
         name: infinispan_cache
       vars:
         infinispan_deployer_password: "{{ admin_pass }}"

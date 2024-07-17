@@ -9,45 +9,40 @@
       - httpd.home is defined
     quiet: true
 
-- group:
+- name: Create group
+  ansible.builtin.group:
     name: "{{ httpd.group.name }}"
     state: present
     gid: "{{ httpd.group.id | default(omit) }}"
 
-- user:
+- name: Create user
+  ansible.builtin.user:
     name: "{{ httpd.user.name }}"
     state: present
     uid: "{{ httpd.user.id | default(omit) }}"
 
-- file:
+- name: Change file ownership
+  ansible.builtin.file:
     path: "{{ httpd.home }}"
     owner: "{{ httpd.user.name }}"
     group: "{{ httpd.group.name }}"
     recurse: true
   changed_when: false
 
-- set_fact:
+- ansible.builtin.set_fact:
     zip_file_repo: /opt/apps
 
-- file:
+- name: Create repo directory
+  ansible.builtin.file:
     path: "{{ zip_file_repo }}"
     state: directory
-
-- name: Download JBoss Core Services from CSP
-  redhat_csp_download:
-    url: "https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=96561&product=core.service.apachehttp"
-    dest: "{{ zip_file_repo }}/jbcs.zip"
-    username: "{{ rhn_username }}"
-    password: "{{ rhn_password }}"
-  when:
-    - not jbcs_installed is defined
 
 - stat:
     path: "{{ httpd.home }}/httpd"
   register: httpd_home
 
 - name: Unarchive JBoss Core Services
-  unarchive:
+  ansible.builtin.unarchive:
     src: "{{ zip_file_repo }}/jbcs.zip"
     remote_src: yes
     dest: /opt
@@ -55,26 +50,26 @@
     - not httpd_home.stat.exists
 
 - name: "Post install HTTPD"
-  command:
+  ansible.builtin.command:
     cmd: "{{ httpd.home }}/httpd/.postinstall.systemd"
     chdir: "{{ httpd.home }}/httpd/"
     creates: /usr/lib/systemd/system/jbcs-httpd24-httpd.service
 
 - name: "Ensures JBCS configuration is correct"
-  template:
+  ansible.builtin.template:
     src: templates/httpd.conf.j2
     dest: /opt/jbcs-httpd24-2.4/httpd/conf/httpd.conf
   notify:
     - "Restart JBCS"
 
 - name: "Start HTTPd Service"
-  service:
+  ansible.builtin.service:
     name: jbcs-httpd24-httpd.service
     state: started
     enabled: yes
 
 - name: "Wait for all used ports to be open"
-  wait_for:
+  ansible.builtin.wait_for:
     port: "{{ item }}"
     delay: 0
   loop:

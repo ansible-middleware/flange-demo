@@ -1,13 +1,13 @@
 ---
-- include_tasks: prereqs.yml
-- include_tasks: install-jb-httpd.yml
-- include_tasks: ssl.yml
+- ansible.builtin.include_tasks: prereqs.yml
+- ansible.builtin.include_tasks: install-jb-httpd.yml
+- ansible.builtin.include_tasks: ssl.yml
 
-- set_fact:
+- ansible.builtin.set_fact:
     jbcs_host: "{{ (groups['jbcs'][0] if groups['jbcs'] | length > 0 else ansible_nodename) }}"
 
 - name: "Ensures mod_cluster configuration is deployed"
-  template:
+  ansible.builtin.template:
     src: templates/mod_cluster.conf.j2
     dest: /opt/jbcs-httpd24-2.4/httpd/conf.d/mod_cluster.conf
   notify:
@@ -15,7 +15,7 @@
 
 - name: configure firewall for JBCS ports
   become: yes
-  firewalld:
+  ansible.posix.firewalld:
     port: "{{ port }}"
     permanent: true
     state: enabled

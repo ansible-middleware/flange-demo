@@ -1,7 +1,7 @@
 ---
 - block:
     - name: Get keycloak auth token
-      uri:
+      ansible.builtin.uri:
         url: "{{ keycloak_url }}/auth/realms/master/protocol/openid-connect/token"
         method: POST
         body: "client_id={{ keycloak_auth_client }}&username={{ keycloak_admin_user }}&password={{ keycloak_admin_password }}&grant_type=password"
@@ -13,7 +13,7 @@
       run_once: true
 
     - name: "Get Clients"
-      uri:
+      ansible.builtin.uri:
         url: "{{ keycloak_url }}/auth/admin/realms/{{ keycloak_realm }}/clients"
         method: GET
         status_code:
@@ -24,7 +24,7 @@
       register: keycloak_client_response
 
     - name: "Get Client Secret"
-      uri:
+      ansible.builtin.uri:
         url: "{{ keycloak_url }}/auth/admin/realms/{{ keycloak_realm }}/clients/{{ (keycloak_client_response.json | selectattr('clientId', 'equalto', keycloak_client) | list | first).id }}/client-secret"
         method: GET
         status_code:

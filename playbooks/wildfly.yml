@@ -1,11 +1,10 @@
 ---
 - name: Playbook for Wildfly Hosts
   hosts: wildfly
+  become: true
   collections:
-    - middleware_automation.jcliff
     - middleware_automation.wildfly
     - middleware_automation.redhat_csp_download
   roles:
     - redhat_csp_download
-    - jcliff
     - flange_wildfly

@@ -1,17 +1,17 @@
 ---
-- assert:
+- ansible.builtin.assert:
     that:
       - app_detail is defined
       - app_dir is defined
       - app_dest is defined
     quiet: true
 
-- stat:
+- ansible.builtin.stat:
     path: "{{ app_dest }}"
   register: app_dest_path
 
 - name: "Download a demo app to deploy from {{ app_detail.url }} into {{ app_dest }}"
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ app_detail.url }}"
     dest: "{{ app_dest }}"
   when:

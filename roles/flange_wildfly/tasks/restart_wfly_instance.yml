@@ -1,11 +1,11 @@
 ---
-- assert:
+- ansible.builtin.assert:
     that:
       - nb_instances is defined
     quiet: true
 
 - name: 'Restart Wildfly instances'
-  service:
+  ansible.builtin.service:
     name: "{{ wildfly.config.name }}-{{ item }}"
     state: restarted
   loop: "{{ range(1, (nb_instances|int + 1)) | list }}"

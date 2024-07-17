@@ -1,23 +1,23 @@
 ---
 - name: Interpolate web origins list
-  set_fact:
+  ansible.builtin.set_fact:
     demo_app_redirect_uris: "{{ demo_app_redirect_uris + item }}"
   loop:
     - [ "https://{{ origin_host }}{{ demo_app_endpoint }}/*"]
 
-- set_fact:
+- ansible.builtin.set_fact:
     app_servers_list: []
 
-- include_tasks: demo_app_urls.yml
+- ansible.builtin.include_tasks: demo_app_urls.yml
   with_items:
     - "{{ groups['wildfly'] }}"
 
-- set_fact:
+- ansible.builtin.set_fact:
     demo_app_redirect_uris: "{{ demo_app_redirect_uris }} + ['{{ item }}{{ demo_app_endpoint }}/*']"
   with_items:
     - "{{ app_servers_list }}"
 
-- debug:
+- ansible.builtin.debug:
     msg: "demo_app_redirect_uris: {{ demo_app_redirect_uris }}"
   when:
     - debug_redirects_urls is defined

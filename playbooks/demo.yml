@@ -1,17 +1,17 @@
 ---
-- import_playbook: preconds.yml
+- ansible.builtin.import_playbook: preconds.yml
 
 # PGSL Playbook
-- import_playbook: postgresql.yml
+- ansible.builtin.import_playbook: postgresql.yml
 
 # JBoss Core Services (Apache HTTPD)
 #- import_playbook: jbcs.yml
 
 # Datagrid Playbook
-- import_playbook: jdg.yml
+- ansible.builtin.import_playbook: jdg.yml
 
 # Keycloak Playbook
-- import_playbook: keycloak.yml
+- ansible.builtin.import_playbook: keycloak.yml
 
 # Wildfly Playbook
-- import_playbook: wildfly.yml
+- ansible.builtin.import_playbook: wildfly.yml

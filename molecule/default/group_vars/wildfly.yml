@@ -1,9 +1,8 @@
 ---
-ansible_become: true
-jcliff_yum_backend: dnf
-wildfly_version: '27.0.0.Final'
-wildfly_archive_filename: "wildfly-{{ wildfly_version }}.zip"
-wildfly_install_download_url: "https://github.com/wildfly/wildfly/releases/download/{{ wildfly_version }}/{{ wildfly_archive_filename }}"
-wildfly_bind_addr: 0.0.0.0
-nb_instance_by_node: 2
-wildfly_offline_install: false
+wildfly_install_workdir: '/opt/wildfly/'
+wildfly_version: '32.0.0.Final'
+wildfly_home: '{{ wildfly_install_workdir }}wildfly-{{ wildfly_version }}/'
+wildfly_java_home: '/usr/lib/jvm/jre-openjdk/'
+wildfly_java_package_name: java-11-openjdk-headless
+wildfly_user: 'wildfly'
+wildfly_group: "{{ wildfly_user }}"

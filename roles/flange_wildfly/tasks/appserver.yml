@@ -1,9 +1,9 @@
 ---
-- set_fact:
+- ansible.builtin.set_fact:
     instance_id: "{{ item }}"
 
 - name: "Set up for Wildfly instance {{ instance_id }}"
-  include_role:
+  ansible.builtin.include_role:
     name: wildfly_systemd
   vars:
     wildfly_home: "{{ wildfly.home }}"
@@ -18,7 +18,7 @@
     service_systemd_conf_file: "/usr/lib/systemd/system/{{ inventory_hostname }}-{{ item }}.service"
 
 - name: "Install RHSSO Extension on instance {{ instance_name }}"
-  include_tasks: keycloak/keycloak-extension-install.yml
+  ansible.builtin.include_tasks: keycloak/keycloak-extension-install.yml
 
 - name: "Deploy app on instance {{ instance_name }}"
-  include_tasks: fine-tuned-wildfly.yml
+  ansible.builtin.include_tasks: fine-tuned-wildfly.yml

@@ -1,23 +1,26 @@
 ---
 - name: Prepare
   hosts: all
+  become: true
   tasks:
     - name: Install required packages
-      yum:
+      ansible.builtin.yum:
         use_backend: dnf
-        name:
-          - sudo
-          - iproute
-          - net-tools
-          - bind-utils
-          - glibc-locale-source
-          - glibc-langpack-en
+        name: "{{ item }}"
         state: present
+      loop:
+        - sudo
+        - iproute
+        - net-tools
+        - bind-utils
+        - glibc-locale-source
+        - glibc-langpack-en
+        - iproute
+        - python3-lxml
+
     - name: Upgrade systemd (for postgres)
-      yum:
-        use_backend: dnf
-        name:
-          - systemd
+      ansible.builtin.dnf:
+        name: systemd
         state: latest
 
     - ansible.builtin.file:
