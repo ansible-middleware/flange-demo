@@ -3,6 +3,6 @@
   hosts: keycloak
   tasks:
     - name: Wildfly Role
-      include_role:
+      ansible.builtin.include_role:
         name: keycloak
         tasks_from: stop_keycloak.yml

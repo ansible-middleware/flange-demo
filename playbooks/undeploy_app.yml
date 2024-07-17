@@ -1,13 +1,14 @@
 ---
 - name: Playbook for Wildfly Hosts
   hosts: wildfly
+  become: true
   tasks:
 
-    - set_fact:
+    - ansible.builtin.set_fact:
         nb_instances: "{{ (nb_instance_by_node | default(2) ) }}"
 
     - name: Wildfly Role
-      include_role:
+      ansible.builtin.include_role:
         name: flange_wildfly
         tasks_from: undeploy_apps.yml
       vars:

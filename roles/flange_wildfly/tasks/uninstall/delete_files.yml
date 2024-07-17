@@ -1,5 +1,5 @@
 ---
-- assert:
+- ansible.builtin.assert:
     that:
       - wildfly is defined
       - wildfly.basedir_prefix is defined
@@ -8,16 +8,16 @@
     quiet: true
 
 - name: "Delete all runtimes data"
-  file:
+  ansible.builtin.file:
     state: absent
     path: "{{ wildfly.basedir_prefix }}{{ item }}"
 
 - name: "Delete configurations files"
-  file:
+  ansible.builtin.file:
     state: absent
     path: "/etc/wfly-{{ item }}"
 
 - name: "Delete all systems services"
-  file:
+  ansible.builtin.file:
     state: absent
     path: "/usr/lib/systemd/system/wfly-{{ item }}.service"

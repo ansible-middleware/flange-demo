@@ -1,5 +1,5 @@
 ---
-keycloak_jvm_package: java-1.8.0-openjdk-headless
+keycloak_jvm_package: java-11-openjdk-headless
 keycloak_version: 18.0.2
 keycloak_ha_enabled: False
 keycloak_modcluster_url: jbcs-0

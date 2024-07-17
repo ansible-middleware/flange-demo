@@ -1,13 +1,10 @@
 ---
 - name: Playbook to update Applications on a Wildfly instance
   hosts: wildfly
-  collections:
-    - wildfly.jcliff
-  roles:
-    - jcliff
+  become: true
   tasks:
     - name: Wildfly Role
-      include_role:
+      ansible.builtin.include_role:
         name: flange_wildfly
         tasks_from: fine-tuned-wildfly.yml
       vars:

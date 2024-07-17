@@ -1,16 +1,16 @@
 ---
 - name: "Install HTTPd"
-  command:
+  ansible.builtin.command:
     cmd: yum groupinstall -y "{{ httpd.name }}"
     creates: "/opt/rh/{{ httpd.name }}"
 
 - block:
-    - stat:
+    - ansible.builtin.stat:
         path: "{{ httpd.home }}/root/etc/httpd/conf.d/ssl.conf"
       register: ssl_conf
 
     - name: "Disable HTTPd SSL support"
-      command:
+      ansible.builtin.command:
         cmd: "yum remove -y {{ httpd.name }}-mod_ssl"
         warn: no
       when:
@@ -21,8 +21,8 @@
     - httpd is defined
     - httpd.nossl is defined
 
-- name:
-  service:
+- name: Start Apache HTTP
+  ansible.builtin.service:
     name: "{{ httpd.name }}-httpd"
     state: started
     enabled: yes

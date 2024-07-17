@@ -1,20 +1,20 @@
 ---
-- assert:
+- ansible.builtin.assert:
     that:
       - wildfly_home is defined
       - jboss_cli_query is defined
     quiet: true
 
-- set_fact:
+- ansible.builtin.set_fact:
     wildfly_admin_port: "{{ cli_port | default('9990') }}"
     wildfly_admin_host: "{{ cli_host | default('localhost') }}"
 
-- set_fact:
+- ansible.builtin.set_fact:
     jboss_cli: "{{ wildfly_home }}/bin/jboss-cli.sh -c --controller={{ wildfly_admin_host }}:{{ wildfly_admin_port }}"
 
 - block:
     - name: "Run CLI query {{ jboss_cli_query }} on {{ cli_host }}:{{ cli_port }}"
-      command: >
+      ansible.builtin.command: >
         {{ jboss_cli }} "--command={{ jboss_cli_query }}"
       args:
         chdir: "{{ wildfly_home }}"

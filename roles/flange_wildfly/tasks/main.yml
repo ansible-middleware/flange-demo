@@ -1,44 +1,44 @@
 ---
-- assert:
+- ansible.builtin.assert:
     that:
       - wildfly is defined
       - wildfly.user is defined
       - wildfly.home is defined
-      - jdbc_driver_module_dir is defined
+      - wildfly_driver_module_dir is defined
     quiet: true
 
-- debug:
+- ansible.builtin.debug:
     msg: "keycloak_flange_url: {{ keycloak_flange_url }}"
   when:
     - keycloak_flange_url is defined
 
 - name: "Install Prerequisites"
-  include_tasks: prereqs.yml
+  ansible.builtin.include_tasks: prereqs.yml
 
 - name: "Install wildfly"
-  include_role:
+  ansible.builtin.include_role:
     name: wildfly_install
 
 - name: "Install Keycloak module"
-  include_tasks: keycloak/keycloak-download.yml
+  ansible.builtin.include_tasks: keycloak/keycloak-download.yml
 
 - name: "Install Postresql driver"
-  include_role:
+  ansible.builtin.include_role:
     name: wildfly_driver
   vars:
       wildfly_user: "{{ wildfly.user }}"
-      jdbc_driver_module_dir: "{{ wildfly.home }}/modules/org/postgresql/main"
-      jdbc_driver_version: "{{ jdbc_driver_default_version }}"
-      jdbc_driver_jar_filename: "postgresql-{{ jdbc_driver_default_version }}.jar"
-      jdbc_driver_jar_url: "https://repo.maven.apache.org/maven2/org/postgresql/postgresql/{{ jdbc_driver_default_version }}/{{ jdbc_driver_jar_filename }}"
-      jdbc_driver_jar_installation_path: "{{ jdbc_driver_module_dir }}/{{ jdbc_driver_jar_filename }}"
-      jdbc_driver_module_name: 'org.postgresql'
+      wildfly_driver_module_dir: "{{ wildfly.home }}/modules/org/postgresql/main"
+      wildfly_driver_version: "{{ wildfly_driver_default_version }}"
+      wildfly_driver_jar_filename: "postgresql-{{ wildfly_driver_default_version }}.jar"
+      wildfly_driver_jar_url: "https://repo.maven.apache.org/maven2/org/postgresql/postgresql/{{ wildfly_driver_default_version }}/{{ wildfly_driver_jar_filename }}"
+      wildfly_driver_jar_installation_path: "{{ wildfly_driver_module_dir }}/{{ wildfly_driver_jar_filename }}"
+      wildfly_driver_module_name: 'org.postgresql'
 
-- set_fact:
+- ansible.builtin.set_fact:
     nb_instances: "{{ (nb_instance_by_node | default(2) ) }}"
 
-- set_fact:
+- ansible.builtin.set_fact:
     nb_instances: "{{ (nb_instances | int) +1 }}"
 
-- include_tasks: appserver.yml
+- ansible.builtin.include_tasks: appserver.yml
   loop: "{{ range(1, (nb_instance_by_node| default(2) |int + 1)) | list }}"

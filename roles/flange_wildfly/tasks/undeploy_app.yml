@@ -1,5 +1,5 @@
 ---
-- assert:
+- ansible.builtin.assert:
     that:
       - wildfly is defined
       - wildfly.home is defined
@@ -9,7 +9,7 @@
 
 - block:
     - name: "Undeploy {{ app_name }}"
-      include_tasks: jboss_cli.yml
+      ansible.builtin.include_tasks: jboss_cli.yml
       vars:
         jboss_cli_query: "undeploy {{ app_name }}"
         wildfly_home: "{{ wildfly.home }}"

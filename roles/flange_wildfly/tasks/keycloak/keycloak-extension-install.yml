@@ -1,5 +1,5 @@
 ---
-- assert:
+- ansible.builtin.assert:
     that:
       - wildfly is defined
       - wildfly.port_range_offset is defined
@@ -7,14 +7,14 @@
       - keycloak_download_url is defined
     quiet: true
 
-- set_fact:
+- ansible.builtin.set_fact:
     wildfly_instance_port: "{{ 9990 + (item * 100) }}"
 
-- set_fact:
+- ansible.builtin.set_fact:
     jboss_cli: "{{ wildfly.home }}/bin/jboss-cli.sh -c --controller=localhost:{{ wildfly_instance_port }}"
 
 - name: "Wait for wildfly port {{wildfly_instance_port|int}}"
-  wait_for:
+  ansible.builtin.wait_for:
     port: "{{wildfly_instance_port|int}}"
     host: localhost
     connect_timeout: 3
@@ -25,7 +25,7 @@
 
 - block:
     - name: Check if Keycloak extensions installed
-      command: >
+      ansible.builtin.command: >
         {{ jboss_cli }} --command='/extension=org.keycloak.keycloak-adapter-subsystem:read-resource'
       args:
         chdir: "{{ wildfly.home }}"
@@ -34,13 +34,13 @@
     - name: Install Keycloak Adapter and Reload
       block:
         - name: Install Keycloak Adapter
-          command: >
+          ansible.builtin.command: >
             {{ jboss_cli }} --file={{ wildfly.home }}/bin/adapter-elytron-install.cli
           args:
             chdir: "{{ wildfly.home }}"
           changed_when: true
         - name: Reload After Keycloak Adapter Install
-          command: >
+          ansible.builtin.command: >
             {{ jboss_cli }} --command=":reload"
           args:
             chdir: "{{ wildfly.home }}"

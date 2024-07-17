@@ -1,14 +1,15 @@
 ---
 - name: Playbook for Wildfly Hosts
   hosts: wildfly
+  become: true
   tasks:
 
-    - set_fact:
+    - ansible.builtin.set_fact:
         nb_instances: "{{ (nb_instance_by_node | default(2) ) }}"
         status_report: []
 
-    - include_tasks: roles/flange_wildfly/tasks/status.yml
+    - ansible.builtin.include_tasks: roles/flange_wildfly/tasks/status.yml
       loop: "{{ range(1, (nb_instances|int + 1)) | list }}"
 
-    - debug:
+    - ansible.builtin.debug:
         msg: "{{ status_report }}"

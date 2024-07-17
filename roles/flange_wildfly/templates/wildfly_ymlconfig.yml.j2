@@ -1,0 +1,45 @@
+wildfly-configuration:
+  system-property:
+    JBOSS_ID:
+      value: {{ inventory_hostname }}
+  socket-binding-group:
+    standard-sockets:
+      remote-destination-outbound-socket-binding:
+        jgroups-wildfly-cluster-demo-1:
+          host: wildfly-cluster-demo-1
+          port: 7600
+      remote-destination-outbound-socket-binding:
+        jgroups-wildfly-cluster-demo-2:
+          host: wildfly-cluster-demo-2
+          port: 7600
+      remote-destination-outbound-socket-binding:
+        jgroups-wildfly-cluster-demo-3:
+          host: wildfly-cluster-demo-3
+          port: 7600
+  subsystem:
+    jgroups:
+      stack:
+        tcpping:
+          transport:
+            type: TCP
+            socket-binding: jgroups-tcp
+          protocol:
+            TCPPING:
+              socket-bindings:
+                {{ eap_cluster_nodes | map(attribute='address') }}
+              properties:
+                initial_hosts: "{{ eap_cluster_nodes | map(attribute='inventory_host') | join (',') }}"
+                port_range: 0
+            MERGE3:
+            FD_SOCK:
+            FD_ALL:
+            VERIFY_SUSPECT:
+            pbcast.NAKACK2:
+            UNICAST3:
+            pbcast.STABLE:
+            pbcast.GMS:
+            MFC:
+            FRAG3:
+      channel:
+        ee:
+          stack: tcpping

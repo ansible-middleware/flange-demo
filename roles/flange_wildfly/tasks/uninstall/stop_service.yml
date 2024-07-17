@@ -1,5 +1,5 @@
 ---
-- assert:
+- ansible.builtin.assert:
     that:
       - wildfly is defined
       - wildfly.config is defined
@@ -8,14 +8,14 @@
       - item is defined
     quiet: true
 
-- set_fact:
+- ansible.builtin.set_fact:
     instance_name: "{{ wildfly.config.name }}-{{ item }}"
 
 - block:
   - name: "Stop Wildfly instance {{ instance_name }}"
-    service:
+    ansible.builtin.service:
       name: "{{ instance_name }}"
       state: stopped
   rescue:
-    - debug:
+    - ansible.builtin.debug:
         msg: "Service {{ instance_name }} has already been removed."

@@ -3,7 +3,6 @@ pgsql:
   pgdata: "{{ overrides_pgsql_pgdata | default('/var/lib/pgsql/data') }}"
   packages_list:
     - python39
-    - python39-devel
     - python3-psycopg2
     - postgresql-server
   db:

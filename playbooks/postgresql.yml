@@ -1,7 +1,8 @@
 ---
 - name: Playbook for Postgresql Setup
   hosts: pgsql
+  become: true
   tasks:
     - name: pgsql Role
-      include_role:
+      ansible.builtin.include_role:
         name: flange_postgresql

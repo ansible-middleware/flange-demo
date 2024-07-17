@@ -1,5 +1,5 @@
 ---
-- set_fact:
+- ansible.builtin.set_fact:
     wildfly_instance_management_port: "{{ 9990 + ((item - wildfly.port_range_offset) * 100) }}"
     wildfly_instance_http_port: "{{ 8080 + ((item - wildfly.port_range_offset) * 100) }}"
     wildfly_instance_https_port: "{{ 8443 + ((item - wildfly.port_range_offset) * 100) }}"
@@ -7,7 +7,7 @@
 
 - name: configure firewall for Wildfly ports
   become: yes
-  firewalld:
+  ansible.posix.firewalld:
     port: "{{ port }}"
     permanent: true
     state: enabled
@@ -18,21 +18,22 @@
     - "{{ wildfly_instance_ajp_port }}/tcp"
   loop_control:
     loop_var: port
+  when: flange_firewall_enable
 
-- set_fact:
+- ansible.builtin.set_fact:
     demo_app: "{{ apps | selectattr('version','equalto', sample_app_version) | list | first }}"
     info_app: "{{ apps | selectattr('name','equalto', 'info') | list | first }}"
 
-- set_fact:
+- ansible.builtin.set_fact:
     demo_app_dest: "{{ app_dir + '/' + demo_app.name + '-' + demo_app.version + '.' + demo_app.extension }}"
     info_app_dest: "{{ app_dir + '/' + info_app.name + '-' + info_app.version + '.' + info_app.extension }}"
 
 - name: "Ensures apps repository folder {{ app_dir }} exits."
-  file:
+  ansible.builtin.file:
     path: "{{ app_dir }}"
     state: directory
 
-- include_tasks: tasks/app_download.yml
+- ansible.builtin.include_tasks: tasks/app_download.yml
   vars:
     app_detail: "{{ app.detail }}"
     app_dest: "{{ app.dest }}"
@@ -44,10 +45,8 @@
 
 - name: "Configure Wildfly with Keycloak support"
   block:
-    - set_fact:
+    - ansible.builtin.set_fact:
         secure_deployment_name: "{{ demo_app.name + '.' + demo_app.extension }}"
 
-    - include_tasks: keycloak/keycloak-configuration.yml
-
-    - include_tasks: jcliff-with-keycloak.yml
+    - ansible.builtin.include_tasks: keycloak/keycloak-configuration.yml
   when: not disable_keycloak

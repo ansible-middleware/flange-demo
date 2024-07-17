@@ -1,16 +1,16 @@
 ---
-- assert:
+- ansible.builtin.assert:
     that:
       - url is defined
       - app_list_by_instance is defined
     quiet: true
 
-- set_fact:
+- ansible.builtin.set_fact:
     nb_instances: 2
   when:
     - not nb_instances is defined
 
-- set_fact:
+- ansible.builtin.set_fact:
     app_list_by_instance: "{{ app_list_by_instance }} + ['{{ url }}:{{ 8443 + (port_shift * 100) }}']"
   loop: "{{ range(0, (nb_instances|int)) | flatten }}"
   loop_control:

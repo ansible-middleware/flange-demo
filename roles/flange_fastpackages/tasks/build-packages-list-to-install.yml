@@ -1,10 +1,10 @@
 ---
-- set_fact:
+- ansible.builtin.set_fact:
     update_cache: true
 
 - block:
   - name: "Test if package {{ package_name }} is already installed"
-    command: rpm -q {{ package_name }}
+    ansible.builtin.command: rpm -q {{ package_name }}
     args:
       warn: no
     register: rpm_info
@@ -12,6 +12,6 @@
 
   rescue:
     - name: "If package {{ package_name }} is missing, add it to the yum install list."
-      set_fact:
+      ansible.builtin.set_fact:
         packages_to_install: "{{ packages_to_install + [ package_name ] }}"
       when: rpm_info.failed

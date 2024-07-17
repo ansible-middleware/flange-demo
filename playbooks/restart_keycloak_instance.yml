@@ -5,6 +5,6 @@
     - middleware_automation.infinispan
   tasks:
     - name: keycloak restart
-      include_role:
+      ansible.builtin.include_role:
         name: keycloak
         tasks_from: restart_keycloak.yml

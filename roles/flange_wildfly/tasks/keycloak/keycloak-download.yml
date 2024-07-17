@@ -1,5 +1,5 @@
 ---
-- assert:
+- ansible.builtin.assert:
     that:
       - wildfly is defined
       - wildfly.home is defined
@@ -7,7 +7,7 @@
     quiet: true
 
 - name: Download Keycloak Adapter
-  unarchive:
+  ansible.builtin.unarchive:
     src: "{{ keycloak_download_url }}"
     dest: "{{ wildfly.home }}"
     remote_src: yes

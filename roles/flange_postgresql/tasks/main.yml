@@ -1,15 +1,15 @@
 - name: "Install PostgreSQL and relate packages"
-  include_role:
+  ansible.builtin.include_role:
     name: flange_fastpackages
   vars:
     packages_list: "{{ pgsql.packages_list }}"
 
-- stat:
+- ansible.builtin.stat:
     path: "{{ pgsql.pgdata }}/pg_hba.conf"
   register: pgdata_init
 
 - name: "Init PostgresQL Db"
-  command:
+  ansible.builtin.command:
     cmd: /usr/bin/postgresql-setup initdb
     creates: /var/lib/pgsql/initdb.log
   register: datadir_init
@@ -19,7 +19,7 @@
     - not pgdata_init.stat.exists
 
 - name: Ensures postgresql.service.d/ dir exists
-  file:
+  ansible.builtin.file:
     path: /etc/systemd/system/postgresql.service.d/
     state: directory
     owner: root
@@ -27,7 +27,7 @@
     mode: 0755
 
 - name: Install workaround systemd config for https://access.redhat.com/solutions/5605181"
-  template:
+  ansible.builtin.template:
     src: postgresql-unit-stop.conf
     dest: /etc/systemd/system/postgresql.service.d/stop.conf
     owner: root
@@ -37,7 +37,7 @@
     - restart postgres
 
 - name: "Ensure PostgreSQL accept connection from app servers"
-  template:
+  ansible.builtin.template:
     src: pg_hba.conf
     dest: /var/lib/pgsql/data/pg_hba.conf
     owner: postgres
@@ -47,7 +47,7 @@
     - restart postgres
 
 - name: "Ensure PostgreSQL accept remote connection"
-  template:
+  ansible.builtin.template:
     src: postgresql.conf
     dest: /var/lib/pgsql/data/postgresql.conf
     owner: postgres
@@ -59,7 +59,7 @@
     - groups['pgsql'][0] != 'localhost'
 
 - name: "Ensure the PostgreSQL service is running"
-  service:
+  ansible.builtin.service:
     name: postgresql
     state: started
     enabled: yes
