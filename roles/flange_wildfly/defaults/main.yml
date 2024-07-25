@@ -1,5 +1,5 @@
 ---
-wildfly_version: '32.0.0.Final'
+wildfly_version: '33.0.0.Final'
 wildfly_install_workdir: '/opt/wildfly/'
 wildfly_home: '{{ wildfly_install_workdir }}wildfly-{{ wildfly_version }}/'
 wildfly_java_home: '/usr/lib/jvm/jre-openjdk/'
@@ -34,7 +34,7 @@ disable_keycloak: False
 enable_rhsso: True
 
 wildfly:
-  home: "{{ '/opt/wildfly/jboss-eap-7.4/' if rhn_username is defined and rhn_password is defined else '/opt/wildfly/wildfly-32.0.0.Final/' }}"
+  home: "{{ '/opt/wildfly/jboss-eap-7.4/' if rhn_username is defined and rhn_password is defined else '/opt/wildfly/wildfly-33.0.0.Final/' }}"
   user: wildfly
   group: wildfly
   bind_addr: "{{ override_wildfly_bind_addr | default(ansible_nodename) }}"
