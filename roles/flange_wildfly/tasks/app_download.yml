@@ -14,6 +14,7 @@
   ansible.builtin.get_url:
     url: "{{ app_detail.url }}"
     dest: "{{ app_dest }}"
+    timeout: 60
   when:
     - app_dest_path is defined
     - app_dest_path.stat is defined
