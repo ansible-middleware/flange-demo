@@ -1,6 +1,6 @@
 ---
 wildfly_install_workdir: '/opt/wildfly/'
-wildfly_version: '32.0.0.Final'
+wildfly_version: '33.0.0.Final'
 wildfly_home: '{{ wildfly_install_workdir }}wildfly-{{ wildfly_version }}/'
 wildfly_java_home: '/usr/lib/jvm/jre-openjdk/'
 wildfly_java_package_name: java-11-openjdk-headless
